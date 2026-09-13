@@ -225,9 +225,9 @@ if (UK_PIXEL_ID !== 'UK_PIXEL_ID') {
   .host-role { font-size: 12.5px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--gold-deep); margin-bottom: 12px; }
   .host-bio { font-size: 14px; color: var(--mid-grey); line-height: 1.7; }
 
-  .host-letter p { font-size: 14px; color: var(--mid-grey); line-height: 1.75; margin-bottom: 13px; }
-  .host-letter p:first-child { font-weight: 700; color: var(--black); }
-  .host-signoff { font-style: italic; }
+  .host-letter { max-width: 68ch; }
+  .host-letter p { font-size: 14.5px; color: var(--mid-grey); line-height: 1.85; margin-bottom: 17px; }
+  .host-signoff { font-style: italic; margin-top: 20px; }
   .host-cta {
     display: inline-block; margin-top: 6px; padding: 14px 30px; background: var(--black); color: #fff;
     border: none; border-radius: 10px; font-family: var(--face); font-size: 12.5px;
@@ -309,7 +309,11 @@ if (UK_PIXEL_ID !== 'UK_PIXEL_ID') {
     .hero { padding: 40px 16px 58px; }
     .form-card { padding: 26px 20px; }
     .section { padding: 56px 16px; }
-    .host-card { flex-direction: column; text-align: center; gap: 18px; padding: 28px 22px; }
+    /* photo and name centre as a header; only the letter itself stays left aligned */
+    .host-card { flex-direction: column; text-align: left; gap: 18px; padding: 28px 22px; }
+    .host-photo { align-self: center; }
+    .host-name, .host-role { text-align: center; }
+    .host-cta { display: block; margin-left: auto; margin-right: auto; }
     .curr-item { flex-direction: column; gap: 8px; padding: 20px 22px; }
     .t-pair.t-grid-3 {
       display: flex; grid-template-columns: none; overflow-x: auto; scroll-snap-type: x mandatory;
@@ -466,10 +470,10 @@ if (UK_PIXEL_ID !== 'UK_PIXEL_ID') {
         <div class="host-name">Oliver Cullen</div>
         <div class="host-role">Director, Golden Key Property</div>
         <div class="host-letter">
-          <p>Hi, Oliver here.</p>
-          <p>I have personally led more than 50 investment asset transactions across the UK and Australia, on behalf of buyers and investors worldwide.</p>
-          <p>If you are looking at a 16% net yield and wondering where the catch is, that is a fair question, and it is the one this workshop exists to answer.</p>
-          <p>That is why I run this workshop. In 30 minutes I will show you exactly how the 16% net figure is calculated, what the 25 year assurance does and does not cover, and what the managed service actually handles. Nothing is for sale on the workshop itself.</p>
+          <p>Dear property investor,</p>
+          <p>Alongside a team with a combined 10+ years in this space, I've led property transactions across the UK and Australia for investors worldwide. Eighteen months ago I moved into a very specific UK structure: income tied to a long-term contracted agreement with a housing provider, not a location, a tenant, or a manager doing their job properly.</p>
+          <p>If that sounds too good to be true, that's fair. It's exactly what this workshop answers.</p>
+          <p>In 30 minutes I'll show you how the numbers are calculated and what "hands-off" actually means. Nothing is for sale, just the full picture so you can judge it yourself.</p>
           <p class="host-signoff">See you inside,<br />Oliver</p>
         </div>
         <button class="host-cta" onclick="window.scrollTo({top:0,behavior:'smooth'})">Reserve Your Seat →</button>

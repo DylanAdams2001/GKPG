@@ -197,9 +197,13 @@ if (UK_PIXEL_ID !== 'UK_PIXEL_ID') {
   .section-sub { font-size: 16px; color: var(--mid-grey); text-align: center; max-width: 600px; margin: 0 auto 48px; line-height: 1.65; }
 
   /* CURRICULUM */
-  .curriculum { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; }
-  .curr-item { display: flex; gap: 20px; background: var(--white); border: 1px solid var(--line); border-radius: 14px; padding: 24px 26px; align-items: flex-start; }
-  .curr-num { font-family: var(--face-display); font-weight: 800; font-size: 26px; color: var(--gold); line-height: 1; flex-shrink: 0; min-width: 38px; }
+  .curriculum { max-width: 760px; margin: 38px auto 0; display: flex; flex-direction: column; gap: 14px; }
+  .curr-item { display: flex; gap: 20px; background: var(--white); border: 1px solid var(--line); border-radius: 14px; padding: 24px 26px; align-items: center; }
+  .curr-icon {
+    width: 46px; height: 46px; border-radius: 50%; flex-shrink: 0;
+    background: var(--brand-gradient); color: var(--black);
+    display: flex; align-items: center; justify-content: center;
+  }
   .curr-text { font-size: 14.5px; color: var(--mid-grey); line-height: 1.7; }
   .curr-text strong { color: var(--black); font-weight: 800; }
 
@@ -422,26 +426,25 @@ if (UK_PIXEL_ID !== 'UK_PIXEL_ID') {
   <div class="container">
     <span class="section-eyebrow">What's Covered</span>
     <h2 class="section-title">Here Is What You'll Discover</h2>
-    <p class="section-sub">No fluff and no long build-up. Five things that decide whether this model is worth your capital.</p>
     <div class="curriculum">
       <div class="curr-item">
-        <div class="curr-num">01</div>
+        <div class="curr-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="2.5" width="14" height="19" rx="2.5"/><rect x="8.2" y="6" width="7.6" height="3.2" rx="0.8"/><circle cx="9.2" cy="13.2" r="0.9"/><circle cx="12" cy="13.2" r="0.9"/><circle cx="14.8" cy="13.2" r="0.9"/><circle cx="9.2" cy="17.2" r="0.9"/><circle cx="12" cy="17.2" r="0.9"/><circle cx="14.8" cy="17.2" r="0.9"/></svg></div>
         <p class="curr-text"><strong>The 3 numbers that decide whether 16% net is real or just marketing…</strong> and how to check every one of them yourself before you part with a penny</p>
       </div>
       <div class="curr-item">
-        <div class="curr-num">02</div>
+        <div class="curr-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 12S6 6.2 12 6.2c1.5 0 2.9.36 4.1.95"/><path d="M19.8 9.3c1.1 1.3 1.7 2.7 1.7 2.7s-3.5 5.8-9.5 5.8c-1.8 0-3.4-.52-4.7-1.25"/><circle cx="12" cy="12" r="2.6"/><line x1="3.2" y1="3.2" x2="20.8" y2="20.8"/></svg></div>
         <p class="curr-text"><strong>Why these units never appear on Rightmove or Zoopla…</strong> and what that missing listing is genuinely worth to you at the point of purchase</p>
       </div>
       <div class="curr-item">
-        <div class="curr-num">03</div>
+        <div class="curr-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2.6H7.5a2 2 0 0 0-2 2v14.8a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V7.6z"/><polyline points="14 2.6 14 7.6 18.5 7.6"/><line x1="8.8" y1="12.2" x2="15.2" y2="12.2"/><line x1="8.8" y1="16" x2="13" y2="16"/></svg></div>
         <p class="curr-text"><strong>What the 25 year rental agreement covers the month a tenant stops paying…</strong> the question most investors never think to ask until it is far too late</p>
       </div>
       <div class="curr-item">
-        <div class="curr-num">04</div>
+        <div class="curr-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.8"/><polyline points="12 6.8 12 12 15.6 14"/></svg></div>
         <p class="curr-text"><strong>How completed stock pays you in 30 to 60 days instead of two years…</strong> and the cost buried in every off-plan deal you have been shown so far</p>
       </div>
       <div class="curr-item">
-        <div class="curr-num">05</div>
+        <div class="curr-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.2 4.2H7.4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h9.2a2 2 0 0 0 2-2v-13a2 2 0 0 0-2-2h-1.8"/><rect x="9.2" y="2.4" width="5.6" height="3.6" rx="1.1"/><polyline points="9.4 13.2 11.3 15.1 14.9 11.5"/></svg></div>
         <p class="curr-text"><strong>The 'fully managed' promise pulled apart line by line…</strong> exactly which costs are covered, and the handful that quietly stay with you</p>
       </div>
     </div>
@@ -521,7 +524,7 @@ if (UK_PIXEL_ID !== 'UK_PIXEL_ID') {
       <div class="why-card">
         <div class="why-icon">↑</div>
         <h4>You're Yield-Focused</h4>
-        <p>If your current UK stock is returning 4 to 5% net, the gap is the entire reason to spend the next few minutes here.</p>
+        <p>If your rentals are returning 4 to 5% net, this model targets 16%. The workshop shows you exactly where that difference comes from.</p>
       </div>
       <div class="why-card">
         <div class="why-icon">✓</div>

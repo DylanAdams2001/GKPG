@@ -1,0 +1,622 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Your Workshop | Golden Key Property</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" type="image/x-icon" href="favicon.ico" />
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<!-- Meta Pixel. PLACEHOLDER: swap UK_PIXEL_ID for the real UK dataset ID.
+     Inert until then. This page is the workshop room, so it also fires a
+     ViewContent event you can use as the "actually attended" signal. -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+var UK_PIXEL_ID = 'UK_PIXEL_ID';
+if (UK_PIXEL_ID !== 'UK_PIXEL_ID') {
+  fbq('init', UK_PIXEL_ID);
+  fbq('track', 'PageView');
+  fbq('track', 'ViewContent', { content_name: 'UK Workshop' });
+}
+</script>
+<!-- End Meta Pixel -->
+<style>
+  :root {
+    --black: #0a0a0a;
+    --white: #ffffff;
+    --graphite: #45474b;
+    --gold: #D4AF37;
+    --gold-deep: #96751F;
+    --gold-pale: #F8F0DA;
+    --brand-gradient: linear-gradient(135deg, #F5E6BC 0%, #D4AF37 50%, #B8922E 100%);
+    --light-grey: #f7f7f5;
+    --mid-grey: #57595c;
+    --line: #e3e3e0;
+    --face: 'Inter', -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", Arial, sans-serif;
+    --face-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--face); color: var(--black); background: var(--white); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  h1, h2, h3, h4 { font-family: var(--face); font-weight: 800; letter-spacing: -0.02em; }
+
+  /* .ph = unconfirmed placeholder, swap for the real value before publishing */
+  .ph { color: #b45309; background: #fef3c7; padding: 1px 6px; border-radius: 3px; font-weight: 600; }
+  .ph-dark { color: #FBBF24; background: rgba(251,191,36,0.14); padding: 1px 6px; border-radius: 3px; font-weight: 600; }
+
+  /* HEADER */
+  .header {
+    background: var(--black);
+    padding: 16px 24px;
+    display: flex; align-items: center; justify-content: center;
+    border-bottom: 1px solid rgba(212,175,55,0.25);
+  }
+  .header .wordmark { display: inline-flex; align-items: center; gap: 8px; font-family: var(--face-display); font-weight: 800; font-size: 1.1rem; letter-spacing: 0.01em; color: #fff; text-decoration: none; }
+  .header .wordmark span { color: var(--gold); }
+  .header .wordmark-icon { color: var(--gold); flex-shrink: 0; }
+
+  /* WATCH SECTION */
+  .watch {
+    background: var(--black);
+    background-image: radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.14) 0%, transparent 60%);
+    padding: 52px 24px 64px; text-align: center;
+  }
+  .confirm-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(212,175,55,0.12); border: 1px solid rgba(212,175,55,0.45);
+    color: var(--gold); font-weight: 800;
+    font-size: 10.5px; letter-spacing: 2.4px; text-transform: uppercase;
+    padding: 8px 16px; border-radius: 100px; margin-bottom: 20px;
+  }
+  .watch h1 {
+    font-family: var(--face-display);
+    font-size: clamp(28px, 4.4vw, 46px); font-weight: 800; color: #fff;
+    line-height: 1.15; margin-bottom: 14px; letter-spacing: -0.01em;
+  }
+  .watch h1 em { color: var(--gold); font-style: normal; }
+  .watch-sub { font-size: 16px; color: rgba(255,255,255,0.6); max-width: 560px; margin: 0 auto 34px; line-height: 1.65; }
+
+  .player-wrap { max-width: 880px; margin: 0 auto; }
+  .player {
+    position: relative; aspect-ratio: 16 / 9; border-radius: 16px; overflow: hidden;
+    background: #121213; border: 1px solid rgba(255,255,255,0.14);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.55);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .player iframe, .player video { width: 100%; height: 100%; border: 0; display: block; }
+  .player-placeholder { padding: 32px; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+  .player-placeholder .icon {
+    width: 62px; height: 62px; border-radius: 50%; background: var(--brand-gradient);
+    display: flex; align-items: center; justify-content: center; color: var(--black); font-size: 21px; padding-left: 4px;
+  }
+  .player-placeholder p { font-size: 13.5px; color: rgba(255,255,255,0.6); max-width: 460px; line-height: 1.65; }
+
+  .watch-meta { display: flex; align-items: center; justify-content: center; gap: 26px; flex-wrap: wrap; margin-top: 22px; }
+  .watch-meta-item { font-size: 12.5px; color: rgba(255,255,255,0.55); font-weight: 600; }
+  .watch-meta-item strong { color: var(--gold); font-weight: 800; }
+
+  [hidden] { display: none !important; }
+
+  /* COUNTDOWN STAGE */
+  .cd-stage {
+    background: #121213; border: 1px solid rgba(255,255,255,0.14); border-radius: 16px;
+    padding: 58px 32px; box-shadow: 0 30px 80px rgba(0,0,0,0.55);
+  }
+  .cd-stage-label { display: block; font-size: 10.5px; font-weight: 800; letter-spacing: 2.4px; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 12px; }
+  .cd-stage-time { font-family: var(--face-display); font-size: clamp(56px, 11vw, 104px); font-weight: 800; color: var(--gold); line-height: 1; font-variant-numeric: tabular-nums; margin-bottom: 26px; }
+  .cd-stage-bar { height: 6px; border-radius: 100px; background: rgba(255,255,255,0.1); overflow: hidden; max-width: 420px; margin: 0 auto 16px; }
+  .cd-stage-fill { height: 100%; background: var(--brand-gradient); width: 0%; transition: width 1s linear; }
+  .cd-stage-note { font-size: 13px; color: rgba(255,255,255,0.5); }
+
+  /* LIVE INDICATOR */
+  .confirm-badge.is-live { border-color: rgba(255,59,48,0.5); color: #fff; background: rgba(255,59,48,0.1); }
+  .live-dot {
+    display: inline-block; width: 9px; height: 9px; border-radius: 50%;
+    background: #ff3b30; margin-right: 8px; vertical-align: middle;
+    animation: livePulse 1.1s ease-in-out infinite;
+  }
+  @keyframes livePulse {
+    0%   { opacity: 1;    box-shadow: 0 0 0 0 rgba(255,59,48,0.6); }
+    70%  { opacity: 0.35; box-shadow: 0 0 0 7px rgba(255,59,48,0); }
+    100% { opacity: 1;    box-shadow: 0 0 0 0 rgba(255,59,48,0); }
+  }
+  /* A flashing element is a genuine accessibility problem for some people,
+     so honour the OS-level setting and leave the dot solid instead. */
+  @media (prefers-reduced-motion: reduce) {
+    .live-dot { animation: none; opacity: 1; }
+  }
+
+  /* BOOKED CARD (later session) */
+  .booked {
+    background: #121213; border: 1px solid rgba(255,255,255,0.14); border-radius: 16px;
+    padding: 46px 32px; box-shadow: 0 30px 80px rgba(0,0,0,0.55);
+  }
+  .booked-label { display: block; font-size: 10.5px; font-weight: 800; letter-spacing: 2.4px; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 12px; }
+  .booked-when { font-family: var(--face-display); font-size: clamp(30px, 5vw, 50px); font-weight: 800; color: var(--gold); line-height: 1.1; margin-bottom: 10px; }
+  .booked-note { font-size: 13.5px; color: rgba(255,255,255,0.55); margin-bottom: 24px; }
+  .cal-links { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; }
+  .cal-link {
+    display: inline-block; padding: 11px 20px; border-radius: 10px; text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.22); color: #fff; font-size: 12.5px; font-weight: 700; transition: all 0.2s ease;
+  }
+  .cal-link:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* LIVE GRID: chat alongside the player */
+  .player-wrap.is-live { max-width: 1180px; }
+  .live-grid { display: grid; grid-template-columns: 340px 1fr; gap: 20px; align-items: stretch; }
+  .chat {
+    background: #121213; border: 1px solid rgba(255,255,255,0.14); border-radius: 16px;
+    display: flex; flex-direction: column; overflow: hidden; text-align: left; min-height: 300px;
+  }
+  .chat-head { padding: 13px 16px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .chat-title { font-size: 11.5px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: #fff; }
+  .chat-body { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 15px; }
+  .msg-from { font-size: 11.5px; font-weight: 800; color: var(--gold); margin-bottom: 3px; }
+  .msg.mine .msg-from { color: rgba(255,255,255,0.9); }
+  .msg-text { font-size: 13px; color: rgba(255,255,255,0.78); line-height: 1.55; }
+  .msg-note { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 3px; font-style: italic; }
+  .chat-foot { padding: 12px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; gap: 8px; flex-shrink: 0; }
+  .chat-input {
+    flex: 1; min-width: 0; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 10px; padding: 11px 12px; color: #fff; font-family: var(--face); font-size: 13px; outline: none;
+  }
+  .chat-input:focus { border-color: var(--gold); }
+  .chat-input::placeholder { color: rgba(255,255,255,0.35); }
+  .chat-send {
+    background: var(--brand-gradient); color: var(--black); border: none; border-radius: 10px;
+    padding: 0 16px; font-family: var(--face); font-weight: 800; font-size: 12px; cursor: pointer; flex-shrink: 0;
+  }
+  .chat-send:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  @media (max-width: 900px) {
+    .live-grid { grid-template-columns: 1fr; }
+    .live-grid .player { order: 1; }
+    .chat { order: 2; min-height: 280px; max-height: 380px; }
+  }
+
+  /* WELCOME VIDEO */
+  .welcome { max-width: 720px; margin: 0 auto; }
+  .welcome-head { font-size: 17px; font-weight: 800; color: var(--black); text-align: center; margin-bottom: 16px; }
+
+  /* CHECKLIST */
+  .checklist { max-width: 620px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+  .check-item { display: flex; gap: 14px; align-items: flex-start; background: var(--white); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; }
+  .check-tick { width: 24px; height: 24px; border-radius: 6px; background: var(--gold); color: var(--black); font-size: 14px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .check-item h4 { font-size: 14.5px; font-weight: 700; color: var(--black); margin-bottom: 3px; }
+  .check-item p { font-size: 13px; color: var(--mid-grey); line-height: 1.6; }
+
+  /* SECTIONS */
+  .section { padding: 72px 24px; }
+  .section-grey { background: var(--light-grey); }
+  .container { max-width: 940px; margin: 0 auto; }
+  .section-eyebrow { display: block; text-align: center; font-weight: 700; font-size: 10px; letter-spacing: 2.5px; color: var(--graphite); text-transform: uppercase; margin-bottom: 12px; }
+  .section-title { font-family: var(--face-display); font-size: clamp(25px, 4vw, 38px); font-weight: 800; text-align: center; line-height: 1.2; letter-spacing: -0.01em; margin-bottom: 14px; color: var(--black); }
+  .section-sub { font-size: 16px; color: var(--mid-grey); text-align: center; max-width: 600px; margin: 0 auto 44px; line-height: 1.65; }
+
+  .next-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .next-card { background: var(--white); border-radius: 14px; padding: 28px 24px; border-top: 3px solid var(--black); box-shadow: 0 2px 12px rgba(0,0,0,0.06); text-align: center; }
+  .next-num { font-weight: 800; font-size: 32px; color: var(--gold); line-height: 1; margin-bottom: 6px; }
+  .next-card h4 { font-size: 15px; font-weight: 700; color: var(--black); margin-bottom: 6px; }
+  .next-card p { font-size: 13px; color: var(--mid-grey); line-height: 1.6; }
+
+  /* BOTTOM CTA */
+  .bottom-cta {
+    background: var(--black);
+    background-image: radial-gradient(ellipse at 30% 100%, rgba(212,175,55,0.14) 0%, transparent 55%);
+    padding: 80px 24px; text-align: center;
+  }
+  .bottom-cta h2 { font-family: var(--face-display); font-size: clamp(25px, 4.5vw, 40px); font-weight: 800; color: #fff; margin-bottom: 16px; letter-spacing: -0.01em; }
+  .bottom-cta h2 em { color: var(--gold); font-style: normal; }
+  .bottom-cta p { font-size: 16px; color: rgba(255,255,255,0.58); max-width: 520px; margin: 0 auto 32px; }
+  .cta-link {
+    display: inline-block; padding: 17px 42px; background: var(--brand-gradient); color: var(--black);
+    border: none; border-radius: 12px; font-family: var(--face); font-size: 13.5px;
+    font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; cursor: pointer;
+    text-decoration: none; transition: all 0.2s ease;
+  }
+  .cta-link:hover { background: var(--gold-deep); color: #fff; transform: translateY(-2px); box-shadow: 0 12px 36px rgba(212,175,55,0.3); }
+  .cta-note { font-size: 12.5px; color: rgba(255,255,255,0.4); margin-top: 16px; }
+
+  /* FOOTER */
+  .footer { background: var(--black); padding: 44px 24px; text-align: center; border-top: 1px solid rgba(255,255,255,0.06); }
+  .footer .wordmark { display: inline-flex; align-items: center; gap: 8px; font-family: var(--face-display); font-weight: 800; font-size: 1.05rem; letter-spacing: 0.01em; color: #fff; margin-bottom: 20px; }
+  .footer .wordmark span { color: var(--gold); }
+  .footer .wordmark-icon { color: var(--gold); }
+  .footer-links { display: flex; align-items: center; justify-content: center; gap: 26px; flex-wrap: wrap; margin-bottom: 18px; }
+  .footer-links a { font-size: 13px; color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--gold); }
+  .footer-copy { font-size: 11.5px; color: rgba(255,255,255,0.24); line-height: 1.8; max-width: 640px; margin: 0 auto; }
+
+  @media (max-width: 780px) {
+    .next-grid { grid-template-columns: 1fr; }
+    .watch { padding: 38px 16px 48px; }
+    .section { padding: 52px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <a href="index.html" class="wordmark" id="homeLink"><svg class="wordmark-icon" width="15" height="32" viewBox="75 42 51 110" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="100" cy="66" r="19" stroke="currentColor" stroke-width="7"/><rect x="95.5" y="85" width="9" height="62" fill="currentColor"/><rect x="104.5" y="126" width="15" height="7" fill="currentColor"/><rect x="104.5" y="138" width="11" height="7" fill="currentColor"/></svg>Golden Key<span> · </span>Property</a>
+</header>
+
+<!-- WATCH -->
+<section class="watch">
+  <div class="confirm-badge" id="statusBadge">✓ Seat Reserved</div>
+  <h1 id="watchTitle">Your Workshop Starts <em>Shortly</em></h1>
+  <p class="watch-sub" id="watchSub">Keep this page open. Your session begins automatically the moment the countdown reaches zero.</p>
+
+  <div class="player-wrap">
+    <!-- Booked state, shown when a later fixed session was chosen -->
+    <div class="booked" id="bookedStage" hidden>
+      <span class="booked-label">Your session</span>
+      <div class="booked-when" id="bookedWhen">--</div>
+      <p class="booked-note">We have emailed you the joining link. Add it to your calendar so it does not get lost.</p>
+      <div class="cal-links">
+        <a class="cal-link" id="calGoogle" href="#" target="_blank" rel="noopener">Google Calendar</a>
+        <a class="cal-link" id="calOutlook" href="#" target="_blank" rel="noopener">Outlook</a>
+        <a class="cal-link" id="calIcs" href="#" download="golden-key-workshop.ics">Apple / .ics</a>
+      </div>
+    </div>
+
+    <!-- Countdown state -->
+    <div class="cd-stage" id="cdStage">
+      <span class="cd-stage-label">Starting in</span>
+      <div class="cd-stage-time" id="cdBig">--:--</div>
+      <div class="cd-stage-bar"><div class="cd-stage-fill" id="cdFill"></div></div>
+      <p class="cd-stage-note">Your session is about to begin. Keep this page open.</p>
+    </div>
+
+    <!-- Live state: chat alongside the player, revealed when the countdown hits zero -->
+    <div class="live-grid" id="liveGrid" hidden>
+      <aside class="chat">
+        <div class="chat-head">
+          <span class="live-dot"></span>
+          <span class="chat-title">Live Chat</span>
+        </div>
+        <div class="chat-body" id="chatBody"></div>
+        <div class="chat-foot">
+          <input type="text" class="chat-input" id="chatInput" placeholder="Ask a question…" maxlength="400" />
+          <button type="button" class="chat-send" id="chatSend">Send</button>
+        </div>
+      </aside>
+
+      <div class="player" id="playerStage">
+      <!--
+        PLACEHOLDER: replace this whole .player-placeholder div with the video
+        embed, keeping it inside .player so the 16:9 frame and styling hold.
+        Example (YouTube unlisted):
+        <iframe src="https://www.youtube.com/embed/VIDEO_ID?rel=0" title="Golden Key Property Workshop" allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+        Example (Vimeo):
+        <iframe src="https://player.vimeo.com/video/VIDEO_ID" title="Golden Key Property Workshop" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+      -->
+      <div class="player-placeholder">
+        <div class="icon">▶</div>
+        <p><span class="ph-dark">[VIDEO EMBED GOES HERE]</span><br />Paste the YouTube, Vimeo or GHL embed code into this block. See the comment in the page source for the exact snippet.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="watch-meta" id="watchMeta" hidden>
+      <div class="watch-meta-item"><strong>30</strong> minutes</div>
+      <div class="watch-meta-item"><strong>Link</strong> sent to your inbox</div>
+      <div class="watch-meta-item"><strong>Questions?</strong> Book a call below</div>
+    </div>
+  </div>
+</section>
+
+<!-- WELCOME VIDEO -->
+<section class="section">
+  <div class="container">
+    <div class="welcome">
+      <p class="welcome-head">A quick word from Oliver before you start</p>
+      <div class="player">
+        <!--
+          PLACEHOLDER: short welcome video from Oliver. Same embed rules as the
+          workshop player above: drop the iframe straight in, replacing this
+          placeholder div.
+        -->
+        <div class="player-placeholder">
+          <div class="icon">▶</div>
+          <p><span class="ph-dark">[WELCOME VIDEO EMBED]</span><br />A 60 to 90 second piece to camera from Oliver: thanks for registering, what they will get out of the workshop, and to keep an eye on their inbox.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHECKLIST -->
+<section class="section section-grey">
+  <div class="container">
+    <span class="section-eyebrow">Before It Starts</span>
+    <h2 class="section-title">Your Workshop Checklist</h2>
+    <div class="checklist">
+      <div class="check-item">
+        <div class="check-tick">✓</div>
+        <div>
+          <h4>Check your inbox, and your spam folder</h4>
+          <p>Your joining link is on its way. If it has not landed within a few minutes, it is usually sitting in spam or promotions.</p>
+        </div>
+      </div>
+      <div class="check-item">
+        <div class="check-tick">✓</div>
+        <div>
+          <h4>Add it to your calendar</h4>
+          <p>Takes five seconds and means it does not get lost behind everything else in your day.</p>
+        </div>
+      </div>
+      <div class="check-item">
+        <div class="check-tick">✓</div>
+        <div>
+          <h4>Have a pen handy</h4>
+          <p>The yield breakdown moves quickly. Worth noting the numbers so you can check them against your own stock afterwards.</p>
+        </div>
+      </div>
+      <div class="check-item">
+        <div class="check-tick">✓</div>
+        <div>
+          <h4>Write down your questions</h4>
+          <p>Anything the workshop does not answer, note it down and put it straight to the team on a call.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BOTTOM CTA -->
+<section class="bottom-cta">
+  <h2>Questions After The Workshop?</h2>
+  <p>Book a short call with the team to go through current availability, pricing, and anything the workshop left open.</p>
+  <a href="booking.html" class="cta-link">Book A Call →</a>
+  <p class="cta-note">No pitch. No pressure. No commitment.</p>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="wordmark"><svg class="wordmark-icon" width="15" height="32" viewBox="75 42 51 110" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="100" cy="66" r="19" stroke="currentColor" stroke-width="7"/><rect x="95.5" y="85" width="9" height="62" fill="currentColor"/><rect x="104.5" y="126" width="15" height="7" fill="currentColor"/><rect x="104.5" y="138" width="11" height="7" fill="currentColor"/></svg>Golden Key<span> · </span>Property</div>
+  <div class="footer-links">
+    <a href="#">Privacy Policy</a>
+    <a href="#">Terms &amp; Conditions</a>
+  </div>
+  <p class="footer-copy">
+    &copy; 2026 Golden Key Property. All rights reserved.<br />
+    Golden Key Property is a trading name of Asbach Enterprises Ltd, registered in England &amp; Wales. Registration number: 16016190.<br />
+    167-169 Great Portland Street, 5th Floor, London, England, W1W 5PF &nbsp;·&nbsp; info@goldenkeypropertyco.com<br /><br />
+    <strong>Risk warning:</strong> This page is not a financial promotion and the workshop is general information only, not a personal recommendation. Property investment places your capital at risk; you may get back less than you invest. Property values can fall as well as rise, rental income is not guaranteed, and property is generally illiquid, so it may be difficult to sell or exit quickly. Past or targeted performance is not a reliable indicator of future results. Golden Key Property is not authorised or regulated by the Financial Conduct Authority to give investment advice. Seek independent financial and legal advice before making any investment decision.
+  </p>
+</footer>
+
+<script>
+// The shared booking page reads this to route its "back to homepage" link.
+try { sessionStorage.setItem('gkOriginPage', 'uk-workshop.html'); } catch (e) {}
+
+// Branches on what the visitor picked on the registration page. The soonest
+// session continues the countdown they already saw (held in sessionStorage, so
+// the timer never jumps backwards) and then opens the player. A fixed later
+// session shows the booked card with calendar links instead.
+(function () {
+  const LEAD_MIN_MS = 4.5 * 60 * 1000;
+  const LEAD_MAX_MS = 7.5 * 60 * 1000;
+  const SESSION_KEY = 'gkWorkshopStart';
+  const CHOICE_KEY = 'gkWorkshopChoice';
+  const DURATION_MIN = 30;
+
+  const cdStage = document.getElementById('cdStage');
+  const cdBig = document.getElementById('cdBig');
+  const cdFill = document.getElementById('cdFill');
+  const bookedStage = document.getElementById('bookedStage');
+  const bookedWhen = document.getElementById('bookedWhen');
+  const playerStage = document.getElementById('playerStage');
+  const liveGrid = document.getElementById('liveGrid');
+  const watchMeta = document.getElementById('watchMeta');
+  const statusBadge = document.getElementById('statusBadge');
+  const watchTitle = document.getElementById('watchTitle');
+  const watchSub = document.getElementById('watchSub');
+  if (!cdStage || !liveGrid) return;
+
+  let choice = null;
+  try { choice = JSON.parse(sessionStorage.getItem(CHOICE_KEY) || 'null'); } catch (e) {}
+
+  function fmt(ms) {
+    const total = Math.max(0, Math.round(ms / 1000));
+    const m = String(Math.floor(total / 60)).padStart(2, '0');
+    const s = String(total % 60).padStart(2, '0');
+    return m + ':' + s;
+  }
+
+  function pad(n) { return String(n).padStart(2, '0'); }
+  function icsStamp(d) {
+    return d.getUTCFullYear() + pad(d.getUTCMonth() + 1) + pad(d.getUTCDate()) + 'T' +
+           pad(d.getUTCHours()) + pad(d.getUTCMinutes()) + '00Z';
+  }
+
+  const EVENT_TITLE = 'Golden Key Property Workshop';
+  const EVENT_DETAIL = 'Your 30 minute workshop on off-market UK buy to let. The joining link is in your email.';
+
+  function setupCalendarLinks(startDate) {
+    const endDate = new Date(startDate.getTime() + DURATION_MIN * 60000);
+    const s1 = icsStamp(startDate), s2 = icsStamp(endDate);
+
+    const g = document.getElementById('calGoogle');
+    if (g) {
+      g.href = 'https://calendar.google.com/calendar/render?action=TEMPLATE' +
+        '&text=' + encodeURIComponent(EVENT_TITLE) +
+        '&dates=' + s1 + '/' + s2 +
+        '&details=' + encodeURIComponent(EVENT_DETAIL);
+    }
+    const o = document.getElementById('calOutlook');
+    if (o) {
+      o.href = 'https://outlook.live.com/calendar/0/deeplink/compose?path=/calendar/action/compose&rru=addevent' +
+        '&subject=' + encodeURIComponent(EVENT_TITLE) +
+        '&startdt=' + startDate.toISOString() +
+        '&enddt=' + endDate.toISOString() +
+        '&body=' + encodeURIComponent(EVENT_DETAIL);
+    }
+    const ics = document.getElementById('calIcs');
+    if (ics) {
+      const body = [
+        'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Golden Key Property//Workshop//EN',
+        'BEGIN:VEVENT',
+        'UID:' + Date.now() + '@goldenkeypropertyco.com',
+        'DTSTAMP:' + icsStamp(new Date()),
+        'DTSTART:' + s1, 'DTEND:' + s2,
+        'SUMMARY:' + EVENT_TITLE,
+        'DESCRIPTION:' + EVENT_DETAIL,
+        'END:VEVENT', 'END:VCALENDAR'
+      ].join('\r\n');
+      ics.href = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(body);
+    }
+  }
+
+  // ---- Live chat ----------------------------------------------------------
+  // Messages from Golden Key are pre-written and timed to the video, the same
+  // way slides are. Everything a viewer types is real and reaches the team.
+  // There are deliberately no scripted "attendee" messages: inventing other
+  // people endorsing an investment is not something we do.
+  const GHL_WEBHOOK_URL = 'UK_WEBINAR_WEBHOOK_URL';
+
+  // Edit freely. `at` is seconds from the moment the workshop opens.
+  const HOST_MESSAGES = [
+    { at: 2,   from: 'Golden Key Team', text: 'Welcome in. Type a question any time and it comes straight to our team.' },
+    { at: 45,  from: 'Golden Key Team', text: 'PLACEHOLDER: time this one to the section where Oliver introduces the model.' },
+    { at: 300, from: 'Golden Key Team', text: 'PLACEHOLDER: time this to the 16% yield breakdown, e.g. point out the figure is net, after costs.' },
+    { at: 900, from: 'Golden Key Team', text: 'PLACEHOLDER: time this to the 25 year assurance section.' },
+    { at: 1500, from: 'Golden Key Team', text: 'PLACEHOLDER: near the end, invite them to book a call using the button below.' }
+  ];
+
+  const chatBody = document.getElementById('chatBody');
+  const chatInput = document.getElementById('chatInput');
+  const chatSend = document.getElementById('chatSend');
+
+  // Read lazily rather than at load, so attribution does not depend on script order.
+  function getAttendee() {
+    try { return JSON.parse(sessionStorage.getItem('gkAttendee') || '{}') || {}; } catch (e) { return {}; }
+  }
+
+  function addMessage(from, text, opts) {
+    opts = opts || {};
+    const wrap = document.createElement('div');
+    wrap.className = 'msg' + (opts.mine ? ' mine' : '');
+    const who = document.createElement('div');
+    who.className = 'msg-from';
+    who.textContent = from;
+    const body = document.createElement('div');
+    body.className = 'msg-text';
+    body.textContent = text;              // textContent, so a typed question can never inject markup
+    wrap.appendChild(who);
+    wrap.appendChild(body);
+    if (opts.note) {
+      const n = document.createElement('div');
+      n.className = 'msg-note';
+      n.textContent = opts.note;
+      wrap.appendChild(n);
+    }
+    chatBody.appendChild(wrap);
+    chatBody.scrollTop = chatBody.scrollHeight;
+    return wrap;
+  }
+
+  function sendQuestion() {
+    const text = chatInput.value.trim();
+    if (!text) return;
+    chatInput.value = '';
+    const attendee = getAttendee();
+    const node = addMessage(attendee.first_name || 'You', text, { mine: true, note: 'Sending…' });
+    const note = node.querySelector('.msg-note');
+
+    if (GHL_WEBHOOK_URL === 'UK_WEBINAR' + '_WEBHOOK_URL') {
+      if (note) note.textContent = 'Not sent: the webhook URL has not been set yet.';
+      return;
+    }
+    fetch(GHL_WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type: 'workshop_question',
+        question: text,
+        first_name: attendee.first_name || '',
+        email: attendee.email || '',
+        source: 'UK Workshop Live Chat',
+        asked_at: new Date().toISOString()
+      })
+    }).then(function (r) {
+      if (!r.ok) throw new Error('bad response');
+      if (note) note.textContent = 'Sent to the team. We will come back to you by email.';
+    }).catch(function () {
+      if (note) note.textContent = 'Could not send. Please reply to your confirmation email instead.';
+    });
+  }
+
+  function startChat() {
+    if (!chatBody) return;
+    HOST_MESSAGES.forEach(function (m) {
+      setTimeout(function () { addMessage(m.from, m.text); }, Math.max(0, m.at) * 1000);
+    });
+    if (chatSend) chatSend.addEventListener('click', sendQuestion);
+    if (chatInput) {
+      chatInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') { e.preventDefault(); sendQuestion(); }
+      });
+    }
+  }
+
+  function reveal() {
+    cdStage.hidden = true;
+    liveGrid.hidden = false;
+    document.querySelector('.player-wrap').classList.add('is-live');
+    watchMeta.hidden = false;
+    startChat();
+    statusBadge.classList.add('is-live');
+    statusBadge.innerHTML = '<span class="live-dot"></span>Live Now';
+    watchTitle.innerHTML = 'Your Workshop Is <em>Ready</em>';
+    watchSub.textContent = 'Press play to begin. We have emailed you the link too, so you can come back to it any time.';
+  }
+
+  // ---- Fixed later session: booked card, no countdown ----
+  if (choice && choice.jit === false && choice.at) {
+    const when = new Date(choice.at);
+    cdStage.hidden = true;
+    bookedStage.hidden = false;
+    bookedWhen.textContent = choice.label || when.toLocaleString('en-GB');
+    watchTitle.innerHTML = 'Your Seat Is <em>Booked</em>';
+    watchSub.textContent = 'We will email you the joining link before it starts. Add it to your calendar so it does not get missed.';
+    setupCalendarLinks(when);
+    return;
+  }
+
+  // ---- Soonest session: continue the countdown, then open the player ----
+  const now = Date.now();
+  let target = 0;
+  try { target = parseInt(sessionStorage.getItem(SESSION_KEY) || '0', 10) || 0; } catch (e) {}
+  if (!target || target - now > LEAD_MAX_MS) {
+    target = now + LEAD_MIN_MS + Math.floor(Math.random() * (LEAD_MAX_MS - LEAD_MIN_MS + 1));
+    try { sessionStorage.setItem(SESSION_KEY, String(target)); } catch (e) {}
+  }
+  if (target <= now) { reveal(); return; }
+
+  const span = Math.max(1, target - now);
+  function tick() {
+    const remaining = target - Date.now();
+    if (remaining <= 0) { reveal(); clearInterval(timer); return; }
+    cdBig.textContent = fmt(remaining);
+    cdFill.style.width = Math.min(100, ((span - remaining) / span) * 100) + '%';
+  }
+  var timer = setInterval(tick, 1000);
+  tick();
+})();
+</script>
+</body>
+</html>

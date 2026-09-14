@@ -411,8 +411,8 @@ try { sessionStorage.setItem('gkOriginPage', 'uk-workshop.html'); } catch (e) {}
 // the timer never jumps backwards) and then opens the player. A fixed later
 // session shows the booked card with calendar links instead.
 (function () {
-  const LEAD_MIN_MS = 4.5 * 60 * 1000;
-  const LEAD_MAX_MS = 7.5 * 60 * 1000;
+  const SLOT_MS = 15 * 60 * 1000;
+  const MIN_LEAD_MS = 3 * 60 * 1000;
   const SESSION_KEY = 'gkWorkshopStart';
   const CHOICE_KEY = 'gkWorkshopChoice';
   const DURATION_MIN = 30;
@@ -684,8 +684,9 @@ try { sessionStorage.setItem('gkOriginPage', 'uk-workshop.html'); } catch (e) {}
   const now = Date.now();
   let target = 0;
   try { target = parseInt(sessionStorage.getItem(SESSION_KEY) || '0', 10) || 0; } catch (e) {}
-  if (!target || target - now > LEAD_MAX_MS) {
-    target = now + LEAD_MIN_MS + Math.floor(Math.random() * (LEAD_MAX_MS - LEAD_MIN_MS + 1));
+  if (!target || target - now > SLOT_MS + MIN_LEAD_MS) {
+    target = Math.ceil(now / SLOT_MS) * SLOT_MS;
+    if (target - now < MIN_LEAD_MS) target += SLOT_MS;
     try { sessionStorage.setItem(SESSION_KEY, String(target)); } catch (e) {}
   }
   if (target <= now) { reveal(); return; }

@@ -67,9 +67,17 @@ the `session_is_just_in_time` branch.
 
 ## The three payloads
 
-All three POST to the **same** webhook above. They are told apart by `type`.
-Every workflow on this webhook **must** filter on `type` or it will fire on all
-three.
+**Each type has its own inbound webhook**, so a workflow can only ever receive
+what it handles. The `type` field is still sent on every payload as a sanity
+check and so the data is self describing, but it is no longer load bearing.
+
+| Payload | Webhook |
+|---|---|
+| `workshop_registration` | ends `66366cf1` |
+| `workshop_progress` | ends `42c95c56` |
+
+Chat questions are not collected for this funnel. The live chat is a one way
+feed with no input.
 
 ### 1. `workshop_registration`
 
@@ -209,12 +217,19 @@ The expected value sits on `Schedule` instead.
 
 ## Testing
 
-1. Register via `/uk-workshop?fbclid=test001`
-2. Contact appears with `fbc`, `fbp`, `event_id` populated
-3. Events Manager shows **one** `CompleteRegistration` with decent match quality
-4. Watch to 75% → contact gains tag `watched-workshop`
-5. Book a test call → `Schedule` arrives at `3950 USD`
-6. Delete the test contact and cancel the appointment
+1. In a private window, register via `/uk-workshop?fbclid=test001`
+2. Contact appears with `fbc`, `fbp` and `event_id` populated
+3. Events Manager shows **one** `CompleteRegistration`, with `fbc`, `fbp` and
+   `event_id` among the matched parameters
+4. Wait out the countdown, click through to `/uk-workshop-live`, and leave the
+   tab **in the foreground**. The tab must stay visible: progress runs on
+   visible time
+5. Contact collects `watched-start`, `watched-25`, `watched-50`, `watched-75`,
+   `watched-complete`, and `watch_percent` reads `100`
+6. Book a test call → `Schedule` arrives at `3950 USD`
+7. Delete the test contact and cancel the appointment
 
-If `fbc` is empty at step 2, the mapping did not take. It fails silently and
-costs attribution later, so do not move past it.
+`event_id` is generated unconditionally by the page, so if it is empty on the
+contact the mapping is broken rather than the page. `fbc` and `fbp` can
+legitimately be empty if the visit had no ad click or the pixel was blocked,
+which is why step 1 uses a private window and a test click id.

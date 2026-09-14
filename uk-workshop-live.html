@@ -477,19 +477,24 @@ try { sessionStorage.setItem('gkOriginPage', 'uk-workshop.html'); } catch (e) {}
   function pingProgress(tag, pct) {
     const attendee = getAttendee();
     if (!attendee.email && !attendee.contact_id) return;
+
+    // Only send identifiers we actually have. An empty email reaching a
+    // Create/Update Contact action matches nothing and creates a blank record.
+    const payload = {
+      type: 'workshop_progress',
+      tag: tag,
+      percent: pct,
+      seconds_watched: Math.round(watchedSeconds),
+      watched_at: new Date().toISOString()
+    };
+    if (attendee.contact_id) payload.contact_id = attendee.contact_id;
+    if (attendee.email) payload.email = attendee.email;
+    if (attendee.first_name) payload.first_name = attendee.first_name;
+
     fetch(GHL_PROGRESS_WEBHOOK, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        type: 'workshop_progress',
-        tag: tag,
-        percent: pct,
-        contact_id: attendee.contact_id || '',
-        email: attendee.email || '',
-        first_name: attendee.first_name || '',
-        seconds_watched: Math.round(watchedSeconds),
-        watched_at: new Date().toISOString()
-      })
+      body: JSON.stringify(payload)
     }).catch(function () {});   // best effort, never block the player
   }
 

@@ -93,26 +93,6 @@ fbq('track', 'ViewContent', { content_name: 'UK Workshop' });
     display: flex; align-items: center; justify-content: center;
   }
   .player iframe, .player video { width: 100%; height: 100%; border: 0; display: block; }
-  .facade {
-    position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%;
-    border: 0; cursor: pointer; padding: 0;
-    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
-    background: #121213 url('images/welcome-poster.jpg') center center/cover no-repeat;
-    font-family: var(--face);
-  }
-  .facade::after {
-    content: ''; position: absolute; inset: 0;
-    background: linear-gradient(180deg, rgba(5,5,6,0.42), rgba(5,5,6,0.72));
-  }
-  .facade > * { position: relative; z-index: 1; }
-  .facade-play {
-    width: 64px; height: 64px; border-radius: 50%; background: var(--brand-gradient);
-    display: flex; align-items: center; justify-content: center;
-    color: var(--black); font-size: 21px; padding-left: 4px;
-    box-shadow: 0 10px 32px rgba(212,175,55,0.4); transition: transform 0.2s ease;
-  }
-  .facade:hover .facade-play { transform: scale(1.07); }
-  .facade-label { color: #fff; font-size: 14px; font-weight: 700; letter-spacing: 0.2px; }
   .player-placeholder { padding: 32px; display: flex; flex-direction: column; align-items: center; gap: 14px; }
   .player-placeholder .icon {
     width: 62px; height: 62px; border-radius: 50%; background: var(--brand-gradient);
@@ -346,11 +326,13 @@ fbq('track', 'ViewContent', { content_name: 'UK Workshop' });
   <div class="container">
     <div class="welcome">
       <p class="welcome-head">A quick word from Oliver before you start</p>
-      <div class="player" id="welcomePlayer">
-        <button type="button" class="facade" id="welcomePlay">
-          <span class="facade-play" aria-hidden="true">&#9654;</span>
-          <span class="facade-label">Play Oliver's message</span>
-        </button>
+      <div class="player">
+        <iframe
+          src="https://www.tella.tv/video/vid_cmu1b8mm300cm0agmdoqnhkfg/embed?b=0&amp;title=0&amp;a=1&amp;loop=0&amp;t=0&amp;muted=0&amp;wt=0&amp;o=0"
+          title="A word from Oliver Cullen"
+          allow="autoplay; fullscreen"
+          allowtransparency
+        ></iframe>
       </div>
     </div>
   </div>
@@ -416,26 +398,6 @@ fbq('track', 'ViewContent', { content_name: 'UK Workshop' });
     <strong>Risk warning:</strong> This page is not a financial promotion and the workshop is general information only, not a personal recommendation. Property investment places your capital at risk; you may get back less than you invest. Property values can fall as well as rise, rental income is not guaranteed, and property is generally illiquid, so it may be difficult to sell or exit quickly. Past or targeted performance is not a reliable indicator of future results. Golden Key Property is not authorised or regulated by the Financial Conduct Authority to give investment advice. Seek independent financial and legal advice before making any investment decision.
   </p>
 </footer>
-
-<script>
-// The iframe is created by the click itself. A cross-origin player reloaded
-// programmatically does not inherit the parent's user gesture, so autoplay
-// with sound stays blocked; building it inside the handler is what allows it.
-(function () {
-  const btn = document.getElementById('welcomePlay');
-  const holder = document.getElementById('welcomePlayer');
-  if (!btn || !holder) return;
-  btn.addEventListener('click', function () {
-    const f = document.createElement('iframe');
-    f.src = 'https://www.tella.tv/video/vid_cmu1b8mm300cm0agmdoqnhkfg/embed?b=0&title=0&a=1&loop=0&t=0&muted=0&wt=0&o=0';
-    f.title = "A word from Oliver Cullen";
-    f.setAttribute('allow', 'autoplay; fullscreen');
-    f.setAttribute('allowtransparency', '');
-    holder.innerHTML = '';
-    holder.appendChild(f);
-  });
-})();
-</script>
 
 <script>
 // The shared booking page reads this to route its "back to homepage" link.

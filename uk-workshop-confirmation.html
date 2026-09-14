@@ -573,12 +573,67 @@ try { sessionStorage.setItem('gkOriginPage', 'uk-workshop.html'); } catch (e) {}
     }
   }
 
+  // ---- Workshop engagement ------------------------------------------------
+  // The embed might be YouTube, Vimeo or GHL and each exposes playback
+  // differently, so this measures *visible* time on the page instead. The
+  // timer only advances while the tab is actually in view, which rules out
+  // someone leaving it open in a background tab and inflating the numbers.
+  // If you later settle on one player, swap watchedSeconds for its real
+  // progress callback and the rest of this keeps working unchanged.
+  const WORKSHOP_SECONDS = 30 * 60;
+  const MARKS = [
+    { at: 0.25, ev: 'Workshop25' },
+    { at: 0.50, ev: 'Workshop50' },
+    { at: 0.75, ev: 'Workshop75' },
+    { at: 0.95, ev: 'WorkshopComplete' }
+  ];
+  let watchedSeconds = 0;
+  let lastTick = null;
+  const firedMarks = {};
+
+  function fireMeta(name) {
+    if (typeof fbq === 'function') {
+      fbq('trackCustom', name, {
+        content_name: 'UK Workshop',
+        seconds_watched: Math.round(watchedSeconds)
+      });
+    }
+  }
+
+  function engagementTick() {
+    const now = Date.now();
+    if (document.visibilityState === 'visible') {
+      if (lastTick !== null) watchedSeconds += (now - lastTick) / 1000;
+      lastTick = now;
+    } else {
+      lastTick = null;   // paused while the tab is hidden
+    }
+    for (let i = 0; i < MARKS.length; i++) {
+      const m = MARKS[i];
+      if (!firedMarks[m.ev] && watchedSeconds >= WORKSHOP_SECONDS * m.at) {
+        firedMarks[m.ev] = true;
+        fireMeta(m.ev);
+      }
+    }
+  }
+
+  function startEngagementTracking() {
+    fireMeta('WorkshopStart');
+    lastTick = Date.now();
+    document.addEventListener('visibilitychange', function () {
+      if (document.visibilityState === 'visible') lastTick = Date.now();
+      else lastTick = null;
+    });
+    setInterval(engagementTick, 5000);
+  }
+
   function reveal() {
     cdStage.hidden = true;
     liveGrid.hidden = false;
     document.querySelector('.player-wrap').classList.add('is-live');
     watchMeta.hidden = false;
     startChat();
+    startEngagementTracking();
     statusBadge.classList.add('is-live');
     statusBadge.innerHTML = '<span class="live-dot"></span>Live Now';
     watchTitle.innerHTML = 'Your Workshop Is <em>Ready</em>';

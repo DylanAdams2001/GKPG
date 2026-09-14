@@ -93,6 +93,18 @@ fbq('track', 'ViewContent', { content_name: 'UK Workshop' });
     display: flex; align-items: center; justify-content: center;
   }
   .player iframe, .player video { width: 100%; height: 100%; border: 0; display: block; }
+  .soundbar {
+    position: absolute; left: 50%; bottom: 20px; transform: translateX(-50%); z-index: 3;
+    display: inline-flex; align-items: center; gap: 9px;
+    background: var(--brand-gradient); color: var(--black);
+    border: 0; border-radius: 100px; padding: 13px 24px; cursor: pointer;
+    font-family: var(--face); font-size: 13.5px; font-weight: 800; letter-spacing: 0.3px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+    animation: soundPulse 2s ease-in-out infinite;
+  }
+  .soundbar svg { width: 17px; height: 17px; }
+  @keyframes soundPulse { 0%,100%{transform:translateX(-50%) scale(1)} 50%{transform:translateX(-50%) scale(1.045)} }
+  @media (prefers-reduced-motion: reduce) { .soundbar { animation: none; } }
   .player-placeholder { padding: 32px; display: flex; flex-direction: column; align-items: center; gap: 14px; }
   .player-placeholder .icon {
     width: 62px; height: 62px; border-radius: 50%; background: var(--brand-gradient);
@@ -270,15 +282,10 @@ fbq('track', 'ViewContent', { content_name: 'UK Workshop' });
       </aside>
 
       <div class="player" id="playerStage">
-        <!-- TEMPORARY: the 90 second pre-workshop video, standing in so the
-             engagement marks can be tested. Swap the src for the real 30
-             minute workshop and set WORKSHOP_SECONDS back to 30 * 60. -->
-        <iframe
-          src="https://www.tella.tv/video/vid_cmu1b8mm300cm0agmdoqnhkfg/embed?b=0&amp;title=0&amp;a=1&amp;loop=0&amp;t=0&amp;muted=0&amp;wt=0&amp;o=0"
-          title="Golden Key Property Workshop"
-          allow="autoplay; fullscreen"
-          allowtransparency
-        ></iframe>
+        <button type="button" class="soundbar" id="soundBar" hidden>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>
+          Tap for sound
+        </button>
       </div>
     </div>
 
@@ -517,16 +524,46 @@ try { sessionStorage.setItem('gkOriginPage', 'uk-workshop.html'); } catch (e) {}
     setInterval(engagementTick, 1000);
   }
 
+  // Autoplay is only permitted while muted, and the click that got them here
+  // happened on the previous page so it does not carry. The session therefore
+  // starts muted and running, with a prompt for sound. Tapping it rebuilds the
+  // iframe unmuted at the point they had reached, rather than from the top.
+  const WORKSHOP_SRC = 'https://www.tella.tv/video/vid_cmu1b8mm300cm0agmdoqnhkfg/embed?b=0&title=0&loop=0&wt=0&o=0&a=1';
+  let sessionOpenedAt = 0;
+
+  function buildPlayer(muted, startAt) {
+    const holder = document.getElementById('playerStage');
+    const bar = document.getElementById('soundBar');
+    const old = holder.querySelector('iframe');
+    if (old) old.remove();
+    const f = document.createElement('iframe');
+    f.src = WORKSHOP_SRC + '&muted=' + (muted ? 1 : 0) + '&t=' + Math.max(0, Math.round(startAt));
+    f.title = 'Golden Key Property Workshop';
+    f.setAttribute('allow', 'autoplay; fullscreen');
+    f.setAttribute('allowtransparency', '');
+    holder.insertBefore(f, bar);
+  }
+
   function reveal() {
     cdStage.hidden = true;
     liveGrid.hidden = false;
     document.querySelector('.player-wrap').classList.add('is-live');
     watchMeta.hidden = false;
+    sessionOpenedAt = Date.now();
+    buildPlayer(true, 0);
+    const bar = document.getElementById('soundBar');
+    if (bar) {
+      bar.hidden = false;
+      bar.addEventListener('click', function () {
+        buildPlayer(false, (Date.now() - sessionOpenedAt) / 1000);
+        bar.remove();
+      });
+    }
     startEngagementTracking();
     statusBadge.classList.add('is-live');
     statusBadge.innerHTML = '<span class="live-dot"></span>Live Now';
     watchTitle.innerHTML = 'Your Workshop Is <em>Ready</em>';
-    watchSub.textContent = 'Press play to begin. We have emailed you the link too, so you can come back to it any time.';
+    watchSub.textContent = 'Your session is running. Tap the button on the video for sound.';
   }
 
   // ---- Soonest session: continue the countdown, then open the player ----

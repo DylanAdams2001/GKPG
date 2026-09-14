@@ -803,7 +803,6 @@ document.getElementById('submitBtn').addEventListener('click', function () {
   const chosenSession = selectedSession();
   try {
     sessionStorage.setItem('gkAttendee', JSON.stringify({
-      type: 'workshop_registration',
       first_name: fnameEl.value.trim(), email: emailEl.value.trim()
     }));
   } catch (e) {}
@@ -829,6 +828,7 @@ document.getElementById('submitBtn').addEventListener('click', function () {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
+      type: 'workshop_registration',
       first_name: fnameEl.value.trim(),
       last_name: lnameEl.value.trim(),
       email: emailEl.value.trim(),

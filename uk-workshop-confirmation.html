@@ -93,16 +93,26 @@ fbq('track', 'ViewContent', { content_name: 'UK Workshop' });
     display: flex; align-items: center; justify-content: center;
   }
   .player iframe, .player video { width: 100%; height: 100%; border: 0; display: block; }
-  .unmute {
-    position: absolute; left: 50%; bottom: 18px; transform: translateX(-50%);
-    display: inline-flex; align-items: center; gap: 9px; z-index: 2;
-    background: rgba(10,10,10,0.82); color: #fff; border: 1px solid rgba(255,255,255,0.28);
-    border-radius: 100px; padding: 11px 20px; cursor: pointer;
-    font-family: var(--face); font-size: 13.5px; font-weight: 700;
-    backdrop-filter: blur(6px); transition: background 0.2s, border-color 0.2s;
+  .facade {
+    position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%;
+    border: 0; cursor: pointer; padding: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+    background: #121213 url('images/welcome-poster.jpg') center center/cover no-repeat;
+    font-family: var(--face);
   }
-  .unmute:hover { background: var(--gold); color: var(--black); border-color: transparent; }
-  .unmute svg { width: 17px; height: 17px; }
+  .facade::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(5,5,6,0.42), rgba(5,5,6,0.72));
+  }
+  .facade > * { position: relative; z-index: 1; }
+  .facade-play {
+    width: 64px; height: 64px; border-radius: 50%; background: var(--brand-gradient);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--black); font-size: 21px; padding-left: 4px;
+    box-shadow: 0 10px 32px rgba(212,175,55,0.4); transition: transform 0.2s ease;
+  }
+  .facade:hover .facade-play { transform: scale(1.07); }
+  .facade-label { color: #fff; font-size: 14px; font-weight: 700; letter-spacing: 0.2px; }
   .player-placeholder { padding: 32px; display: flex; flex-direction: column; align-items: center; gap: 14px; }
   .player-placeholder .icon {
     width: 62px; height: 62px; border-radius: 50%; background: var(--brand-gradient);
@@ -336,17 +346,10 @@ fbq('track', 'ViewContent', { content_name: 'UK Workshop' });
   <div class="container">
     <div class="welcome">
       <p class="welcome-head">A quick word from Oliver before you start</p>
-      <div class="player">
-        <iframe
-          id="welcomeVideo"
-          src="https://www.tella.tv/video/vid_cmu1b8mm300cm0agmdoqnhkfg/embed?b=0&amp;title=0&amp;a=1&amp;loop=0&amp;t=0&amp;muted=1&amp;wt=0&amp;o=0"
-          title="A word from Oliver Cullen"
-          allow="autoplay; fullscreen"
-          allowtransparency
-        ></iframe>
-        <button type="button" class="unmute" id="unmuteBtn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>
-          Tap for sound
+      <div class="player" id="welcomePlayer">
+        <button type="button" class="facade" id="welcomePlay">
+          <span class="facade-play" aria-hidden="true">&#9654;</span>
+          <span class="facade-label">Play Oliver's message</span>
         </button>
       </div>
     </div>
@@ -415,16 +418,21 @@ fbq('track', 'ViewContent', { content_name: 'UK Workshop' });
 </footer>
 
 <script>
-// Tella is cross-origin so the player cannot be unmuted from here. Reloading
-// the iframe with muted=0 restarts it with sound, which for a short welcome
-// video is the better outcome anyway: they hear it from the beginning.
+// The iframe is created by the click itself. A cross-origin player reloaded
+// programmatically does not inherit the parent's user gesture, so autoplay
+// with sound stays blocked; building it inside the handler is what allows it.
 (function () {
-  const btn = document.getElementById('unmuteBtn');
-  const frame = document.getElementById('welcomeVideo');
-  if (!btn || !frame) return;
+  const btn = document.getElementById('welcomePlay');
+  const holder = document.getElementById('welcomePlayer');
+  if (!btn || !holder) return;
   btn.addEventListener('click', function () {
-    frame.src = frame.src.replace('muted=1', 'muted=0');
-    btn.remove();
+    const f = document.createElement('iframe');
+    f.src = 'https://www.tella.tv/video/vid_cmu1b8mm300cm0agmdoqnhkfg/embed?b=0&title=0&a=1&loop=0&t=0&muted=0&wt=0&o=0';
+    f.title = "A word from Oliver Cullen";
+    f.setAttribute('allow', 'autoplay; fullscreen');
+    f.setAttribute('allowtransparency', '');
+    holder.innerHTML = '';
+    holder.appendChild(f);
   });
 })();
 </script>

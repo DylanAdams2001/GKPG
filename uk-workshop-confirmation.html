@@ -170,18 +170,6 @@ fbq('track', 'ViewContent', { content_name: 'UK Workshop' });
   }
   .msg-link:hover { background: #fff; }
   .msg-note { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 3px; font-style: italic; }
-  .chat-foot { padding: 12px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; gap: 8px; flex-shrink: 0; }
-  .chat-input {
-    flex: 1; min-width: 0; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14);
-    border-radius: 10px; padding: 11px 12px; color: #fff; font-family: var(--face); font-size: 13px; outline: none;
-  }
-  .chat-input:focus { border-color: var(--gold); }
-  .chat-input::placeholder { color: rgba(255,255,255,0.35); }
-  .chat-send {
-    background: var(--brand-gradient); color: var(--black); border: none; border-radius: 10px;
-    padding: 0 16px; font-family: var(--face); font-weight: 800; font-size: 12px; cursor: pointer; flex-shrink: 0;
-  }
-  .chat-send:disabled { opacity: 0.5; cursor: not-allowed; }
 
   @media (max-width: 900px) {
     .live-grid { grid-template-columns: 1fr; }
@@ -291,10 +279,6 @@ fbq('track', 'ViewContent', { content_name: 'UK Workshop' });
           <span class="chat-title">Live Chat</span>
         </div>
         <div class="chat-body" id="chatBody"></div>
-        <div class="chat-foot">
-          <input type="text" class="chat-input" id="chatInput" placeholder="Ask a question…" maxlength="400" />
-          <button type="button" class="chat-send" id="chatSend">Send</button>
-        </div>
       </aside>
 
       <div class="player" id="playerStage">
@@ -479,16 +463,17 @@ try { sessionStorage.setItem('gkOriginPage', 'uk-workshop.html'); } catch (e) {}
   }
 
   // ---- Live chat ----------------------------------------------------------
-  // Messages from Golden Key are pre-written and timed to the video, the same
-  // way slides are. Everything a viewer types is real and reaches the team.
-  // There are deliberately no scripted "attendee" messages: inventing other
-  // people endorsing an investment is not something we do.
-  const GHL_WEBHOOK_URL = 'https://services.leadconnectorhq.com/hooks/HEOut7IJQ2GxJIUq9qIb/webhook-trigger/66366cf1-032d-4417-bcf0-8c34466d24c3';
+  // A one-way feed. Messages are pre-written and timed to the video, the same
+  // way slides are. There are deliberately no scripted "attendee" messages:
+  // inventing other people endorsing an investment is not something we do.
+  // Each payload type has its own inbound webhook, so every GHL workflow
+  // receives only what it handles and cannot be triggered by the others.
+  const GHL_PROGRESS_WEBHOOK = 'https://services.leadconnectorhq.com/hooks/HEOut7IJQ2GxJIUq9qIb/webhook-trigger/42c95c56-93f9-47ff-8f11-8cb3a6749ba6';
 
   // Edit freely. `at` is seconds of *watched* time, so the chat stays in step
   // with the viewer even if they switch tabs and come back.
   const HOST_MESSAGES = [
-    { at: 5,    from: 'Golden Key Team', text: 'Welcome in. Type a question any time and it comes straight to our team.' },
+    { at: 5,    from: 'Golden Key Team', text: 'Welcome in. Oliver is about to walk through the numbers. Anything he does not cover, there is a link below to put it to him directly.' },
     { at: 60,   from: 'Golden Key Team', text: 'PLACEHOLDER: time this to where Oliver introduces the model.' },
     { at: 420,  from: 'Golden Key Team', text: 'PLACEHOLDER: time this to the 16% breakdown. Worth noting the figure is net, after costs.' },
     { at: 900,  from: 'Golden Key Team', text: 'PLACEHOLDER: time this to the 25 year agreement section.' },
@@ -501,8 +486,6 @@ try { sessionStorage.setItem('gkOriginPage', 'uk-workshop.html'); } catch (e) {}
   ];
 
   const chatBody = document.getElementById('chatBody');
-  const chatInput = document.getElementById('chatInput');
-  const chatSend = document.getElementById('chatSend');
 
   // Read lazily rather than at load, so attribution does not depend on script order.
   // Anyone arriving from the confirmation email is in a fresh browser session
@@ -549,46 +532,6 @@ try { sessionStorage.setItem('gkOriginPage', 'uk-workshop.html'); } catch (e) {}
     chatBody.appendChild(wrap);
     chatBody.scrollTop = chatBody.scrollHeight;
     return wrap;
-  }
-
-  function sendQuestion() {
-    const text = chatInput.value.trim();
-    if (!text) return;
-    chatInput.value = '';
-    const attendee = getAttendee();
-    const node = addMessage(attendee.first_name || 'You', text, { mine: true, note: 'Sending…' });
-    const note = node.querySelector('.msg-note');
-
-    if (GHL_WEBHOOK_URL === 'UK_WEBINAR' + '_WEBHOOK_URL') {
-      if (note) note.textContent = 'Not sent: the webhook URL has not been set yet.';
-      return;
-    }
-    fetch(GHL_WEBHOOK_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        type: 'workshop_question',
-        contact_id: attendee.contact_id || '',
-        question: text,
-        first_name: attendee.first_name || '',
-        email: attendee.email || '',
-        source: 'UK Workshop Live Chat',
-        asked_at: new Date().toISOString()
-      })
-    }).then(function (r) {
-      if (!r.ok) throw new Error('bad response');
-      if (note) note.textContent = 'Sent to the team. We will come back to you by email.';
-    }).catch(function () {
-      if (note) note.textContent = 'Could not send. Please reply to your confirmation email instead.';
-    });
-  }
-
-  function startChat() {
-    if (!chatSend || !chatInput) return;
-    chatSend.addEventListener('click', sendQuestion);
-    chatInput.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter') { e.preventDefault(); sendQuestion(); }
-    });
   }
 
   // Called from the engagement tick, so chat advances on watched time.
@@ -640,7 +583,7 @@ try { sessionStorage.setItem('gkOriginPage', 'uk-workshop.html'); } catch (e) {}
   function pingProgress(tag, pct) {
     const attendee = getAttendee();
     if (!attendee.email && !attendee.contact_id) return;
-    fetch(GHL_WEBHOOK_URL, {
+    fetch(GHL_PROGRESS_WEBHOOK, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -692,7 +635,6 @@ try { sessionStorage.setItem('gkOriginPage', 'uk-workshop.html'); } catch (e) {}
     liveGrid.hidden = false;
     document.querySelector('.player-wrap').classList.add('is-live');
     watchMeta.hidden = false;
-    startChat();
     startEngagementTracking();
     statusBadge.classList.add('is-live');
     statusBadge.innerHTML = '<span class="live-dot"></span>Live Now';

@@ -24,12 +24,9 @@ n.queue=[];t=b.createElement(e);t.async=!0;
 t.src=v;s=b.getElementsByTagName(e)[0];
 s.parentNode.insertBefore(t,s)}(window, document,'script',
 'https://connect.facebook.net/en_US/fbevents.js');
-var UK_PIXEL_ID = '1397390558441912';
-if (UK_PIXEL_ID !== 'UK_PIXEL' + '_ID') {
-  fbq('init', UK_PIXEL_ID);
-  fbq('track', 'PageView');
-  fbq('track', 'ViewContent', { content_name: 'UK Workshop' });
-}
+fbq('init', '1397390558441912');
+fbq('track', 'PageView');
+fbq('track', 'ViewContent', { content_name: 'UK Workshop' });
 </script>
 <!-- End Meta Pixel -->
 <style>
@@ -492,7 +489,7 @@ try { sessionStorage.setItem('gkOriginPage', 'uk-workshop.html'); } catch (e) {}
   // way slides are. Everything a viewer types is real and reaches the team.
   // There are deliberately no scripted "attendee" messages: inventing other
   // people endorsing an investment is not something we do.
-  const GHL_WEBHOOK_URL = 'UK_WEBINAR_WEBHOOK_URL';
+  const GHL_WEBHOOK_URL = 'https://services.leadconnectorhq.com/hooks/HEOut7IJQ2GxJIUq9qIb/webhook-trigger/66366cf1-032d-4417-bcf0-8c34466d24c3';
 
   // Edit freely. `at` is seconds of *watched* time, so the chat stays in step
   // with the viewer even if they switch tabs and come back.

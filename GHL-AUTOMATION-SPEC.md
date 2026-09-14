@@ -16,8 +16,22 @@ Everything needed to build the GoHighLevel side of the UK workshop funnel.
 https://www.goldenkeypropertyco.com/uk-workshop-confirmation?c={{contact.id}}
 ```
 
-Without `?c=`, anyone arriving from an email is anonymous to the page, and the
-`workshop_watched` ping never fires.
+Without `?c=`, anyone arriving from an email is anonymous to the page and no
+progress ping fires for them.
+
+Paste the whole URL including the merge field into the link field in GHL's
+email editor. Then send yourself a test and click it: the address bar should
+show a real id. If it shows `{{contact.id}}` or `%7B%7Bcontact.id%7D%7D` the
+merge did not resolve, and the page will ignore it rather than pass a bad
+identifier to GHL.
+
+### GHL build gotchas
+
+- **Dynamic tags:** the Add Tag field has a hidden Standard/Dynamic toggle
+  behind the three dot menu. Switch to Dynamic before the merge field is
+  accepted.
+- **Number fields:** a Number custom field rejects typed merge syntax. Insert
+  through the merge picker instead.
 
 ## Identifiers
 

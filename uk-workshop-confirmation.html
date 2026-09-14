@@ -494,7 +494,11 @@ try { sessionStorage.setItem('gkOriginPage', 'uk-workshop.html'); } catch (e) {}
   function getAttendee() {
     let a = {};
     try { a = JSON.parse(sessionStorage.getItem('gkAttendee') || '{}') || {}; } catch (e) {}
-    const cid = new URLSearchParams(window.location.search).get('c');
+    // Ignore an unresolved merge field, e.g. ?c={{contact.id}} arriving
+    // literally because the email editor did not substitute it. Passing that
+    // through would send GHL an identifier matching nothing.
+    let cid = new URLSearchParams(window.location.search).get('c');
+    if (cid && /[{}]/.test(decodeURIComponent(cid))) cid = null;
     if (cid) {
       a.contact_id = cid;
       try { sessionStorage.setItem('gkAttendee', JSON.stringify(a)); } catch (e) {}

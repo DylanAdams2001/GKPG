@@ -803,6 +803,7 @@ document.getElementById('submitBtn').addEventListener('click', function () {
   const chosenSession = selectedSession();
   try {
     sessionStorage.setItem('gkAttendee', JSON.stringify({
+      type: 'workshop_registration',
       first_name: fnameEl.value.trim(), email: emailEl.value.trim()
     }));
   } catch (e) {}

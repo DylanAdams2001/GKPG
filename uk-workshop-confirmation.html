@@ -623,6 +623,25 @@ try { sessionStorage.setItem('gkOriginPage', 'uk-workshop.html'); } catch (e) {}
     }
   }
 
+  // Tells GHL the session was genuinely watched, so follow-up can branch on
+  // real engagement rather than treating a ten second bounce the same as
+  // someone who sat through all thirty minutes.
+  function pingWatched() {
+    const attendee = getAttendee();
+    if (!attendee.email) return;
+    fetch(GHL_WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type: 'workshop_watched',
+        email: attendee.email,
+        first_name: attendee.first_name || '',
+        seconds_watched: Math.round(watchedSeconds),
+        watched_at: new Date().toISOString()
+      })
+    }).catch(function () {});   // best effort, never block the player
+  }
+
   function engagementTick() {
     const now = Date.now();
     if (document.visibilityState === 'visible') {
@@ -637,6 +656,7 @@ try { sessionStorage.setItem('gkOriginPage', 'uk-workshop.html'); } catch (e) {}
       if (!firedMarks[m.ev] && watchedSeconds >= WORKSHOP_SECONDS * m.at) {
         firedMarks[m.ev] = true;
         fireMeta(m.ev);
+        if (m.ev === 'Workshop75') pingWatched();
       }
     }
   }

@@ -7,13 +7,14 @@ Everything needed to build the GoHighLevel side of the UK workshop funnel.
 | Page | URL | Purpose |
 |---|---|---|
 | Registration | `/uk-workshop` | Opt-in form |
-| Workshop room | `/uk-workshop-confirmation` | Countdown, video, live chat |
+| Confirmation | `/uk-workshop-confirmation` | Countdown, welcome video, checklist, join button |
+| Workshop room | `/uk-workshop-live` | The session: player, chat, engagement tracking |
 | Booking | `/uk-workshop-booking` | Call calendar |
 
-**Always link to the workshop room with the contact id appended:**
+**Link people straight to the room, with the contact id appended:**
 
 ```
-https://www.goldenkeypropertyco.com/uk-workshop-confirmation?c={{contact.id}}
+https://www.goldenkeypropertyco.com/uk-workshop-live?c={{contact.id}}
 ```
 
 Without `?c=`, anyone arriving from an email is anonymous to the page and no
@@ -196,7 +197,7 @@ usual reason webinar follow-up underperforms.
 | Event | Fired by | Notes |
 |---|---|---|
 | `PageView` | Page | All three pages |
-| `ViewContent` | Page | Workshop room load |
+| `ViewContent` | Page | Live room load, i.e. chose to attend |
 | `WorkshopStart` | Page | Player opened |
 | `Workshop25/50/75/Complete` | Page | Watched-time marks |
 | `CompleteRegistration` | **GHL** | **Optimise the campaign on this** |

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Your Workshop | Golden Key Property</title>
+<title>Workshop Room | Golden Key Property</title>
 <meta name="robots" content="noindex, nofollow" />
 <link rel="icon" type="image/x-icon" href="favicon.ico" />
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
@@ -13,7 +13,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 <!-- Meta Pixel.
-     -->
+     Inert until then. This page is the workshop room, so it also fires a
+     ViewContent event you can use as the "actually attended" signal. -->
 <script>
 !function(f,b,e,v,n,t,s)
 {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -25,6 +26,7 @@ s.parentNode.insertBefore(t,s)}(window, document,'script',
 'https://connect.facebook.net/en_US/fbevents.js');
 fbq('init', '1397390558441912');
 fbq('track', 'PageView');
+fbq('track', 'ViewContent', { content_name: 'UK Workshop' });
 </script>
 <!-- End Meta Pixel -->
 <style>
@@ -98,6 +100,9 @@ fbq('track', 'PageView');
   }
   .player-placeholder p { font-size: 13.5px; color: rgba(255,255,255,0.6); max-width: 460px; line-height: 1.65; }
 
+  .watch-meta { display: flex; align-items: center; justify-content: center; gap: 26px; flex-wrap: wrap; margin-top: 22px; }
+  .watch-meta-item { font-size: 12.5px; color: rgba(255,255,255,0.55); font-weight: 600; }
+  .watch-meta-item strong { color: var(--gold); font-weight: 800; }
 
   [hidden] { display: none !important; }
 
@@ -145,6 +150,16 @@ fbq('track', 'PageView');
   }
   .cal-link:hover { border-color: var(--gold); color: var(--gold); }
 
+  /* LIVE GRID: chat alongside the player */
+  .player-wrap.is-live { max-width: 1180px; }
+  .live-grid { display: grid; grid-template-columns: 340px 1fr; gap: 20px; align-items: stretch; }
+  .chat {
+    background: #121213; border: 1px solid rgba(255,255,255,0.14); border-radius: 16px;
+    display: flex; flex-direction: column; overflow: hidden; text-align: left; min-height: 300px;
+  }
+  .chat-head { padding: 13px 16px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .chat-title { font-size: 11.5px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: #fff; }
+  .chat-body { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 15px; }
   .msg-from { font-size: 11.5px; font-weight: 800; color: var(--gold); margin-bottom: 3px; }
   .msg.mine .msg-from { color: rgba(255,255,255,0.9); }
   .msg-text { font-size: 13px; color: rgba(255,255,255,0.78); line-height: 1.55; }
@@ -156,25 +171,11 @@ fbq('track', 'PageView');
   .msg-link:hover { background: #fff; }
   .msg-note { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 3px; font-style: italic; }
 
-
-  /* JOIN */
-  .join-stage {
-    background: #121213; border: 1px solid rgba(255,255,255,0.14); border-radius: 16px;
-    padding: 54px 32px; box-shadow: 0 30px 80px rgba(0,0,0,0.55);
+  @media (max-width: 900px) {
+    .live-grid { grid-template-columns: 1fr; }
+    .live-grid .player { order: 1; }
+    .chat { order: 2; min-height: 280px; max-height: 380px; }
   }
-  .join-title { font-family: var(--face-display); font-size: clamp(26px, 4vw, 38px); font-weight: 800; color: #fff; margin: 10px 0 24px; }
-  .join-btn {
-    display: inline-block; padding: 17px 40px; border-radius: 12px;
-    background: var(--brand-gradient); color: var(--black); text-decoration: none;
-    font-family: var(--face); font-size: 13.5px; font-weight: 800;
-    letter-spacing: 1.2px; text-transform: uppercase; transition: all 0.2s ease;
-  }
-  .join-btn:hover { background: #fff; transform: translateY(-2px); box-shadow: 0 12px 36px rgba(212,175,55,0.3); }
-  .join-btn-quiet {
-    margin-top: 20px; background: transparent; color: rgba(255,255,255,0.75);
-    border: 1px solid rgba(255,255,255,0.28); font-size: 12px; padding: 12px 26px;
-  }
-  .join-btn-quiet:hover { background: transparent; color: var(--gold); border-color: var(--gold); box-shadow: none; }
 
   /* WELCOME VIDEO */
   .welcome { max-width: 720px; margin: 0 auto; }
@@ -245,93 +246,46 @@ fbq('track', 'PageView');
 
 <!-- WATCH -->
 <section class="watch">
-  <div class="confirm-badge" id="statusBadge">✓ Seat Reserved</div>
+  <div class="confirm-badge" id="statusBadge">Workshop Room</div>
   <h1 id="watchTitle">Your Workshop Starts <em>Shortly</em></h1>
   <p class="watch-sub" id="watchSub">Keep this page open. Your session begins automatically the moment the countdown reaches zero.</p>
 
   <div class="player-wrap">
-    <!-- Booked state, shown when a later fixed session was chosen -->
-    <div class="booked" id="bookedStage" hidden>
-      <span class="booked-label">Your session</span>
-      <div class="booked-when" id="bookedWhen">--</div>
-      <p class="booked-note">We have emailed you the joining link. Add it to your calendar so it does not get lost.</p>
-      <div class="cal-links">
-        <a class="cal-link" id="calGoogle" href="#" target="_blank" rel="noopener">Google Calendar</a>
-        <a class="cal-link" id="calOutlook" href="#" target="_blank" rel="noopener">Outlook</a>
-        <a class="cal-link" id="calIcs" href="#" download="golden-key-workshop.ics">Apple / .ics</a>
-      </div>
-    </div>
-
     <!-- Countdown state -->
     <div class="cd-stage" id="cdStage">
       <span class="cd-stage-label">Starting in</span>
       <div class="cd-stage-time" id="cdBig">--:--</div>
       <div class="cd-stage-bar"><div class="cd-stage-fill" id="cdFill"></div></div>
-      <p class="cd-stage-note">Your session is about to begin.</p>
-      <a class="join-btn join-btn-quiet" id="joinEarly" href="uk-workshop-live.html">Go to the waiting room →</a>
+      <p class="cd-stage-note">Your session is about to begin. Keep this page open.</p>
     </div>
 
-    <!-- Ready state, replaces the countdown once the session is open -->
-    <div class="join-stage" id="joinStage" hidden>
-      <span class="cd-stage-label">Your session is open</span>
-      <div class="join-title">The workshop is ready</div>
-      <a class="join-btn" id="joinBtn" href="uk-workshop-live.html">Join the waiting room →</a>
-      <p class="cd-stage-note">Runs about 30 minutes. Best watched in one sitting.</p>
-    </div>
-  </div>
-</section>
+    <!-- Live state: chat alongside the player, revealed when the countdown hits zero -->
+    <div class="live-grid" id="liveGrid" hidden>
+      <aside class="chat">
+        <div class="chat-head">
+          <span class="live-dot"></span>
+          <span class="chat-title">Live Chat</span>
+        </div>
+        <div class="chat-body" id="chatBody"></div>
+      </aside>
 
-<!-- WELCOME VIDEO -->
-<section class="section">
-  <div class="container">
-    <div class="welcome">
-      <p class="welcome-head">A quick word from Oliver before you start</p>
-      <div class="player">
+      <div class="player" id="playerStage">
+        <!-- TEMPORARY: the 90 second pre-workshop video, standing in so the
+             engagement marks can be tested. Swap the src for the real 30
+             minute workshop and set WORKSHOP_SECONDS back to 30 * 60. -->
         <iframe
           src="https://www.tella.tv/video/vid_cmu1b8mm300cm0agmdoqnhkfg/embed?b=0&amp;title=0&amp;a=1&amp;loop=0&amp;t=0&amp;muted=0&amp;wt=0&amp;o=0"
-          title="A word from Oliver Cullen"
+          title="Golden Key Property Workshop"
           allow="autoplay; fullscreen"
           allowtransparency
         ></iframe>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- CHECKLIST -->
-<section class="section section-grey">
-  <div class="container">
-    <span class="section-eyebrow">Before It Starts</span>
-    <h2 class="section-title">Your Workshop Checklist</h2>
-    <div class="checklist">
-      <div class="check-item">
-        <div class="check-tick">✓</div>
-        <div>
-          <h4>Check your inbox, and your spam folder</h4>
-          <p>Your joining link is on its way. If it has not landed within a few minutes, it is usually sitting in spam or promotions.</p>
-        </div>
-      </div>
-      <div class="check-item">
-        <div class="check-tick">✓</div>
-        <div>
-          <h4>Add it to your calendar</h4>
-          <p>Takes five seconds and means it does not get lost behind everything else in your day.</p>
-        </div>
-      </div>
-      <div class="check-item">
-        <div class="check-tick">✓</div>
-        <div>
-          <h4>Have a pen handy</h4>
-          <p>The yield breakdown moves quickly. Worth noting the numbers so you can check them against your own stock afterwards.</p>
-        </div>
-      </div>
-      <div class="check-item">
-        <div class="check-tick">✓</div>
-        <div>
-          <h4>Write down your questions</h4>
-          <p>Anything the workshop does not answer, note it down and put it straight to the team on a call.</p>
-        </div>
-      </div>
+    <div class="watch-meta" id="watchMeta" hidden>
+      <div class="watch-meta-item"><strong>30</strong> minutes</div>
+      <div class="watch-meta-item"><strong>Link</strong> sent to your inbox</div>
+      <div class="watch-meta-item"><strong>Questions?</strong> Book a call below</div>
     </div>
   </div>
 </section>
@@ -363,40 +317,26 @@ fbq('track', 'PageView');
 // The shared booking page reads this to route its "back to homepage" link.
 try { sessionStorage.setItem('gkOriginPage', 'uk-workshop.html'); } catch (e) {}
 
-// Holding page. It counts down to the session, then hands over to the live
-// room. No player, no chat and no engagement tracking here: those belong on
-// uk-workshop-live.html so that reaching them is a deliberate choice.
+// Branches on what the visitor picked on the registration page. The soonest
+// session continues the countdown they already saw (held in sessionStorage, so
+// the timer never jumps backwards) and then opens the player. A fixed later
+// session shows the booked card with calendar links instead.
 (function () {
   const SLOT_MS = 15 * 60 * 1000;
   const MIN_LEAD_MS = 3 * 60 * 1000;
   const SESSION_KEY = 'gkWorkshopStart';
-  const CHOICE_KEY = 'gkWorkshopChoice';
-  const DURATION_MIN = 30;
 
   const cdStage = document.getElementById('cdStage');
   const cdBig = document.getElementById('cdBig');
   const cdFill = document.getElementById('cdFill');
-  const joinStage = document.getElementById('joinStage');
-  const bookedStage = document.getElementById('bookedStage');
-  const bookedWhen = document.getElementById('bookedWhen');
+  const playerStage = document.getElementById('playerStage');
+  const liveGrid = document.getElementById('liveGrid');
+  const watchMeta = document.getElementById('watchMeta');
   const statusBadge = document.getElementById('statusBadge');
   const watchTitle = document.getElementById('watchTitle');
   const watchSub = document.getElementById('watchSub');
-  if (!cdStage) return;
+  if (!cdStage || !liveGrid) return;
 
-  // Carry the contact id through, so someone arriving from an email stays
-  // identified on the live page. Ignore an unresolved merge field.
-  let cid = new URLSearchParams(window.location.search).get('c');
-  if (cid && /[{}]/.test(decodeURIComponent(cid))) cid = null;
-  if (cid) {
-    ['joinBtn', 'joinEarly'].forEach(function (id) {
-      const a = document.getElementById(id);
-      if (a) a.href = a.getAttribute('href') + '?c=' + encodeURIComponent(cid);
-    });
-  }
-
-  let choice = null;
-  try { choice = JSON.parse(sessionStorage.getItem(CHOICE_KEY) || 'null'); } catch (e) {}
 
   function fmt(ms) {
     const total = Math.max(0, Math.round(ms / 1000));
@@ -405,72 +345,191 @@ try { sessionStorage.setItem('gkOriginPage', 'uk-workshop.html'); } catch (e) {}
     return m + ':' + s;
   }
 
-  function pad(n) { return String(n).padStart(2, '0'); }
-  function icsStamp(d) {
-    return d.getUTCFullYear() + pad(d.getUTCMonth() + 1) + pad(d.getUTCDate()) + 'T' +
-           pad(d.getUTCHours()) + pad(d.getUTCMinutes()) + '00Z';
+  // ---- Live chat ----------------------------------------------------------
+  // A one-way feed. Messages are pre-written and timed to the video, the same
+  // way slides are. There are deliberately no scripted "attendee" messages:
+  // inventing other people endorsing an investment is not something we do.
+  // Each payload type has its own inbound webhook, so every GHL workflow
+  // receives only what it handles and cannot be triggered by the others.
+  const GHL_PROGRESS_WEBHOOK = 'https://services.leadconnectorhq.com/hooks/HEOut7IJQ2GxJIUq9qIb/webhook-trigger/42c95c56-93f9-47ff-8f11-8cb3a6749ba6';
+
+  // Edit freely. `at` is seconds of *watched* time, so the chat stays in step
+  // with the viewer even if they switch tabs and come back.
+  const HOST_MESSAGES = [
+    { at: 5,    from: 'Golden Key Team', text: 'Welcome in. Oliver is about to walk through the numbers. Anything he does not cover, there is a link below to put it to him directly.' },
+    { at: 60,   from: 'Golden Key Team', text: 'PLACEHOLDER: time this to where Oliver introduces the model.' },
+    { at: 420,  from: 'Golden Key Team', text: 'PLACEHOLDER: time this to the 16% breakdown. Worth noting the figure is net, after costs.' },
+    { at: 900,  from: 'Golden Key Team', text: 'PLACEHOLDER: time this to the 25 year agreement section.' },
+    { at: 1320, from: 'Golden Key Team',
+      text: 'If you want to go through these numbers against your own situation, Oliver has a few times open this week.',
+      link: { href: 'uk-workshop-booking.html', label: 'Book your call' } },
+    { at: 1680, from: 'Golden Key Team',
+      text: 'Link again while it is fresh. No pressure and nothing is for sale on the call.',
+      link: { href: 'uk-workshop-booking.html', label: 'Book your call' } }
+  ];
+
+  const chatBody = document.getElementById('chatBody');
+
+  // Read lazily rather than at load, so attribution does not depend on script order.
+  // Anyone arriving from the confirmation email is in a fresh browser session
+  // with no stored attendee, so ?c=<contact id> is what identifies them and
+  // keeps the watched ping and chat attribution working on a return visit.
+  function getAttendee() {
+    let a = {};
+    try { a = JSON.parse(sessionStorage.getItem('gkAttendee') || '{}') || {}; } catch (e) {}
+    // Ignore an unresolved merge field, e.g. ?c={{contact.id}} arriving
+    // literally because the email editor did not substitute it. Passing that
+    // through would send GHL an identifier matching nothing.
+    let cid = new URLSearchParams(window.location.search).get('c');
+    if (cid && /[{}]/.test(decodeURIComponent(cid))) cid = null;
+    if (cid) {
+      a.contact_id = cid;
+      try { sessionStorage.setItem('gkAttendee', JSON.stringify(a)); } catch (e) {}
+    }
+    return a;
   }
 
-  const EVENT_TITLE = 'Golden Key Property Workshop';
-  const EVENT_DETAIL = 'Your 30 minute workshop. The joining link is in your email.';
-
-  function setupCalendarLinks(startDate) {
-    const endDate = new Date(startDate.getTime() + DURATION_MIN * 60000);
-    const s1 = icsStamp(startDate), s2 = icsStamp(endDate);
-
-    const g = document.getElementById('calGoogle');
-    if (g) {
-      g.href = 'https://calendar.google.com/calendar/render?action=TEMPLATE' +
-        '&text=' + encodeURIComponent(EVENT_TITLE) +
-        '&dates=' + s1 + '/' + s2 +
-        '&details=' + encodeURIComponent(EVENT_DETAIL);
+  function addMessage(from, text, opts) {
+    opts = opts || {};
+    const wrap = document.createElement('div');
+    wrap.className = 'msg' + (opts.mine ? ' mine' : '');
+    const who = document.createElement('div');
+    who.className = 'msg-from';
+    who.textContent = from;
+    const body = document.createElement('div');
+    body.className = 'msg-text';
+    body.textContent = text;              // textContent, so a typed question can never inject markup
+    wrap.appendChild(who);
+    wrap.appendChild(body);
+    if (opts.note) {
+      const n = document.createElement('div');
+      n.className = 'msg-note';
+      n.textContent = opts.note;
+      wrap.appendChild(n);
     }
-    const o = document.getElementById('calOutlook');
-    if (o) {
-      o.href = 'https://outlook.live.com/calendar/0/deeplink/compose?path=/calendar/action/compose&rru=addevent' +
-        '&subject=' + encodeURIComponent(EVENT_TITLE) +
-        '&startdt=' + startDate.toISOString() +
-        '&enddt=' + endDate.toISOString() +
-        '&body=' + encodeURIComponent(EVENT_DETAIL);
+    // Links only ever come from HOST_MESSAGES, never from typed input, so a
+    // viewer still cannot get an anchor into the page.
+    if (opts.link && !opts.mine) {
+      const a = document.createElement('a');
+      a.className = 'msg-link';
+      a.href = opts.link.href;
+      a.textContent = opts.link.label;
+      wrap.appendChild(a);
     }
-    const ics = document.getElementById('calIcs');
-    if (ics) {
-      const body = [
-        'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Golden Key Property//Workshop//EN',
-        'BEGIN:VEVENT',
-        'UID:' + Date.now() + '@goldenkeypropertyco.com',
-        'DTSTAMP:' + icsStamp(new Date()),
-        'DTSTART:' + s1, 'DTEND:' + s2,
-        'SUMMARY:' + EVENT_TITLE,
-        'DESCRIPTION:' + EVENT_DETAIL,
-        'END:VEVENT', 'END:VCALENDAR'
-      ].join('\r\n');
-      ics.href = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(body);
+    chatBody.appendChild(wrap);
+    chatBody.scrollTop = chatBody.scrollHeight;
+    return wrap;
+  }
+
+  // Called from the engagement tick, so chat advances on watched time.
+  const firedMessages = {};
+  function releaseDueMessages(seconds) {
+    if (!chatBody) return;
+    for (let i = 0; i < HOST_MESSAGES.length; i++) {
+      const m = HOST_MESSAGES[i];
+      if (!firedMessages[i] && seconds >= m.at) {
+        firedMessages[i] = true;
+        addMessage(m.from, m.text, { link: m.link });
+      }
     }
   }
 
-  function showJoin() {
+  // ---- Workshop engagement ------------------------------------------------
+  // The embed might be YouTube, Vimeo or GHL and each exposes playback
+  // differently, so this measures *visible* time on the page instead. The
+  // timer only advances while the tab is actually in view, which rules out
+  // someone leaving it open in a background tab and inflating the numbers.
+  // If you later settle on one player, swap watchedSeconds for its real
+  // progress callback and the rest of this keeps working unchanged.
+  // TEMPORARY: 90 to match the stand-in video, so the marks fire at roughly
+  // 22s / 45s / 68s / 86s and can actually be tested. Put this back to
+  // 30 * 60 when the real workshop goes in.
+  const WORKSHOP_SECONDS = 90;
+  const MARKS = [
+    { at: 0.25, ev: 'Workshop25',       tag: 'watched-25',       pct: 25 },
+    { at: 0.50, ev: 'Workshop50',       tag: 'watched-50',       pct: 50 },
+    { at: 0.75, ev: 'Workshop75',       tag: 'watched-75',       pct: 75 },
+    { at: 0.95, ev: 'WorkshopComplete', tag: 'watched-complete', pct: 100 }
+  ];
+  let watchedSeconds = 0;
+  let lastTick = null;
+  const firedMarks = {};
+
+  function fireMeta(name) {
+    if (typeof fbq === 'function') {
+      fbq('trackCustom', name, {
+        content_name: 'UK Workshop',
+        seconds_watched: Math.round(watchedSeconds)
+      });
+    }
+  }
+
+  // One ping per milestone so the contact accumulates tags as they watch.
+  // The tag name is sent ready-made, so the GHL workflow just applies it
+  // rather than branching on a percentage.
+  function pingProgress(tag, pct) {
+    const attendee = getAttendee();
+    if (!attendee.email && !attendee.contact_id) return;
+    fetch(GHL_PROGRESS_WEBHOOK, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type: 'workshop_progress',
+        tag: tag,
+        percent: pct,
+        contact_id: attendee.contact_id || '',
+        email: attendee.email || '',
+        first_name: attendee.first_name || '',
+        seconds_watched: Math.round(watchedSeconds),
+        watched_at: new Date().toISOString()
+      })
+    }).catch(function () {});   // best effort, never block the player
+  }
+
+  function engagementTick() {
+    const now = Date.now();
+    if (document.visibilityState === 'visible') {
+      if (lastTick !== null) watchedSeconds += (now - lastTick) / 1000;
+      lastTick = now;
+    } else {
+      lastTick = null;   // paused while the tab is hidden
+    }
+    releaseDueMessages(watchedSeconds);
+    for (let i = 0; i < MARKS.length; i++) {
+      const m = MARKS[i];
+      if (!firedMarks[m.ev] && watchedSeconds >= WORKSHOP_SECONDS * m.at) {
+        firedMarks[m.ev] = true;
+        fireMeta(m.ev);
+        pingProgress(m.tag, m.pct);
+      }
+    }
+  }
+
+  function startEngagementTracking() {
+    fireMeta('WorkshopStart');
+    pingProgress('watched-start', 0);
+    releaseDueMessages(0);
+    lastTick = Date.now();
+    document.addEventListener('visibilitychange', function () {
+      if (document.visibilityState === 'visible') lastTick = Date.now();
+      else lastTick = null;
+    });
+    setInterval(engagementTick, 1000);
+  }
+
+  function reveal() {
     cdStage.hidden = true;
-    joinStage.hidden = false;
+    liveGrid.hidden = false;
+    document.querySelector('.player-wrap').classList.add('is-live');
+    watchMeta.hidden = false;
+    startEngagementTracking();
     statusBadge.classList.add('is-live');
     statusBadge.innerHTML = '<span class="live-dot"></span>Live Now';
     watchTitle.innerHTML = 'Your Workshop Is <em>Ready</em>';
-    watchSub.textContent = 'Head into the room when you are ready. We have emailed you the link too.';
+    watchSub.textContent = 'Press play to begin. We have emailed you the link too, so you can come back to it any time.';
   }
 
-  // ---- Fixed later session: booked card and calendar links ----
-  if (choice && choice.jit === false && choice.at) {
-    const when = new Date(choice.at);
-    cdStage.hidden = true;
-    bookedStage.hidden = false;
-    bookedWhen.textContent = choice.label || when.toLocaleString('en-GB');
-    watchTitle.innerHTML = 'Your Seat Is <em>Booked</em>';
-    watchSub.textContent = 'We will email you the joining link before it starts. Add it to your calendar so it does not get missed.';
-    setupCalendarLinks(when);
-    return;
-  }
-
-  // ---- Soonest session: count down, then offer the room ----
+  // ---- Soonest session: continue the countdown, then open the player ----
   const now = Date.now();
   let target = 0;
   try { target = parseInt(sessionStorage.getItem(SESSION_KEY) || '0', 10) || 0; } catch (e) {}
@@ -479,12 +538,12 @@ try { sessionStorage.setItem('gkOriginPage', 'uk-workshop.html'); } catch (e) {}
     if (target - now < MIN_LEAD_MS) target += SLOT_MS;
     try { sessionStorage.setItem(SESSION_KEY, String(target)); } catch (e) {}
   }
-  if (target <= now) { showJoin(); return; }
+  if (target <= now) { reveal(); return; }
 
   const span = Math.max(1, target - now);
   function tick() {
     const remaining = target - Date.now();
-    if (remaining <= 0) { showJoin(); clearInterval(timer); return; }
+    if (remaining <= 0) { reveal(); clearInterval(timer); return; }
     cdBig.textContent = fmt(remaining);
     cdFill.style.width = Math.min(100, ((span - remaining) / span) * 100) + '%';
   }

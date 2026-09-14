@@ -25,6 +25,31 @@ Without `?c=`, anyone arriving from an email is anonymous to the page, and the
 - **Inbound webhook:** `https://services.leadconnectorhq.com/hooks/HEOut7IJQ2GxJIUq9qIb/webhook-trigger/66366cf1-032d-4417-bcf0-8c34466d24c3`
 - **Workshop calendar:** `uxBRx9V87WyYV6BOr8Ac`
 
+## Do not rebuild these
+
+Built and in use. Leave in place:
+
+- **Conversions API** (sub-workflow)
+- **Booked Call — UK Workshop**
+- **The email content inside Custom Webhook — Lead Capture**
+- **Custom**
+
+Two caveats, both fixable without rebuilding anything:
+
+**The Conversions API actions currently map only FBCLID**, pointed at a
+contact field that does not exist and that nothing writes to. So both
+`CompleteRegistration` and `Schedule` go out with no click ID, no browser ID
+and no `event_id`. That is a parameter mapping bug rather than a design
+choice, and leaving it means the funnel cannot attribute a booked call back
+to the ad that produced it. Add `event_id`, `fbc`, `fbp`, email and phone to
+the existing actions. The workflows themselves stay as they are.
+
+**The emails send six copies in two minutes.** Three email actions sit back
+to back with no wait or branch between them, all carrying the subject "Your
+workshop link". The copy is fine and stays. What needs changing is the
+sequencing around it: one email on registration, the rest behind waits and
+the `session_is_just_in_time` branch.
+
 ## The three payloads
 
 All three POST to the **same** webhook above. They are told apart by `type`.

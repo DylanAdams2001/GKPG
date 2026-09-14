@@ -616,10 +616,10 @@ try { sessionStorage.setItem('gkOriginPage', 'uk-workshop.html'); } catch (e) {}
   // 30 * 60 when the real workshop goes in.
   const WORKSHOP_SECONDS = 90;
   const MARKS = [
-    { at: 0.25, ev: 'Workshop25' },
-    { at: 0.50, ev: 'Workshop50' },
-    { at: 0.75, ev: 'Workshop75' },
-    { at: 0.95, ev: 'WorkshopComplete' }
+    { at: 0.25, ev: 'Workshop25',       tag: 'watched-25',       pct: 25 },
+    { at: 0.50, ev: 'Workshop50',       tag: 'watched-50',       pct: 50 },
+    { at: 0.75, ev: 'Workshop75',       tag: 'watched-75',       pct: 75 },
+    { at: 0.95, ev: 'WorkshopComplete', tag: 'watched-complete', pct: 100 }
   ];
   let watchedSeconds = 0;
   let lastTick = null;
@@ -634,17 +634,19 @@ try { sessionStorage.setItem('gkOriginPage', 'uk-workshop.html'); } catch (e) {}
     }
   }
 
-  // Tells GHL the session was genuinely watched, so follow-up can branch on
-  // real engagement rather than treating a ten second bounce the same as
-  // someone who sat through all thirty minutes.
-  function pingWatched() {
+  // One ping per milestone so the contact accumulates tags as they watch.
+  // The tag name is sent ready-made, so the GHL workflow just applies it
+  // rather than branching on a percentage.
+  function pingProgress(tag, pct) {
     const attendee = getAttendee();
     if (!attendee.email && !attendee.contact_id) return;
     fetch(GHL_WEBHOOK_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        type: 'workshop_watched',
+        type: 'workshop_progress',
+        tag: tag,
+        percent: pct,
         contact_id: attendee.contact_id || '',
         email: attendee.email || '',
         first_name: attendee.first_name || '',
@@ -668,13 +670,14 @@ try { sessionStorage.setItem('gkOriginPage', 'uk-workshop.html'); } catch (e) {}
       if (!firedMarks[m.ev] && watchedSeconds >= WORKSHOP_SECONDS * m.at) {
         firedMarks[m.ev] = true;
         fireMeta(m.ev);
-        if (m.ev === 'Workshop75') pingWatched();
+        pingProgress(m.tag, m.pct);
       }
     }
   }
 
   function startEngagementTracking() {
     fireMeta('WorkshopStart');
+    pingProgress('watched-start', 0);
     releaseDueMessages(0);
     lastTick = Date.now();
     document.addEventListener('visibilitychange', function () {

@@ -86,9 +86,25 @@ per contact.
 
 `type` · `contact_id` · `question` · `first_name` · `email` · `source` · `asked_at`
 
-### 3. `workshop_watched`
+### 3. `workshop_progress`
 
-Sent once, when a viewer reaches 75% of the session.
+Sent each time a viewer passes a milestone. Up to five per contact, in order.
+The `tag` is sent ready-made so the workflow just applies it, no branching
+needed.
+
+| `tag` | `percent` | Fires when |
+|---|---|---|
+| `watched-start` | 0 | Player opened |
+| `watched-25` | 25 | A quarter watched |
+| `watched-50` | 50 | Half watched |
+| `watched-75` | 75 | Three quarters watched |
+| `watched-complete` | 100 | Effectively finished |
+
+Fields: `type` · `tag` · `percent` · `contact_id` · `email` · `first_name` ·
+`seconds_watched` · `watched_at`
+
+Measured on **visible** time, so a tab left open in the background does not
+accumulate progress.
 
 `type` · `contact_id` · `email` · `first_name` · `seconds_watched` · `watched_at`
 
@@ -138,15 +154,28 @@ for Oliver due 1 hour before the call.
 Find contact by `contact_id`, append `question` to the `workshop_questions`
 field, notify Oliver.
 
-## Workflow 4 — Watched the workshop
+## Workflow 4 — Watch progress
 
 **Trigger:** Inbound Webhook
-**Filter:** `type` equals `workshop_watched`
+**Filter:** `type` equals `workshop_progress`
 
-Find contact by `contact_id`, add tag `watched-workshop`.
+Find contact by `contact_id`, then **add the tag from the payload** —
+`{{inboundWebhookRequest.tag}}`. One action, no branching.
 
-Use that tag to split follow-up: someone who watched needs a booking push,
-someone who never opened it needs the link again. They behave nothing alike.
+Contacts accumulate tags as they watch, so the furthest tag present is how
+far they got.
+
+### Branching the follow-up on it
+
+| Tags present | Read | Send |
+|---|---|---|
+| none | Registered, never opened the room | "You missed it, here's the link" |
+| `watched-start` only | Opened, left almost immediately | Re-engage, something put them off |
+| up to `watched-25` / `watched-50` | Dropped part way | Address what comes after that point |
+| `watched-75` or `watched-complete` | Saw the offer | Push the booking |
+
+Those groups behave nothing alike. Sending them the same sequence is the
+usual reason webinar follow-up underperforms.
 
 ## Meta events summary
 

@@ -166,6 +166,12 @@ if (UK_PIXEL_ID !== 'UK_PIXEL' + '_ID') {
   .msg-from { font-size: 11.5px; font-weight: 800; color: var(--gold); margin-bottom: 3px; }
   .msg.mine .msg-from { color: rgba(255,255,255,0.9); }
   .msg-text { font-size: 13px; color: rgba(255,255,255,0.78); line-height: 1.55; }
+  .msg-link {
+    display: inline-block; margin-top: 10px; padding: 9px 15px; border-radius: 8px;
+    background: var(--brand-gradient); color: var(--black); text-decoration: none;
+    font-family: var(--face); font-weight: 800; font-size: 12.5px; letter-spacing: 0.3px;
+  }
+  .msg-link:hover { background: #fff; }
   .msg-note { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 3px; font-style: italic; }
   .chat-foot { padding: 12px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; gap: 8px; flex-shrink: 0; }
   .chat-input {
@@ -488,13 +494,19 @@ try { sessionStorage.setItem('gkOriginPage', 'uk-workshop.html'); } catch (e) {}
   // people endorsing an investment is not something we do.
   const GHL_WEBHOOK_URL = 'UK_WEBINAR_WEBHOOK_URL';
 
-  // Edit freely. `at` is seconds from the moment the workshop opens.
+  // Edit freely. `at` is seconds of *watched* time, so the chat stays in step
+  // with the viewer even if they switch tabs and come back.
   const HOST_MESSAGES = [
-    { at: 2,   from: 'Golden Key Team', text: 'Welcome in. Type a question any time and it comes straight to our team.' },
-    { at: 45,  from: 'Golden Key Team', text: 'PLACEHOLDER: time this one to the section where Oliver introduces the model.' },
-    { at: 300, from: 'Golden Key Team', text: 'PLACEHOLDER: time this to the 16% yield breakdown, e.g. point out the figure is net, after costs.' },
-    { at: 900, from: 'Golden Key Team', text: 'PLACEHOLDER: time this to the 25 year assurance section.' },
-    { at: 1500, from: 'Golden Key Team', text: 'PLACEHOLDER: near the end, invite them to book a call using the button below.' }
+    { at: 5,    from: 'Golden Key Team', text: 'Welcome in. Type a question any time and it comes straight to our team.' },
+    { at: 60,   from: 'Golden Key Team', text: 'PLACEHOLDER: time this to where Oliver introduces the model.' },
+    { at: 420,  from: 'Golden Key Team', text: 'PLACEHOLDER: time this to the 16% breakdown. Worth noting the figure is net, after costs.' },
+    { at: 900,  from: 'Golden Key Team', text: 'PLACEHOLDER: time this to the 25 year agreement section.' },
+    { at: 1320, from: 'Golden Key Team',
+      text: 'If you want to go through these numbers against your own situation, Oliver has a few times open this week.',
+      link: { href: 'uk-workshop-booking.html', label: 'Book your call' } },
+    { at: 1680, from: 'Golden Key Team',
+      text: 'Link again while it is fresh. No pressure and nothing is for sale on the call.',
+      link: { href: 'uk-workshop-booking.html', label: 'Book your call' } }
   ];
 
   const chatBody = document.getElementById('chatBody');
@@ -523,6 +535,15 @@ try { sessionStorage.setItem('gkOriginPage', 'uk-workshop.html'); } catch (e) {}
       n.className = 'msg-note';
       n.textContent = opts.note;
       wrap.appendChild(n);
+    }
+    // Links only ever come from HOST_MESSAGES, never from typed input, so a
+    // viewer still cannot get an anchor into the page.
+    if (opts.link && !opts.mine) {
+      const a = document.createElement('a');
+      a.className = 'msg-link';
+      a.href = opts.link.href;
+      a.textContent = opts.link.label;
+      wrap.appendChild(a);
     }
     chatBody.appendChild(wrap);
     chatBody.scrollTop = chatBody.scrollHeight;
@@ -561,15 +582,23 @@ try { sessionStorage.setItem('gkOriginPage', 'uk-workshop.html'); } catch (e) {}
   }
 
   function startChat() {
-    if (!chatBody) return;
-    HOST_MESSAGES.forEach(function (m) {
-      setTimeout(function () { addMessage(m.from, m.text); }, Math.max(0, m.at) * 1000);
+    if (!chatSend || !chatInput) return;
+    chatSend.addEventListener('click', sendQuestion);
+    chatInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); sendQuestion(); }
     });
-    if (chatSend) chatSend.addEventListener('click', sendQuestion);
-    if (chatInput) {
-      chatInput.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter') { e.preventDefault(); sendQuestion(); }
-      });
+  }
+
+  // Called from the engagement tick, so chat advances on watched time.
+  const firedMessages = {};
+  function releaseDueMessages(seconds) {
+    if (!chatBody) return;
+    for (let i = 0; i < HOST_MESSAGES.length; i++) {
+      const m = HOST_MESSAGES[i];
+      if (!firedMessages[i] && seconds >= m.at) {
+        firedMessages[i] = true;
+        addMessage(m.from, m.text, { link: m.link });
+      }
     }
   }
 
@@ -608,6 +637,7 @@ try { sessionStorage.setItem('gkOriginPage', 'uk-workshop.html'); } catch (e) {}
     } else {
       lastTick = null;   // paused while the tab is hidden
     }
+    releaseDueMessages(watchedSeconds);
     for (let i = 0; i < MARKS.length; i++) {
       const m = MARKS[i];
       if (!firedMarks[m.ev] && watchedSeconds >= WORKSHOP_SECONDS * m.at) {
@@ -619,12 +649,13 @@ try { sessionStorage.setItem('gkOriginPage', 'uk-workshop.html'); } catch (e) {}
 
   function startEngagementTracking() {
     fireMeta('WorkshopStart');
+    releaseDueMessages(0);
     lastTick = Date.now();
     document.addEventListener('visibilitychange', function () {
       if (document.visibilityState === 'visible') lastTick = Date.now();
       else lastTick = null;
     });
-    setInterval(engagementTick, 5000);
+    setInterval(engagementTick, 1000);
   }
 
   function reveal() {

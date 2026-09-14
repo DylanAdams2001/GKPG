@@ -298,18 +298,15 @@ fbq('track', 'ViewContent', { content_name: 'UK Workshop' });
       </aside>
 
       <div class="player" id="playerStage">
-      <!--
-        PLACEHOLDER: replace this whole .player-placeholder div with the video
-        embed, keeping it inside .player so the 16:9 frame and styling hold.
-        Example (YouTube unlisted):
-        <iframe src="https://www.youtube.com/embed/VIDEO_ID?rel=0" title="Golden Key Property Workshop" allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture" allowfullscreen></iframe>
-        Example (Vimeo):
-        <iframe src="https://player.vimeo.com/video/VIDEO_ID" title="Golden Key Property Workshop" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
-      -->
-      <div class="player-placeholder">
-        <div class="icon">▶</div>
-        <p><span class="ph-dark">[VIDEO EMBED GOES HERE]</span><br />Paste the YouTube, Vimeo or GHL embed code into this block. See the comment in the page source for the exact snippet.</p>
-        </div>
+        <!-- TEMPORARY: the 90 second pre-workshop video, standing in so the
+             engagement marks can be tested. Swap the src for the real 30
+             minute workshop and set WORKSHOP_SECONDS back to 30 * 60. -->
+        <iframe
+          src="https://www.tella.tv/video/vid_cmu1b8mm300cm0agmdoqnhkfg/embed?b=0&amp;title=0&amp;a=1&amp;loop=0&amp;t=0&amp;muted=0&amp;wt=0&amp;o=0"
+          title="Golden Key Property Workshop"
+          allow="autoplay; fullscreen"
+          allowtransparency
+        ></iframe>
       </div>
     </div>
 
@@ -614,7 +611,10 @@ try { sessionStorage.setItem('gkOriginPage', 'uk-workshop.html'); } catch (e) {}
   // someone leaving it open in a background tab and inflating the numbers.
   // If you later settle on one player, swap watchedSeconds for its real
   // progress callback and the rest of this keeps working unchanged.
-  const WORKSHOP_SECONDS = 30 * 60;
+  // TEMPORARY: 90 to match the stand-in video, so the marks fire at roughly
+  // 22s / 45s / 68s / 86s and can actually be tested. Put this back to
+  // 30 * 60 when the real workshop goes in.
+  const WORKSHOP_SECONDS = 90;
   const MARKS = [
     { at: 0.25, ev: 'Workshop25' },
     { at: 0.50, ev: 'Workshop50' },

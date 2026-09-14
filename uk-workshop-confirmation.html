@@ -508,8 +508,18 @@ try { sessionStorage.setItem('gkOriginPage', 'uk-workshop.html'); } catch (e) {}
   const chatSend = document.getElementById('chatSend');
 
   // Read lazily rather than at load, so attribution does not depend on script order.
+  // Anyone arriving from the confirmation email is in a fresh browser session
+  // with no stored attendee, so ?c=<contact id> is what identifies them and
+  // keeps the watched ping and chat attribution working on a return visit.
   function getAttendee() {
-    try { return JSON.parse(sessionStorage.getItem('gkAttendee') || '{}') || {}; } catch (e) { return {}; }
+    let a = {};
+    try { a = JSON.parse(sessionStorage.getItem('gkAttendee') || '{}') || {}; } catch (e) {}
+    const cid = new URLSearchParams(window.location.search).get('c');
+    if (cid) {
+      a.contact_id = cid;
+      try { sessionStorage.setItem('gkAttendee', JSON.stringify(a)); } catch (e) {}
+    }
+    return a;
   }
 
   function addMessage(from, text, opts) {
@@ -561,6 +571,7 @@ try { sessionStorage.setItem('gkOriginPage', 'uk-workshop.html'); } catch (e) {}
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         type: 'workshop_question',
+        contact_id: attendee.contact_id || '',
         question: text,
         first_name: attendee.first_name || '',
         email: attendee.email || '',
@@ -628,13 +639,14 @@ try { sessionStorage.setItem('gkOriginPage', 'uk-workshop.html'); } catch (e) {}
   // someone who sat through all thirty minutes.
   function pingWatched() {
     const attendee = getAttendee();
-    if (!attendee.email) return;
+    if (!attendee.email && !attendee.contact_id) return;
     fetch(GHL_WEBHOOK_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         type: 'workshop_watched',
-        email: attendee.email,
+        contact_id: attendee.contact_id || '',
+        email: attendee.email || '',
         first_name: attendee.first_name || '',
         seconds_watched: Math.round(watchedSeconds),
         watched_at: new Date().toISOString()

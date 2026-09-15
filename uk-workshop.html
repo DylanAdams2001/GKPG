@@ -626,14 +626,29 @@ const CHOICE_KEY = 'gkWorkshopChoice';
 const OFFSETS_MS = [15 * 60000, 60 * 60000, 4 * 3600000, 8 * 3600000];
 const CUTOFF_HOUR = 21;                // 9pm, no later sessions after this
 
+// The booked start is mirrored into localStorage as well as sessionStorage, so
+// that the confirmation and live pages still recognise it when the visitor
+// comes back from the email in a fresh browser session.
+function readStart() {
+  let v = 0;
+  try { v = parseInt(sessionStorage.getItem(SESSION_KEY) || '0', 10) || 0; } catch (e) {}
+  if (!v) { try { v = parseInt(localStorage.getItem(SESSION_KEY) || '0', 10) || 0; } catch (e) {} }
+  return v;
+}
+function rememberStart(t) {
+  try { sessionStorage.setItem(SESSION_KEY, String(t)); } catch (e) {}
+  try { localStorage.setItem(SESSION_KEY, String(t)); } catch (e) {}
+}
+
+// Rolling forward to the next slot is right here and only here: nobody has
+// registered yet, so there is no session they are late for.
 function workshopStartAt() {
   const now = Date.now();
-  let target = 0;
-  try { target = parseInt(sessionStorage.getItem(SESSION_KEY) || '0', 10) || 0; } catch (e) {}
+  let target = readStart();
   if (!target || target <= now || target - now > SLOT_MS + MIN_LEAD_MS) {
     target = Math.ceil(now / SLOT_MS) * SLOT_MS;              // next :00/:15/:30/:45
     if (target - now < MIN_LEAD_MS) target += SLOT_MS;        // too close to register
-    try { sessionStorage.setItem(SESSION_KEY, String(target)); } catch (e) {}
+    rememberStart(target);
   }
   return target;
 }
@@ -808,7 +823,8 @@ document.getElementById('submitBtn').addEventListener('click', function () {
   } catch (e) {}
   try {
     sessionStorage.setItem(CHOICE_KEY, JSON.stringify(chosenSession));
-    if (chosenSession.jit) sessionStorage.setItem(SESSION_KEY, String(chosenSession.at));
+    localStorage.setItem(CHOICE_KEY, JSON.stringify(chosenSession));
+    if (chosenSession.jit) rememberStart(chosenSession.at);
   } catch (e) {}
 
   // Meta CAPI match-quality signals, so GHL's server-side event can be

@@ -333,6 +333,21 @@ try { sessionStorage.setItem('gkOriginPage', 'uk-workshop.html'); } catch (e) {}
   const MIN_LEAD_MS = 3 * 60 * 1000;
   const SESSION_KEY = 'gkWorkshopStart';
 
+  // The booked start is mirrored into localStorage as well as sessionStorage.
+  // Someone clicking the confirmation email arrives in a fresh browser session
+  // where sessionStorage is already gone, and without this they look like a
+  // brand new visitor and get handed a second countdown.
+  function readStart() {
+    let v = 0;
+    try { v = parseInt(sessionStorage.getItem(SESSION_KEY) || '0', 10) || 0; } catch (e) {}
+    if (!v) { try { v = parseInt(localStorage.getItem(SESSION_KEY) || '0', 10) || 0; } catch (e) {} }
+    return v;
+  }
+  function rememberStart(t) {
+    try { sessionStorage.setItem(SESSION_KEY, String(t)); } catch (e) {}
+    try { localStorage.setItem(SESSION_KEY, String(t)); } catch (e) {}
+  }
+
   const cdStage = document.getElementById('cdStage');
   const cdBig = document.getElementById('cdBig');
   const cdFill = document.getElementById('cdFill');
@@ -572,14 +587,13 @@ try { sessionStorage.setItem('gkOriginPage', 'uk-workshop.html'); } catch (e) {}
   }
 
   // ---- Soonest session: continue the countdown, then open the player ----
+  // Same rule as the confirmation page. Past its start time, or no start time
+  // known, opens the player immediately and plays from the beginning: arriving
+  // late costs nobody the session, and nobody is ever counted down twice.
   const now = Date.now();
-  let target = 0;
-  try { target = parseInt(sessionStorage.getItem(SESSION_KEY) || '0', 10) || 0; } catch (e) {}
-  if (!target || target - now > SLOT_MS + MIN_LEAD_MS) {
-    target = Math.ceil(now / SLOT_MS) * SLOT_MS;
-    if (target - now < MIN_LEAD_MS) target += SLOT_MS;
-    try { sessionStorage.setItem(SESSION_KEY, String(target)); } catch (e) {}
-  }
+  let target = readStart();
+  if (target - now > SLOT_MS + MIN_LEAD_MS) target = 0;
+  if (!target) { target = now; rememberStart(target); }
   if (target <= now) { reveal(); return; }
 
   const span = Math.max(1, target - now);

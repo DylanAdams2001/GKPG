@@ -398,7 +398,7 @@ try { sessionStorage.setItem('gkOriginPage', '/uk-workshop/'); } catch (e) {}
   // hold panel offering the written guide. Registration, the pixel and the
   // webhook are deliberately untouched, so opt-in rate still measures cleanly.
   // Set back to false to restore the normal countdown. Nothing else to change.
-  const SESSION_ON_HOLD = true;
+  const SESSION_ON_HOLD = false;
 
   if (SESSION_ON_HOLD) {
     [cdStage, joinStage, bookedStage].forEach(function (el) { if (el) el.hidden = true; });

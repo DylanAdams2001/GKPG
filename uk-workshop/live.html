@@ -324,7 +324,7 @@ fbq('track', 'ViewContent', { content_name: 'UK Workshop' });
 // TEMPORARY - TEST DAY. Mirrors SESSION_ON_HOLD in uk-workshop/confirmation.html.
 // No session is running, so anyone who still has this URL is sent back to the
 // holding page rather than landing in an empty room. Set to false to restore.
-const SESSION_ON_HOLD = true;
+const SESSION_ON_HOLD = false;
 if (SESSION_ON_HOLD) { window.location.replace('/uk-workshop/confirmation'); }
 
 // The shared booking page reads this to route its "back to homepage" link.

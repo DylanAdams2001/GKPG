@@ -1,0 +1,8 @@
+# macOS
+.DS_Store
+
+# Local working material: source documents, archives and design references.
+# Deliberately untracked. GitHub Pages serves this repository from its root,
+# so anything committed here is downloadable from the live domain by anyone
+# who guesses the path. Contracts, agreements and internal plans stay local.
+working-files/

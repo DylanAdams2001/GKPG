@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Workshop Room | Golden Key Property</title>
 <meta name="robots" content="noindex, nofollow" />
-<link rel="icon" type="image/x-icon" href="favicon.ico" />
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
-<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
-<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -253,7 +253,7 @@ fbq('track', 'ViewContent', { content_name: 'UK Workshop' });
 
 <!-- HEADER -->
 <header class="header">
-  <a href="index.html" class="wordmark" id="homeLink"><svg class="wordmark-icon" width="15" height="32" viewBox="75 42 51 110" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="100" cy="66" r="19" stroke="currentColor" stroke-width="7"/><rect x="95.5" y="85" width="9" height="62" fill="currentColor"/><rect x="104.5" y="126" width="15" height="7" fill="currentColor"/><rect x="104.5" y="138" width="11" height="7" fill="currentColor"/></svg>Golden Key<span> · </span>Property</a>
+  <a href="/" class="wordmark" id="homeLink"><svg class="wordmark-icon" width="15" height="32" viewBox="75 42 51 110" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="100" cy="66" r="19" stroke="currentColor" stroke-width="7"/><rect x="95.5" y="85" width="9" height="62" fill="currentColor"/><rect x="104.5" y="126" width="15" height="7" fill="currentColor"/><rect x="104.5" y="138" width="11" height="7" fill="currentColor"/></svg>Golden Key<span> · </span>Property</a>
 </header>
 
 <!-- WATCH -->
@@ -301,7 +301,7 @@ fbq('track', 'ViewContent', { content_name: 'UK Workshop' });
 <section class="bottom-cta">
   <h2>Questions After The Workshop?</h2>
   <p>Book a short call with a senior team member to go through current availability, pricing, and anything the workshop left open.</p>
-  <a href="uk-workshop-booking.html" class="cta-link">Book A Call →</a>
+  <a href="/uk-workshop/booking.html" class="cta-link">Book A Call →</a>
   <p class="cta-note">No pitch. No pressure. No commitment.</p>
 </section>
 
@@ -322,7 +322,7 @@ fbq('track', 'ViewContent', { content_name: 'UK Workshop' });
 
 <script>
 // The shared booking page reads this to route its "back to homepage" link.
-try { sessionStorage.setItem('gkOriginPage', 'uk-workshop.html'); } catch (e) {}
+try { sessionStorage.setItem('gkOriginPage', '/uk-workshop/'); } catch (e) {}
 
 // Branches on what the visitor picked on the registration page. The soonest
 // session continues the countdown they already saw (held in sessionStorage, so
@@ -384,10 +384,10 @@ try { sessionStorage.setItem('gkOriginPage', 'uk-workshop.html'); } catch (e) {}
     { at: 900,  from: 'Golden Key Team', text: 'PLACEHOLDER: time this to the 25 year agreement section.' },
     { at: 1320, from: 'Golden Key Team',
       text: 'If you want to go through these numbers against your own situation, Oliver has a few times open this week.',
-      link: { href: 'uk-workshop-booking.html', label: 'Book your call' } },
+      link: { href: '/uk-workshop/booking.html', label: 'Book your call' } },
     { at: 1680, from: 'Golden Key Team',
       text: 'Link again while it is fresh. No pressure and nothing is for sale on the call.',
-      link: { href: 'uk-workshop-booking.html', label: 'Book your call' } }
+      link: { href: '/uk-workshop/booking.html', label: 'Book your call' } }
   ];
 
   const chatBody = document.getElementById('chatBody');

@@ -4,10 +4,10 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Booking Confirmed | Golden Key Property</title>
-<link rel="icon" type="image/x-icon" href="favicon.ico" />
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
-<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
-<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -90,7 +90,7 @@
 
 <!-- HEADER -->
 <header class="header">
-  <a href="index.html" class="wordmark" id="homeLink"><svg class="wordmark-icon" width="15" height="32" viewBox="75 42 51 110" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="100" cy="66" r="19" stroke="currentColor" stroke-width="7"/><rect x="95.5" y="85" width="9" height="62" fill="currentColor"/><rect x="104.5" y="126" width="15" height="7" fill="currentColor"/><rect x="104.5" y="138" width="11" height="7" fill="currentColor"/></svg>Golden Key<span> · </span>Property</a>
+  <a href="/" class="wordmark" id="homeLink"><svg class="wordmark-icon" width="15" height="32" viewBox="75 42 51 110" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="100" cy="66" r="19" stroke="currentColor" stroke-width="7"/><rect x="95.5" y="85" width="9" height="62" fill="currentColor"/><rect x="104.5" y="126" width="15" height="7" fill="currentColor"/><rect x="104.5" y="138" width="11" height="7" fill="currentColor"/></svg>Golden Key<span> · </span>Property</a>
 </header>
 
 <main>
@@ -104,7 +104,7 @@
         <li>A member of our team will call you at the time you selected</li>
         <li>Feel free to reply to the confirmation email if anything comes up beforehand</li>
       </ul>
-      <a href="index.html" class="btn-primary" id="backLink">Back to Homepage</a>
+      <a href="/" class="btn-primary" id="backLink">Back to Homepage</a>
     </div>
   </div>
 </main>
@@ -125,8 +125,8 @@
 </footer>
 
 <script>
-// This page is shared across market landing pages (hong-kong.html,
-// singapore.html, ...). The origin page sets this before the booking flow
+// This page is shared across market landing pages (/hong-kong/,
+// /singapore/, ...). The origin page sets this before the booking flow
 // starts, so both links here point wherever the visitor actually came from.
 try {
   var gkOrigin = sessionStorage.getItem('gkOriginPage');

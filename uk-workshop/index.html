@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Golden Key Property | Free Workshop: £53,000 A Year Net From UK Property</title>
 <meta name="description" content="Free 30 minute workshop. How UK investors are generating £53,000 a year net at 16%, assured for 25 years, with the first rental payment inside 60 days. Units from £130,000." />
-<link rel="icon" type="image/x-icon" href="favicon.ico" />
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
-<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
-<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@23.8.0/build/css/intlTelInput.css" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -67,7 +67,7 @@ fbq('track', 'PageView');
   /* HERO */
   .hero {
     position: relative;
-    background: var(--black) url('images/hero-skyline.jpg') center 38%/cover no-repeat;
+    background: var(--black) url('/images/hero-skyline.jpg') center 38%/cover no-repeat;
     padding: 58px 24px 72px;
   }
   .hero::before {
@@ -215,7 +215,7 @@ fbq('track', 'PageView');
   .host-card { max-width: 780px; margin: 0 auto; background: var(--white); border: 1px solid var(--line); border-radius: 18px; padding: 36px 38px; display: flex; gap: 30px; align-items: flex-start; }
   .host-photo {
     width: 104px; height: 104px; border-radius: 50%; flex-shrink: 0;
-    background: #1a1b1c url('images/host-oliver.jpg') center 22%/cover no-repeat;
+    background: #1a1b1c url('/images/host-oliver.jpg') center 22%/cover no-repeat;
     border: 2px solid var(--gold);
   }
   .host-name { font-size: 19px; font-weight: 800; color: var(--black); margin-bottom: 3px; }
@@ -326,7 +326,7 @@ fbq('track', 'PageView');
 
 <!-- HEADER -->
 <header class="header">
-  <a href="index.html" class="wordmark"><svg class="wordmark-icon" width="15" height="32" viewBox="75 42 51 110" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="100" cy="66" r="19" stroke="currentColor" stroke-width="7"/><rect x="95.5" y="85" width="9" height="62" fill="currentColor"/><rect x="104.5" y="126" width="15" height="7" fill="currentColor"/><rect x="104.5" y="138" width="11" height="7" fill="currentColor"/></svg>Golden Key<span> · </span>Property</a>
+  <a href="/" class="wordmark"><svg class="wordmark-icon" width="15" height="32" viewBox="75 42 51 110" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="100" cy="66" r="19" stroke="currentColor" stroke-width="7"/><rect x="95.5" y="85" width="9" height="62" fill="currentColor"/><rect x="104.5" y="126" width="15" height="7" fill="currentColor"/><rect x="104.5" y="138" width="11" height="7" fill="currentColor"/></svg>Golden Key<span> · </span>Property</a>
 </header>
 
 <!-- HERO -->
@@ -870,8 +870,8 @@ document.getElementById('submitBtn').addEventListener('click', function () {
     // Lead event fires server-side via GHL's Conversions API automation, not
     // from the browser, to avoid double-counted Leads in Ads Manager.
     showSuccess();
-    try { sessionStorage.setItem('gkOriginPage', 'uk-workshop.html'); } catch (e) {}
-    setTimeout(function () { window.location.href = 'uk-workshop-confirmation.html'; }, 1800);
+    try { sessionStorage.setItem('gkOriginPage', '/uk-workshop/'); } catch (e) {}
+    setTimeout(function () { window.location.href = '/uk-workshop/confirmation.html'; }, 1800);
   }).catch(function () {
     submitBtn.disabled = false;
     submitBtn.innerHTML = 'Reserve Your Seat <span class="btn-timer" id="cdBtn">--:--</span>';

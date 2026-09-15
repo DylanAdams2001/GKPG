@@ -9,23 +9,41 @@ its own path, so nothing private belongs in here.
 
 ## Layout
 
+One folder per funnel. Each folder's `index.html` is the entry page, so the
+folder name is the public URL: `hong-kong/index.html` is served at
+`/hong-kong/`.
+
+| Path | URL | What it is |
+| --- | --- | --- |
+| `index.html` | `/` | Homepage |
+| `hong-kong/index.html` | `/hong-kong/` | Hong Kong direct-to-offer landing page |
+| `hong-kong/resource.html` | `/hong-kong/resource.html` | Hong Kong lead magnet delivery |
+| `singapore/index.html` | `/singapore/` | Singapore direct-to-offer landing page |
+| `singapore/resource.html` | `/singapore/resource.html` | Singapore lead magnet delivery |
+| `booking/index.html` | `/booking/` | Call booking, shared by both direct funnels |
+| `booking/confirmation.html` | `/booking/confirmation.html` | Booking confirmation |
+| `uk-workshop/index.html` | `/uk-workshop/` | Workshop registration, the split test against direct-to-offer |
+| `uk-workshop/confirmation.html` | `/uk-workshop/confirmation.html` | Holding page. Counts down to the session, then hands over |
+| `uk-workshop/live.html` | `/uk-workshop/live.html` | The workshop room itself: player, one-way chat, watch tracking |
+| `uk-workshop/booking.html` | `/uk-workshop/booking.html` | Call booking for workshop attendees |
+| `reservation-agreement.html` | `/reservation-agreement.html` | Reservation paperwork |
+
+Supporting folders:
+
 | Path | What it is |
 | --- | --- |
-| `index.html` | Homepage |
-| `hong-kong.html`, `singapore.html` | Direct-to-offer landing pages |
-| `hong-kong-resource.html`, `singapore-resource.html` | Lead magnet delivery pages |
-| `booking.html`, `booking-confirmation.html` | Call booking for the direct funnel |
-| `uk-workshop.html` | UK workshop registration, the split test against direct-to-offer |
-| `uk-workshop-confirmation.html` | Holding page. Counts down to the session, then hands over |
-| `uk-workshop-live.html` | The workshop room itself: player, one-way chat, watch tracking |
-| `uk-workshop-booking.html` | Call booking for workshop attendees |
-| `reservation-agreement.html` | Reservation paperwork |
-| `styles.css` | Shared design system for every page |
 | `images/` | Photography used by the pages |
-| `ad-creative/` | Finished ad creative, by market |
-| `ad-templates/`, `brand/` | Source artwork and brand assets |
-| `GHL-AUTOMATION-SPEC.md` | How the pages talk to GoHighLevel and Meta. Read before changing either |
+| `icons/` | Favicons and the Apple touch icon (`favicon.ico` stays at the root, where browsers look for it) |
+| `marketing/ad-creative/` | Finished ad creative, by market |
+| `marketing/ad-templates/`, `marketing/brand/` | Source artwork and brand assets |
+| `docs/GHL-AUTOMATION-SPEC.md` | How the pages talk to GoHighLevel and Meta. Read before changing either |
 | `working-files/` | Local only, never committed. Source documents, archives, design references |
+
+### Linking between pages
+
+Pages now sit at different depths, so **every internal link and asset path is
+root-relative** — `/images/hero-skyline.jpg`, not `images/hero-skyline.jpg`.
+A relative path will break as soon as it is used from a page one folder down.
 
 ## The UK workshop funnel
 
@@ -40,14 +58,21 @@ beginning instead.
 
 Watch progress is measured as *visible* time on the page, so a backgrounded tab
 does not accrue, and is posted to GoHighLevel as tags at 25 / 50 / 75 / 100 per
-cent. `GHL-AUTOMATION-SPEC.md` has the payloads and the workflows they drive.
+cent. `docs/GHL-AUTOMATION-SPEC.md` has the payloads and the workflows they drive.
 
 ## Before the real recording goes in
 
-Two markers in `uk-workshop-live.html` are both commented `TEMPORARY`:
+Two markers in `uk-workshop/live.html` are both commented `TEMPORARY`:
 
 - the stand-in Tella video in `WORKSHOP_SRC`
 - `WORKSHOP_SECONDS`, currently `90` to match it, to be put back to `30 * 60`
 
 Three `PLACEHOLDER` entries in `HOST_MESSAGES` also need real copy timed to the
 recording.
+
+## Loose ends
+
+- `styles.css` is not referenced by any page. Every page carries its own inline
+  styles instead. It is kept for reference, not served.
+- `images/` holds five photographs no page currently uses: `guide-consultant`,
+  `guide-conversation`, `guide-cover`, `guide-hands`, `why-supported-housing`.

@@ -6,15 +6,15 @@ Everything needed to build the GoHighLevel side of the UK workshop funnel.
 
 | Page | URL | Purpose |
 |---|---|---|
-| Registration | `/uk-workshop` | Opt-in form |
-| Confirmation | `/uk-workshop-confirmation` | Countdown, welcome video, checklist, join button |
-| Workshop room | `/uk-workshop-live` | The session: player, chat, engagement tracking |
-| Booking | `/uk-workshop-booking` | Call calendar |
+| Registration | `/uk-workshop/` | Opt-in form |
+| Confirmation | `/uk-workshop/confirmation` | Countdown, welcome video, checklist, join button |
+| Workshop room | `/uk-workshop/live` | The session: player, chat, engagement tracking |
+| Booking | `/uk-workshop/booking` | Call calendar |
 
 **Link people straight to the room, with the contact id appended:**
 
 ```
-https://www.goldenkeypropertyco.com/uk-workshop-live?c={{contact.id}}
+https://www.goldenkeypropertyco.com/uk-workshop/live?c={{contact.id}}
 ```
 
 Without `?c=`, anyone arriving from an email is anonymous to the page and no
@@ -221,7 +221,7 @@ The expected value sits on `Schedule` instead.
 2. Contact appears with `fbc`, `fbp` and `event_id` populated
 3. Events Manager shows **one** `CompleteRegistration`, with `fbc`, `fbp` and
    `event_id` among the matched parameters
-4. Wait out the countdown, click through to `/uk-workshop-live`, and leave the
+4. Wait out the countdown, click through to `/uk-workshop/live`, and leave the
    tab **in the foreground**. The tab must stay visible: progress runs on
    visible time
 5. Contact collects `watched-start`, `watched-25`, `watched-50`, `watched-75`,

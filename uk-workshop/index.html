@@ -623,7 +623,10 @@ const SESSION_KEY = 'gkWorkshopStart';
 const CHOICE_KEY = 'gkWorkshopChoice';
 // Later sessions are same-day only, offered as offsets from now and rounded to
 // a clean quarter hour. Nothing is scheduled past the cutoff.
-const OFFSETS_MS = [15 * 60000, 60 * 60000, 4 * 3600000, 8 * 3600000];
+// No offset shorter than the session itself: a 30 minute workshop cannot start
+// 15 minutes after the one before it, and offering both reads as a recording
+// rather than a schedule.
+const OFFSETS_MS = [60 * 60000, 3 * 3600000, 6 * 3600000];
 const CUTOFF_HOUR = 21;                // 9pm, no later sessions after this
 
 // The booked start is mirrored into localStorage as well as sessionStorage, so
@@ -682,6 +685,19 @@ function roundUpTo15(d) {
   return r;
 }
 
+// Later sessions land on the hour or the half hour. A published timetable does
+// not run at :15 and :45, and quarter-hour starts are the tell that the times
+// were generated from the visitor's own clock. The soonest session keeps the
+// finer quarter-hour rounding: it is offered as "starting shortly" rather than
+// as a scheduled time, and coarser rounding would leave people waiting longer.
+function roundUpTo30(d) {
+  const r = new Date(d);
+  r.setSeconds(0, 0);
+  const m = r.getMinutes();
+  r.setMinutes(m + ((30 - (m % 30)) % 30));
+  return r;
+}
+
 function offsetLabel(ms) {
   const mins = Math.round(ms / 60000);
   if (mins < 60) return 'in ' + mins + ' minutes';
@@ -697,7 +713,7 @@ function laterSessions() {
   const seen = {};
   seen[workshopStartAt()] = true;   // never offer the same slot twice
   for (let k = 0; k < OFFSETS_MS.length; k++) {
-    const t = roundUpTo15(new Date(now.getTime() + OFFSETS_MS[k]));
+    const t = roundUpTo30(new Date(now.getTime() + OFFSETS_MS[k]));
     if (t > cutoff) continue;
     if (seen[t.getTime()]) continue;
     seen[t.getTime()] = true;

@@ -26,6 +26,7 @@ folder name is the public URL: `hong-kong/index.html` is served at
 | `uk-workshop/confirmation.html` | `/uk-workshop/confirmation.html` | Holding page. Counts down to the session, then hands over |
 | `uk-workshop/live.html` | `/uk-workshop/live.html` | The workshop room itself: player, one-way chat, watch tracking |
 | `uk-workshop/booking.html` | `/uk-workshop/booking.html` | Call booking for workshop attendees |
+| `uk-workshop/resource.html` | `/uk-workshop/resource` | Workshop companion guide. Sent to attendees who reach `watched-complete` |
 | `reservation-agreement.html` | `/reservation-agreement.html` | Reservation paperwork |
 
 Supporting folders:
@@ -74,5 +75,7 @@ recording.
 
 - `styles.css` is not referenced by any page. Every page carries its own inline
   styles instead. It is kept for reference, not served.
-- `images/` holds five photographs no page currently uses: `guide-consultant`,
-  `guide-conversation`, `guide-cover`, `guide-hands`, `why-supported-housing`.
+- `images/guide-consultant.jpg` is not used by any page.
+- The workshop companion guide carries `CONFIRM` and `PLACEHOLDER` markers for
+  figures and terms only Oliver can supply. Search the file for them before it
+  goes out; they are styled amber so they are impossible to miss on screen.

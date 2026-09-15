@@ -1,0 +1,605 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The UK Supported Housing Investor Guide | Golden Key Property</title>
+<meta name="description" content="The written companion to the Golden Key Property workshop. How the 16% net yield is calculated, what the 25 year agreement covers, and what happens between reservation and your first rental payment." />
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #0a0a0a;
+    --ink-soft: #57595c;
+    --line: #e3e3e0;
+    --card: #f7f7f5;
+    --gold: #D4AF37;
+    --gold-deep: #96751F;
+    --gold-pale: #F8F0DA;
+    --face: 'Inter', -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", Arial, sans-serif;
+    --face-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #e9e9e7; }
+  body { font-family: var(--face); color: var(--ink); line-height: 1.6; }
+  h1, h2, h3 { font-family: var(--face-display); font-weight: 800; letter-spacing: -0.01em; margin: 0; color: var(--ink); }
+  p { margin: 0 0 14px; }
+  ul { margin: 0 0 14px; padding-left: 20px; }
+  li { margin-bottom: 8px; }
+
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 20px auto;
+    background: #ffffff;
+    padding: 22mm 20mm;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+    position: relative;
+  }
+  .page-num {
+    position: absolute;
+    bottom: 12mm;
+    right: 20mm;
+    font-size: 0.75rem;
+    color: var(--ink-soft);
+    font-weight: 600;
+  }
+  .wordmark { font-family: var(--face-display); font-weight: 800; font-size: 1.05rem; letter-spacing: 0.01em; }
+  .wordmark span { color: var(--gold); }
+
+  .eyebrow {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold-deep);
+    display: block;
+    margin-bottom: 10px;
+    font-family: var(--face);
+  }
+
+  /* Cover page */
+  .page.cover-page { padding: 0; overflow: hidden; display: flex; flex-direction: column; }
+  .cover-dark {
+    flex: 1;
+    background: #0a0a0a url('/images/guide-cover.jpg') center 40%/cover no-repeat;
+    position: relative;
+    color: #f5f5f3;
+    padding: 56px 20mm 40px;
+    display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .cover-dark::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(5,5,6,0.90) 0%, rgba(5,5,6,0.82) 45%, rgba(5,5,6,0.95) 100%);
+  }
+  .cover-dark > * { position: relative; z-index: 1; }
+  .cover-dark .wordmark { color: #fff; }
+  .cover-bar { height: 4px; background: var(--gold); width: 64px; border-radius: 3px; margin-bottom: 22px; }
+  .cover-dark .kicker { font-family: var(--face); font-size: 0.85rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); display: block; margin-bottom: 16px; }
+  .cover-dark h1 { font-size: 2.5rem; line-height: 1.1; color: #fff; margin-bottom: 18px; }
+  .cover-dark p.standfirst { font-family: var(--face); font-size: 1.02rem; color: #d6d7d9; max-width: 36ch; font-weight: 500; margin: 0; }
+  .cover-dark .cover-bottom { border-top: 1px solid rgba(255,255,255,0.15); padding-top: 14px; font-family: var(--face); font-size: 0.78rem; color: #cfd0d2; display: flex; justify-content: space-between; margin: 0; }
+
+  h2.section-title { font-size: 1.6rem; margin-bottom: 6px; }
+  .section-sub { font-family: var(--face); color: var(--ink-soft); font-size: 0.98rem; margin-bottom: 24px; }
+
+  .callout {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 18px 20px;
+    font-family: var(--face);
+    font-size: 0.92rem;
+    color: var(--ink-soft);
+    margin: 18px 0;
+  }
+  .callout strong { color: var(--ink); }
+  .callout.gold { background: var(--gold-pale); border-color: #ecdcae; }
+
+  .steps { list-style: none; padding: 0; margin: 20px 0; counter-reset: step; }
+  .steps li {
+    counter-increment: step;
+    display: flex; gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line);
+    font-family: var(--face);
+    font-size: 0.95rem;
+  }
+  .steps li:last-child { border-bottom: none; }
+  .steps li::before {
+    content: counter(step);
+    flex-shrink: 0;
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: #fff;
+    font-weight: 800; font-size: 0.8rem;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .steps li .step-body .step-day { display: block; font-family: var(--face); font-size: 0.7rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; color: var(--gold-deep); margin-bottom: 3px; }
+  .steps li .step-body b { display: block; margin-bottom: 2px; font-family: var(--face-display); font-weight: 700; }
+  .steps li .step-body span { color: var(--ink-soft); font-size: 0.88rem; }
+
+  /* Contents page */
+  .contents-list { list-style: none; padding: 0; margin: 24px 0 0; }
+  .contents-list li {
+    display: flex; align-items: baseline; gap: 14px;
+    padding: 12px 0; border-bottom: 1px solid var(--line);
+    font-family: var(--face); font-weight: 700; font-size: 0.98rem;
+  }
+  .contents-list li .num { color: var(--gold-deep); font-weight: 800; width: 24px; flex-shrink: 0; }
+  .intro-text { margin-top: 28px; font-family: var(--face); font-size: 1rem; color: var(--ink-soft); }
+  .intro-text .sig { font-family: var(--face-display); font-weight: 700; color: var(--ink); font-style: italic; }
+
+  .fact-strip { display: flex; gap: 14px; margin: 20px 0; }
+  .fact-item { flex: 1; border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; font-family: var(--face); font-size: 0.85rem; font-weight: 700; text-align: center; color: var(--ink); }
+  .fact-item span { color: var(--gold-deep); margin-right: 4px; }
+
+  .stat-strip { display: flex; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; margin: 20px 0; }
+  .stat-strip .stat { flex: 1; background: #fff; padding: 16px 14px; text-align: center; }
+  .stat-strip .stat .num { display: block; font-family: var(--face-display); font-size: 1.4rem; font-weight: 800; color: var(--gold-deep); }
+  .stat-strip .stat .label { display: block; font-family: var(--face); font-size: 0.7rem; color: var(--ink-soft); font-weight: 600; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.04em; }
+
+  .two-col { display: flex; gap: 28px; margin-top: 20px; font-family: var(--face); }
+  .two-col .col { flex: 1; }
+  .two-col h3 { font-family: var(--face); font-size: 0.9rem; margin-bottom: 10px; color: var(--gold-deep); text-transform: uppercase; letter-spacing: 0.04em; }
+  .two-col ul { padding-left: 18px; }
+  .two-col li { font-size: 0.9rem; margin-bottom: 8px; }
+
+  .faq-item { padding: 10px 0; border-bottom: 1px solid var(--line); font-family: var(--face); }
+  .faq-item:last-child { border-bottom: none; }
+  .faq-item .q { font-weight: 700; font-size: 0.95rem; margin-bottom: 4px; }
+  .faq-item .a { font-size: 0.9rem; color: var(--ink-soft); margin: 0; }
+
+  .t-card { border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px; margin-bottom: 14px; font-family: var(--face); }
+  .t-stars { color: var(--gold-deep); font-size: 0.8rem; margin-bottom: 8px; letter-spacing: 2px; }
+  .t-text { font-size: 0.88rem; color: #333; line-height: 1.7; font-style: italic; margin-bottom: 10px; }
+  .t-author { font-size: 0.82rem; font-weight: 700; color: var(--ink); }
+  .t-role { font-weight: 500; color: var(--ink-soft); }
+
+  .disclaimer-box { font-family: var(--face); font-size: 0.78rem; color: var(--ink-soft); line-height: 1.6; }
+  .disclaimer-box p { margin: 0 0 8px; }
+  .disclaimer-box p:last-child { margin-bottom: 0; }
+
+  .cta-box {
+    background: var(--ink);
+    color: #fff;
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin: 14px 0;
+    font-family: var(--face);
+  }
+  .cta-box h3 { color: #fff; font-family: var(--face-display); font-size: 1.05rem; margin-bottom: 6px; }
+  .cta-box p { color: #c7c8ca; margin-bottom: 0; font-size: 0.88rem; }
+  .cta-box a.cta-link {
+    display: inline-block; margin-top: 14px; padding: 12px 26px;
+    background: var(--gold); color: var(--ink); text-decoration: none;
+    border-radius: 8px; font-size: 0.82rem; font-weight: 800;
+    letter-spacing: 0.06em; text-transform: uppercase;
+  }
+
+  /* Photo band */
+  .photo-band {
+    height: 62mm; border-radius: 10px; margin: 22px 0;
+    background-color: #1a1b1c; background-size: cover; background-repeat: no-repeat;
+  }
+  .photo-caption { font-family: var(--face); font-size: 0.78rem; color: var(--ink-soft); margin-top: -12px; }
+
+  /* Yield table */
+  .yield-table { width: 100%; border-collapse: collapse; font-family: var(--face); font-size: 0.9rem; margin: 18px 0; }
+  .yield-table th, .yield-table td { text-align: left; padding: 11px 12px; border-bottom: 1px solid var(--line); }
+  .yield-table th { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-soft); font-weight: 800; }
+  .yield-table td.val { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .yield-table tr.total td { border-top: 2px solid var(--ink); border-bottom: none; font-weight: 800; font-size: 0.98rem; padding-top: 13px; }
+  .yield-table tr.total td.val { color: var(--gold-deep); }
+
+  .placeholder { color: #92400e; background: #fef3c7; padding: 1px 6px; border-radius: 3px; font-weight: 700; font-size: 0.92em; }
+
+  .download-btn {
+    position: fixed; top: 20px; right: 20px; z-index: 500;
+    display: flex; align-items: center; gap: 8px;
+    background: var(--ink); color: #fff; border: none; border-radius: 10px;
+    padding: 13px 22px; font-family: var(--face); font-size: 13px; font-weight: 800;
+    letter-spacing: 0.4px; cursor: pointer; box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    transition: all 0.2s ease;
+  }
+  .download-btn:hover { background: linear-gradient(135deg, #F5E6BC 0%, var(--gold) 50%, var(--gold-deep) 100%); color: var(--ink); }
+  .download-btn svg { width: 15px; height: 15px; flex-shrink: 0; }
+
+  /* Phones. The A4 sheet is a fixed 210mm, which overflows a phone screen, and
+     this guide is delivered by email where most opens are on a phone. Below the
+     sheet width the pages become a single flowing column instead. */
+  @media (max-width: 800px) {
+    .page {
+      width: auto; min-height: 0;
+      margin: 12px; padding: 30px 22px;
+      border-radius: 10px;
+    }
+    .page-num { display: none; }
+    .cover-dark { padding: 44px 24px 32px; }
+    .cover-dark h1 { font-size: 1.9rem; }
+    .two-col, .fact-strip, .price-tiles { flex-direction: column; gap: 16px; }
+    .stat-strip { flex-wrap: wrap; }
+    .stat-strip .stat { flex: 1 1 40%; }
+    .photo-band { height: 40mm; }
+    .download-btn { top: auto; bottom: 16px; right: 16px; padding: 11px 18px; font-size: 12px; }
+    .yield-table th, .yield-table td { padding: 9px 6px; font-size: 0.85rem; }
+  }
+
+  @media print {
+    body { background: #fff; }
+    .page { box-shadow: none; margin: 0; page-break-after: always; width: 210mm; min-height: 297mm; padding: 22mm 20mm; }
+    .page:last-child { page-break-after: auto; }
+    .page-num { display: block; }
+    .download-btn { display: none; }
+  }
+  @page { size: A4; margin: 0; }
+</style>
+</head>
+<body>
+
+<button type="button" class="download-btn" onclick="window.print()">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+  Download PDF
+</button>
+
+<!-- PAGE 1: COVER -->
+<div class="page cover-page">
+  <div class="cover-dark">
+    <div class="wordmark">Golden Key <span>&middot;</span> Property</div>
+    <div>
+      <div class="cover-bar"></div>
+      <span class="kicker">Workshop Companion Guide</span>
+      <h1>The UK Supported<br />Housing Investor<br />Guide</h1>
+      <p class="standfirst">Where the 16% comes from, what the 25 year agreement actually covers, and what happens between reservation and your first rental payment.</p>
+    </div>
+    <p class="cover-bottom">
+      <span>Golden Key Property</span>
+      <span>For workshop attendees</span>
+    </p>
+  </div>
+</div>
+
+<!-- PAGE 2: CONTENTS + INTRO -->
+<div class="page">
+  <span class="eyebrow">Contents</span>
+  <h2 class="section-title">What's Inside This Guide</h2>
+  <p class="section-sub">Everything covered in the workshop, written down so you can check it at your own pace.</p>
+
+  <ul class="contents-list">
+    <li><span class="num">01</span> The model &mdash; what supported housing actually is</li>
+    <li><span class="num">02</span> The 16% &mdash; where the number comes from</li>
+    <li><span class="num">03</span> The 25 year agreement &mdash; what it covers</li>
+    <li><span class="num">04</span> What's handled, and what stays yours</li>
+    <li><span class="num">05</span> From reservation to first rent payment</li>
+    <li><span class="num">06</span> Frequently asked questions</li>
+    <li><span class="num">07</span> Investor stories</li>
+    <li><span class="num">08</span> Your next step</li>
+  </ul>
+
+  <div class="intro-text">
+    <p>You watched the workshop through to the end, so you've already seen the shape of this. This guide is the same material in writing.</p>
+    <p>There's a reason for that. Most property decisions are made twice: once in the moment, when something sounds compelling, and again a week later, when the enthusiasm has worn off and the questions arrive. The second decision is the one that matters, and it's much easier to make against a document than a memory of a video.</p>
+    <p>So take your time with it. Check the numbers. Give it to your accountant or your solicitor if that's your habit, it should hold up to that.</p>
+    <p>If something here doesn't add up, that's exactly what a call is for.</p>
+    <p class="sig">&mdash; Oliver Cullen, Director</p>
+  </div>
+
+  <div class="page-num">02</div>
+</div>
+
+<!-- PAGE 3: THE MODEL -->
+<div class="page">
+  <span class="eyebrow">01 &nbsp;&middot;&nbsp; The Model</span>
+  <h2 class="section-title">What Supported Housing Actually Is</h2>
+  <p class="section-sub">The structural difference between this and an ordinary buy to let.</p>
+
+  <p>In an ordinary buy to let, your income depends on a tenant. You find one, you hope they pay, and when they leave you carry the void until the next one arrives. Your yield is whatever survives that process.</p>
+
+  <p>Supported housing works the other way round. The property is let to a housing provider on a long term contracted agreement. The provider houses the people who need supported accommodation and takes on the tenant relationship entirely. Your agreement is with the provider, not with the occupant.</p>
+
+  <div class="photo-band" style="background-image:url('/images/why-supported-housing.jpg'); background-position: center 45%;"></div>
+
+  <p>That single change is where the rest of the model comes from. Because the rent is contracted rather than market-dependent, it does not fall when the local rental market softens, and it does not stop when an occupant moves out. The provider carries that risk, which is what allows the income to be described as assured rather than projected.</p>
+
+  <div class="callout">
+    <strong>The distinction worth holding on to:</strong> this is not a bet on a location. An ordinary buy to let asks you to pick the right town and the right street at the right time. This model asks you to hold an asset with a contracted income attached to it. Those two things fail in completely different ways, and for completely different reasons.
+  </div>
+
+  <div class="stat-strip">
+    <div class="stat"><span class="num">16%</span><span class="label">Net yield, assured</span></div>
+    <div class="stat"><span class="num">25</span><span class="label">Year agreement</span></div>
+    <div class="stat"><span class="num">60</span><span class="label">Days to first rent</span></div>
+    <div class="stat"><span class="num">&pound;130k</span><span class="label">Entry from</span></div>
+  </div>
+
+  <div class="page-num">03</div>
+</div>
+
+<!-- PAGE 4: THE 16% -->
+<div class="page">
+  <span class="eyebrow">02 &nbsp;&middot;&nbsp; The Numbers</span>
+  <h2 class="section-title">Where The 16% Comes From</h2>
+  <p class="section-sub">A net figure, calculated after costs, not a headline gross number.</p>
+
+  <p>Most yields quoted in property marketing are gross. They describe the rent before anything is taken out of it, which makes them close to meaningless as a comparison, because the costs that follow vary enormously between models.</p>
+
+  <p>The 16% quoted in the workshop is a net figure. It is what remains after the costs of running the property have already been accounted for, which is why it can be compared directly against the 4 to 5% net that a typical residential buy to let returns.</p>
+
+  <div class="callout gold">
+    <strong>Illustrative worked example.</strong> At the &pound;130,000 entry price quoted in the workshop, a 16% net yield produces &pound;20,800 per year. The &pound;53,000 a year figure reflects a portfolio of roughly &pound;331,000 deployed at the same rate. These are illustrations of the arithmetic, not an offer, a quotation, or a projection for any specific property.
+  </div>
+
+  <h3 style="font-size:1.05rem; margin: 26px 0 4px;">Why the number can be this much higher</h3>
+  <p>Three things account for most of the gap between this and a standard buy to let:</p>
+
+  <table class="yield-table">
+    <tr>
+      <th>What changes</th>
+      <th>Effect on net yield</th>
+    </tr>
+    <tr>
+      <td><b>No voids</b><br /><span style="color:var(--ink-soft); font-size:0.85rem;">Rent is contracted with the provider, so it continues between occupants</span></td>
+      <td class="val"><span class="placeholder">CONFIRM</span></td>
+    </tr>
+    <tr>
+      <td><b>No letting or renewal fees</b><br /><span style="color:var(--ink-soft); font-size:0.85rem;">No agent re-letting the property every twelve months</span></td>
+      <td class="val"><span class="placeholder">CONFIRM</span></td>
+    </tr>
+    <tr>
+      <td><b>Maintenance within the agreement</b><br /><span style="color:var(--ink-soft); font-size:0.85rem;">Day to day upkeep sits with the provider rather than with you</span></td>
+      <td class="val"><span class="placeholder">CONFIRM</span></td>
+    </tr>
+    <tr class="total">
+      <td>Net yield to you</td>
+      <td class="val">16%</td>
+    </tr>
+  </table>
+
+  <div class="callout">
+    <strong>Compared with what you may hold now.</strong> If your existing rentals return 4 to 5% net, the difference is not a better location or a harder-working agent. It is that the three lines above have been removed from the model rather than minimised within it.
+  </div>
+
+  <div class="page-num">04</div>
+</div>
+
+<!-- PAGE 5: THE 25 YEAR AGREEMENT -->
+<div class="page">
+  <span class="eyebrow">03 &nbsp;&middot;&nbsp; The Agreement</span>
+  <h2 class="section-title">What 25 Years Actually Covers</h2>
+  <p class="section-sub">The question worth asking of any assurance: what happens on the day it's tested.</p>
+
+  <p>A long agreement is only as good as its behaviour under stress. The useful question is not how many years are on the front page, but what happens the first time something goes wrong.</p>
+
+  <div class="two-col">
+    <div class="col">
+      <h3>Covered by the agreement</h3>
+      <ul>
+        <li>Rent continues if the property is unoccupied between placements</li>
+        <li>Rent continues if an occupant stops paying, that is the provider's exposure, not yours</li>
+        <li>Day to day maintenance and repairs within the agreed scope</li>
+        <li>Tenant sourcing, placement and all occupant contact</li>
+        <li>Rent collection and payment to you on a fixed cycle</li>
+      </ul>
+    </div>
+    <div class="col">
+      <h3>Remains with you</h3>
+      <ul>
+        <li>Ownership of the freehold title, in your name</li>
+        <li>Buildings insurance <span class="placeholder">CONFIRM</span></li>
+        <li>Structural and major works outside the agreed scope <span class="placeholder">CONFIRM</span></li>
+        <li>Your own tax position, including income and any future capital gains</li>
+        <li>Any mortgage you choose to place against the property</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>On the word "assured".</strong> Assured means the rent is contracted for the term rather than dependent on occupancy or on market conditions. It does not mean risk has been removed from the investment. It has been moved, from you to the provider, and it is worth understanding the provider's own standing before you rely on that. We will go through exactly who the agreement is with on a call.
+  </div>
+
+  <div class="callout">
+    <strong>Worth reading before you commit:</strong> the agreement itself. Not a summary of it, the document. We will send it in full, and we would encourage you to have a solicitor read it. Any model that cannot survive that scrutiny is not one you should be in.
+  </div>
+
+  <div class="page-num">05</div>
+</div>
+
+<!-- PAGE 6: HANDS OFF -->
+<div class="page">
+  <span class="eyebrow">04 &nbsp;&middot;&nbsp; Day To Day</span>
+  <h2 class="section-title">What "Hands&#8209;Off" Means In Practice</h2>
+  <p class="section-sub">Specifically, what lands in your inbox after completion, and what doesn't.</p>
+
+  <div class="photo-band" style="background-image:url('/images/guide-hands.jpg'); background-position: center 40%;"></div>
+
+  <p>"Fully managed" is used loosely across the industry, and often means little more than an agent who forwards you problems rather than solving them. It is worth being precise about it.</p>
+
+  <div class="two-col">
+    <div class="col">
+      <h3>You will never deal with</h3>
+      <ul>
+        <li>Finding or vetting occupants</li>
+        <li>Chasing rent arrears</li>
+        <li>Maintenance calls, at any hour</li>
+        <li>Inspections and check&#8209;ins</li>
+        <li>Deposit disputes</li>
+        <li>Re&#8209;letting the property between occupants</li>
+      </ul>
+    </div>
+    <div class="col">
+      <h3>You will receive</h3>
+      <ul>
+        <li>Rent on a fixed payment cycle</li>
+        <li>A statement each period <span class="placeholder">CONFIRM FREQUENCY</span></li>
+        <li>A named point of contact</li>
+        <li>Notice of anything requiring an owner decision</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>This works the same from anywhere.</strong> Because there is no operational involvement expected of you, holding one of these from another country is no different from holding one from the next town. Our existing investors are spread across the UK, Hong Kong and Singapore, and the process is identical for all of them.
+  </div>
+
+  <div class="page-num">06</div>
+</div>
+
+<!-- PAGE 7: THE PROCESS -->
+<div class="page">
+  <span class="eyebrow">05 &nbsp;&middot;&nbsp; The Process</span>
+  <h2 class="section-title">From Reservation To First Rent Payment</h2>
+  <p class="section-sub">Typically 30 to 60 days start to finish. Because these are completed properties, nothing waits on construction.</p>
+
+  <ol class="steps">
+    <li><div class="step-body"><span class="step-day">Day 0</span><b>Call and unit selection</b><span>We go through the numbers against your position, and which units are currently available.</span></div></li>
+    <li><div class="step-body"><span class="step-day">Day 1 to 3</span><b>Reservation</b><span>The unit is taken off market and held for you while the paperwork is prepared.</span></div></li>
+    <li><div class="step-body"><span class="step-day">Week 1</span><b>Solicitors instructed</b><span>Yours and ours. You are free to use your own solicitor, and we would encourage it.</span></div></li>
+    <li><div class="step-body"><span class="step-day">Week 2 to 6</span><b>Legals and searches</b><span>Standard conveyancing. This is the part that sets the overall timeline.</span></div></li>
+    <li><div class="step-body"><span class="step-day">Completion</span><b>Title transfers to you</b><span>Freehold, in your name. The management agreement begins at the same moment.</span></div></li>
+    <li><div class="step-body"><span class="step-day">Within 60 days</span><b>First rental payment</b><span>Income begins as soon as the agreement is live, rather than waiting on a letting cycle.</span></div></li>
+  </ol>
+
+  <p class="section-sub" style="margin-top:10px;">Timings shown are typical estimates and will vary case by case.</p>
+
+  <div class="callout">
+    <strong>Why this is faster than off&#8209;plan.</strong> An off&#8209;plan purchase can leave capital committed for two years before it produces anything. Here the building already exists and the agreement starts at completion, so the gap between paying and earning is measured in weeks.
+  </div>
+
+  <div class="page-num">07</div>
+</div>
+
+<!-- PAGE 8: FAQ -->
+<div class="page">
+  <span class="eyebrow">06 &nbsp;&middot;&nbsp; Common Questions</span>
+  <h2 class="section-title">Frequently Asked Questions</h2>
+
+  <div class="faq-item">
+    <p class="q">Can I use a mortgage, or does this have to be cash?</p>
+    <p class="a">Either. You can buy outright or use a buy to let mortgage. Finance is available subject to status and lender approval, and we can point you at lenders who already understand this structure.</p>
+  </div>
+  <div class="faq-item">
+    <p class="q">Is the 16% really net?</p>
+    <p class="a">Yes. It is calculated after the costs of running the property, not before. That is what makes it comparable to the 4 to 5% net that a standard buy to let typically returns, rather than to a gross headline figure.</p>
+  </div>
+  <div class="faq-item">
+    <p class="q">What happens if the occupant stops paying?</p>
+    <p class="a">Your agreement is with the housing provider, not the occupant, so non&#8209;payment by an occupant is the provider's exposure rather than yours. Your rent continues under the terms of the agreement.</p>
+  </div>
+  <div class="faq-item">
+    <p class="q">What happens if the provider fails?</p>
+    <p class="a">You own the freehold title outright, so the asset remains yours in any circumstance. The contracted income depends on the provider, which is why their standing is a fair thing to ask about, and we will go through it openly on a call.</p>
+  </div>
+  <div class="faq-item">
+    <p class="q">Do I own the property, or is this a fund or a scheme?</p>
+    <p class="a">You own it. Freehold title, registered in your name, the same as any other property purchase. This is not a fund, a share, or a collective investment.</p>
+  </div>
+  <div class="faq-item">
+    <p class="q">Can I sell it later?</p>
+    <p class="a">Yes, it is your asset to sell. Bear in mind that property is generally illiquid and a sale takes time, and that a property with an agreement attached appeals to a particular kind of buyer. Worth discussing against your own timescale before you commit. <span class="placeholder">CONFIRM ANY RESALE TERMS</span></p>
+  </div>
+  <div class="faq-item">
+    <p class="q">Can I hold this in a limited company or a SIPP?</p>
+    <p class="a"><span class="placeholder">CONFIRM</span> &mdash; and a question for your own accountant in any case, as the answer depends on your circumstances.</p>
+  </div>
+  <div class="faq-item">
+    <p class="q">Is any of this financial advice?</p>
+    <p class="a">No. This guide is general information only. It is not personal financial advice and nothing here is a recommendation. We would always encourage independent financial and legal advice before committing any capital.</p>
+  </div>
+
+  <div class="page-num">08</div>
+</div>
+
+<!-- PAGE 9: TESTIMONIALS -->
+<div class="page">
+  <span class="eyebrow">07 &nbsp;&middot;&nbsp; Investor Stories</span>
+  <h2 class="section-title">What Our Investors Say</h2>
+  <p class="section-sub">Real words from real clients who've invested through Golden Key Property.</p>
+
+  <div class="t-card">
+    <div class="t-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+    <p class="t-text">"Very smooth process from Hong Kong, everything can be done online and through WhatsApp, no need to fly over. Rental yield is as promised and tenant found very fast. Professional team, will introduce to my friends."</p>
+    <p class="t-author">Jian L. <span class="t-role">&middot; Investor, Hong Kong</span></p>
+  </div>
+
+  <div class="t-card">
+    <div class="t-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+    <p class="t-text">"Good investment, completion was on time and rental income started right away. Communication was always responsive even across the Hong Kong time zone. Would buy another property through them."</p>
+    <p class="t-author">Huan W. <span class="t-role">&middot; Investor, Sha Tin</span></p>
+  </div>
+
+  <div class="t-card">
+    <div class="t-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+    <p class="t-text"><span class="placeholder">PLACEHOLDER &mdash; a UK investor testimonial belongs here. The three on file are all overseas buyers, which reads oddly in a guide sent to a UK workshop audience.</span></p>
+    <p class="t-author"><span class="placeholder">NAME</span> <span class="t-role">&middot; Investor, <span class="placeholder">LOCATION</span></span></p>
+  </div>
+
+  <div class="page-num">09</div>
+</div>
+
+<!-- PAGE 10: NEXT STEP -->
+<div class="page">
+  <span class="eyebrow">08 &nbsp;&middot;&nbsp; Your Next Step</span>
+  <h2 class="section-title">Where This Goes From Here</h2>
+  <p class="section-sub">A conversation, not a commitment.</p>
+
+  <div class="photo-band" style="background-image:url('/images/guide-conversation.jpg'); background-position: center 40%;"></div>
+
+  <p>The workshop covered the model. This guide covered the detail. What neither can do is tell you whether it fits your position, because that depends on what you already hold, what you are trying to produce from it, and over what period.</p>
+
+  <p>That is what a call is for. It is a conversation about your circumstances, and a chance to put the harder questions directly. If the answer is that this is not right for you, that is a perfectly good outcome and we will say so.</p>
+
+  <h3 style="font-size:1.05rem; margin: 26px 0 8px;">Worth bringing to the call</h3>
+  <ul>
+    <li>What you currently hold, and what it returns net</li>
+    <li>Roughly what you are looking to deploy</li>
+    <li>Whether you are buying cash or with finance</li>
+    <li>Your timescale, and whether you are income or growth focused</li>
+    <li>Any question in this guide you want pressed harder</li>
+  </ul>
+
+  <div class="cta-box">
+    <h3>Book a call with the team</h3>
+    <p>Thirty minutes, at a time that suits you. We will go through the numbers against your position and answer anything this guide left open.</p>
+    <a class="cta-link" href="/uk-workshop/booking.html">Book your call &rarr;</a>
+  </div>
+
+  <div class="callout">
+    <strong>Prefer to read first?</strong> Reply to the email this guide arrived in and ask for the management agreement. We would rather you came to a call having already read it.
+  </div>
+
+  <div class="page-num">10</div>
+</div>
+
+<!-- PAGE 11: DISCLAIMER -->
+<div class="page">
+  <span class="eyebrow">Important Information</span>
+  <h2 class="section-title">Risk Warning &amp; Disclaimer</h2>
+
+  <div class="disclaimer-box" style="margin-top:20px;">
+    <p>This guide is provided for general information purposes only, to help readers understand this supported housing opportunity. Nothing here describes the final terms of, or constitutes an offer, solicitation, invitation, or inducement to invest in, any specific property, scheme, or investment opportunity.</p>
+
+    <p>Nothing in this guide constitutes financial, legal, tax, or investment advice, and none of it should be relied on as such. Golden Key Property (a trading name of Asbach Enterprises Ltd) is not authorised or regulated by the Financial Conduct Authority to give investment advice, and nothing here is a personal recommendation.</p>
+
+    <p>Yield figures quoted are net figures based on the terms of the management agreement at the time of writing, and assume the agreement performs according to its terms. The worked examples shown are illustrations of arithmetic only. They are not quotations, projections, or guarantees of the return on any particular property. Pricing and availability reflect our current allocation at the time of writing and are subject to change; individual units may no longer be available.</p>
+
+    <p>The assured element of the rental income depends on the continuing performance of the housing provider under the agreement. Whilst you own the freehold title outright in all circumstances, contracted income is only as secure as the counterparty providing it, and you should satisfy yourself as to that counterparty before proceeding.</p>
+
+    <p>Property investment of any kind carries risk. Property values can fall as well as rise, income is not guaranteed, and property is generally illiquid, it may be difficult to sell or exit quickly. Where finance is used, borrowing increases both potential returns and potential losses, and your property may be repossessed if you do not keep up repayments. Past performance is not a reliable indicator of future results. You should not invest money you cannot afford to lose, and should seek independent financial and legal advice before making any investment decision.</p>
+
+    <p>This guide is intended for recipients in the United Kingdom and other jurisdictions where receiving this information is not restricted by local law. If you are unsure whether you are permitted to receive this material, please seek independent advice before proceeding.</p>
+
+    <p style="margin-top:16px;">Golden Key Property &nbsp;&middot;&nbsp; a trading name of Asbach Enterprises Ltd, registered in England &amp; Wales, registration number 16016190 &nbsp;&middot;&nbsp; 167-169 Great Portland Street, 5th Floor, London, England, W1W 5PF &nbsp;&middot;&nbsp; info@goldenkeypropertyco.com</p>
+  </div>
+
+  <div class="page-num">11</div>
+</div>
+
+</body>
+</html>

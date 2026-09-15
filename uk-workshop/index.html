@@ -13,8 +13,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-<!-- Meta Pixel.
-     Until then this block is inert and no events are sent. -->
+<!-- Meta Pixel. Dataset 1397390558441912, the same one the Conversions API
+     posts to from GHL. PageView fires here on load; Lead fires server-side
+     after the webhook, never from the browser, to avoid double counting. -->
 <script>
 !function(f,b,e,v,n,t,s)
 {if(f.fbq)return;n=f.fbq=function(){n.callMethod?

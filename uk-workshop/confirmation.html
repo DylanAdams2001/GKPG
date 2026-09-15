@@ -271,6 +271,15 @@ fbq('track', 'PageView');
       <a class="join-btn join-btn-quiet" id="joinEarly" href="/uk-workshop/live.html">Go to the waiting room →</a>
     </div>
 
+    <!-- TEMPORARY - TEST DAY. Replaces every other state while SESSION_ON_HOLD. -->
+    <div class="join-stage" id="holdStage" hidden>
+      <span class="cd-stage-label">Today's session</span>
+      <div class="join-title">Today's workshop is not running</div>
+      <p class="cd-stage-note" style="max-width:52ch; margin-left:auto; margin-right:auto;">Oliver is unwell, so we have had to postpone today's session. Rather than keep you waiting, we have emailed you the full written guide instead. It covers everything the workshop does, and it should be in your inbox now.</p>
+      <a class="join-btn" id="holdBtn" href="/uk-workshop/resource">Read the guide now &rarr;</a>
+      <p class="cd-stage-note">We will email you as soon as the next session is scheduled.</p>
+    </div>
+
     <!-- Ready state, replaces the countdown once the session is open -->
     <div class="join-stage" id="joinStage" hidden>
       <span class="cd-stage-label">Your session is open</span>
@@ -282,7 +291,7 @@ fbq('track', 'PageView');
 </section>
 
 <!-- WELCOME VIDEO -->
-<section class="section">
+<section class="section" data-session-only>
   <div class="container">
     <div class="welcome">
       <p class="welcome-head">A quick word from Oliver before you start</p>
@@ -299,7 +308,7 @@ fbq('track', 'PageView');
 </section>
 
 <!-- CHECKLIST -->
-<section class="section section-grey">
+<section class="section section-grey" data-session-only>
   <div class="container">
     <span class="section-eyebrow">Before It Starts</span>
     <h2 class="section-title">Your Workshop Checklist</h2>
@@ -338,8 +347,8 @@ fbq('track', 'PageView');
 
 <!-- BOTTOM CTA -->
 <section class="bottom-cta">
-  <h2>Questions After The Workshop?</h2>
-  <p>Book a short call with a senior team member to go through current availability, pricing, and anything the workshop left open.</p>
+  <h2 id="ctaTitle">Questions After The Workshop?</h2>
+  <p id="ctaSub">Book a short call with a senior team member to go through current availability, pricing, and anything the workshop left open.</p>
   <a href="/uk-workshop/booking.html" class="cta-link">Book A Call →</a>
   <p class="cta-note">No pitch. No pressure. No commitment.</p>
 </section>
@@ -383,6 +392,29 @@ try { sessionStorage.setItem('gkOriginPage', '/uk-workshop/'); } catch (e) {}
   const watchTitle = document.getElementById('watchTitle');
   const watchSub = document.getElementById('watchSub');
   if (!cdStage) return;
+
+  // TEMPORARY - TEST DAY. While this is true no session runs: the countdown,
+  // the booked state and the workshop prep sections are all replaced by the
+  // hold panel offering the written guide. Registration, the pixel and the
+  // webhook are deliberately untouched, so opt-in rate still measures cleanly.
+  // Set back to false to restore the normal countdown. Nothing else to change.
+  const SESSION_ON_HOLD = true;
+
+  if (SESSION_ON_HOLD) {
+    [cdStage, joinStage, bookedStage].forEach(function (el) { if (el) el.hidden = true; });
+    const hold = document.getElementById('holdStage');
+    if (hold) hold.hidden = false;
+    document.querySelectorAll('[data-session-only]').forEach(function (el) { el.hidden = true; });
+    if (statusBadge) statusBadge.textContent = '\u2713 You are registered';
+    if (watchTitle) watchTitle.innerHTML = 'Your Guide Is On Its <em>Way</em>';
+    if (watchSub) watchSub.textContent = 'Today\u2019s live session is not running. Everything it covers is in the guide we have just emailed you.';
+    // The call CTA still applies, but it cannot refer to a workshop nobody saw.
+    const ctaTitle = document.getElementById('ctaTitle');
+    const ctaSub = document.getElementById('ctaSub');
+    if (ctaTitle) ctaTitle.textContent = 'Would You Rather Just Talk It Through?';
+    if (ctaSub) ctaSub.textContent = 'Book a short call with a senior team member to go through current availability, pricing, and anything in the guide you want pressed harder.';
+    return;
+  }
 
   // Carry the contact id through, so someone arriving from an email stays
   // identified on the live page. Ignore an unresolved merge field.

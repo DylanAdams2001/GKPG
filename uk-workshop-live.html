@@ -477,6 +477,12 @@ try { sessionStorage.setItem('gkOriginPage', 'uk-workshop.html'); } catch (e) {}
   let lastTick = null;
   const firedMarks = {};
 
+  // How late someone can arrive and still be dropped into the session already
+  // in progress, the way they would be on a real live call. Past this they have
+  // missed too much to follow it, so they get a fresh session from the top
+  // instead. Never longer than the session itself.
+  const LATE_JOIN_MAX_MS = Math.min(10 * 60, WORKSHOP_SECONDS) * 1000;
+
   function fireMeta(name) {
     if (typeof fbq === 'function') {
       fbq('trackCustom', name, {
@@ -532,10 +538,20 @@ try { sessionStorage.setItem('gkOriginPage', 'uk-workshop.html'); } catch (e) {}
     }
   }
 
-  function startEngagementTracking() {
+  // `offsetSec` is how far into the session a late arrival has joined. It seeds
+  // watchedSeconds so the chat is already caught up, the same way the backlog is
+  // there when you join a live call late. The marks that offset skipped past are
+  // recorded as fired but never sent: they reached that point of the video, they
+  // did not watch it, and tagging them for it would poison the one signal we use
+  // to tell an engaged lead from a browser.
+  function startEngagementTracking(offsetSec) {
+    watchedSeconds = offsetSec;
+    for (let i = 0; i < MARKS.length; i++) {
+      if (WORKSHOP_SECONDS * MARKS[i].at <= offsetSec) firedMarks[MARKS[i].ev] = true;
+    }
     fireMeta('WorkshopStart');
     pingProgress('watched-start', 0);
-    releaseDueMessages(0);
+    releaseDueMessages(offsetSec);
     lastTick = Date.now();
     document.addEventListener('visibilitychange', function () {
       if (document.visibilityState === 'visible') lastTick = Date.now();
@@ -564,13 +580,16 @@ try { sessionStorage.setItem('gkOriginPage', 'uk-workshop.html'); } catch (e) {}
     holder.insertBefore(f, bar);
   }
 
-  function reveal() {
+  function reveal(offsetSec) {
+    offsetSec = Math.max(0, offsetSec || 0);
     cdStage.hidden = true;
     liveGrid.hidden = false;
     document.querySelector('.player-wrap').classList.add('is-live');
     watchMeta.hidden = false;
-    sessionOpenedAt = Date.now();
-    buildPlayer(true, 0);
+    // Wall clock time of video position zero, so the rebuild on unmute lands
+    // where they actually are rather than at the top.
+    sessionOpenedAt = Date.now() - offsetSec * 1000;
+    buildPlayer(true, offsetSec);
     const bar = document.getElementById('soundBar');
     if (bar) {
       bar.hidden = false;
@@ -579,22 +598,29 @@ try { sessionStorage.setItem('gkOriginPage', 'uk-workshop.html'); } catch (e) {}
         bar.remove();
       });
     }
-    startEngagementTracking();
+    startEngagementTracking(offsetSec);
     statusBadge.classList.add('is-live');
     statusBadge.innerHTML = '<span class="live-dot"></span>Live Now';
-    watchTitle.innerHTML = 'Your Workshop Is <em>Ready</em>';
-    watchSub.textContent = 'Your session is running. Tap the button on the video for sound.';
+    watchTitle.innerHTML = offsetSec > 30 ? 'Your Workshop Is <em>Under Way</em>'
+                                          : 'Your Workshop Is <em>Ready</em>';
+    watchSub.textContent = offsetSec > 30
+      ? 'You have joined a session already in progress. Tap the button on the video for sound.'
+      : 'Your session is running. Tap the button on the video for sound.';
   }
 
   // ---- Soonest session: continue the countdown, then open the player ----
-  // Same rule as the confirmation page. Past its start time, or no start time
-  // known, opens the player immediately and plays from the beginning: arriving
-  // late costs nobody the session, and nobody is ever counted down twice.
+  // A start time in the past means they are late, not that they need a fresh
+  // one. Arriving at 7:02 for a 7:00 session drops them two minutes in, running,
+  // exactly as a live call would. Only once they are past LATE_JOIN_MAX_MS is
+  // that session written off and a new one started from the top. Nothing stored
+  // at all means the browser lost the booking rather than that no booking was
+  // made, so the session opens now instead of restarting a wait they have
+  // already sat through.
   const now = Date.now();
   let target = readStart();
   if (target - now > SLOT_MS + MIN_LEAD_MS) target = 0;
-  if (!target) { target = now; rememberStart(target); }
-  if (target <= now) { reveal(); return; }
+  if (!target || now - target > LATE_JOIN_MAX_MS) { target = now; rememberStart(target); }
+  if (target <= now) { reveal((now - target) / 1000); return; }
 
   const span = Math.max(1, target - now);
   function tick() {

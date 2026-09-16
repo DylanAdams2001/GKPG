@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Watch The Recording | Golden Key Property</title>
+<meta name="description" content="The full workshop recording: how UK supported housing produces its yields, what the 25 year agreement covers, and what happens between reservation and your first rent payment." />
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<!-- Meta Pixel. Dataset 1397390558441912, the same one the Conversions API
+     posts to from GHL. This is the on-demand recording for people who missed
+     the live room entirely, so it fires a custom RecordingView rather than
+     the room's ViewContent - a distinct signal for "watched later" traffic. -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1397390558441912');
+fbq('track', 'PageView');
+fbq('trackCustom', 'RecordingView', { content_name: 'UK Workshop' });
+</script>
+<!-- End Meta Pixel -->
+<style>
+  :root {
+    --black: #0a0a0a;
+    --white: #ffffff;
+    --graphite: #45474b;
+    --gold: #D4AF37;
+    --gold-deep: #96751F;
+    --gold-pale: #F8F0DA;
+    --brand-gradient: linear-gradient(135deg, #F5E6BC 0%, #D4AF37 50%, #B8922E 100%);
+    --light-grey: #f7f7f5;
+    --mid-grey: #57595c;
+    --line: #e3e3e0;
+    --face: 'Inter', -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", Arial, sans-serif;
+    --face-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: var(--white); color: var(--black); font-family: var(--face); font-size: 15.5px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  h1, h2, h3 { font-family: var(--face-display); font-weight: 800; margin: 0; letter-spacing: -0.01em; }
+  a { color: inherit; }
+
+  .shell { max-width: 860px; margin: 0 auto; padding-inline: 20px; }
+
+  .header { border-bottom: 1px solid var(--line); }
+  .header .shell { display: flex; align-items: center; justify-content: space-between; padding-block: 16px; gap: 16px; max-width: 1120px; }
+  .wordmark { display: inline-flex; align-items: center; gap: 7px; font-family: var(--face-display); font-weight: 800; font-size: 16px; text-decoration: none; color: var(--black); }
+  .wordmark span { color: var(--gold); }
+  .head-cta { font-size: 12px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; text-decoration: none; padding: 10px 18px; border-radius: 8px; background: var(--black); color: #fff; white-space: nowrap; }
+  .head-cta:hover { background: var(--brand-gradient); color: var(--black); }
+
+  .hero { padding-block: 40px 22px; text-align: center; }
+  .eyebrow { font-size: 11px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold-deep); margin-bottom: 12px; }
+  .hero h1 { font-size: clamp(28px, 5vw, 42px); line-height: 1.08; margin-bottom: 14px; text-wrap: balance; }
+  .hero p { color: var(--mid-grey); max-width: 58ch; margin: 0 auto; font-size: 16px; }
+
+  .player { position: relative; width: 100%; max-width: 100%; aspect-ratio: 16 / 9; background: #0a0a0a; border-radius: 14px; overflow: hidden; box-shadow: 0 18px 48px rgba(0,0,0,0.18); }
+  .player iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  .player-note { text-align: center; font-size: 13px; color: var(--mid-grey); margin: 12px 0 0; }
+  .player-note .dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--mid-grey); margin-right: 6px; vertical-align: 1px; }
+
+  .covers { margin-top: 44px; }
+  .covers h2 { font-family: var(--face); font-size: 11px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mid-grey); margin-bottom: 16px; display: flex; align-items: baseline; gap: 12px; }
+  .covers h2::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+  .cover-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 13px; }
+  .cover-list li { display: flex; gap: 12px; font-size: 15px; color: var(--graphite); font-weight: 600; }
+  .cover-list li::before { content: "✓"; color: var(--gold-deep); font-weight: 800; flex-shrink: 0; }
+
+  .cta { margin-top: 44px; background: var(--black); border-radius: 14px; padding: 36px 32px; text-align: center; color: #fff; }
+  .cta h2 { font-size: clamp(22px, 3.6vw, 30px); color: #fff; margin-bottom: 10px; text-wrap: balance; }
+  .cta p { color: #c7c8ca; max-width: 52ch; margin: 0 auto 22px; }
+  .cta a.btn { display: inline-block; padding: 16px 36px; background: var(--gold); color: var(--black); text-decoration: none; border-radius: 9px; font-size: 13px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; }
+  .cta a.btn:hover { background: var(--brand-gradient); }
+
+  .footer { margin-top: 56px; border-top: 1px solid var(--line); background: var(--light-grey); }
+  .footer .shell { padding-block: 32px 40px; max-width: 1120px; }
+  .footer-links { margin: 14px 0; display: flex; gap: 18px; flex-wrap: wrap; }
+  .footer-links a { font-size: 13px; color: var(--mid-grey); text-decoration: none; }
+  .footer-links a:hover { color: var(--gold-deep); }
+  .footer-copy { font-size: 12px; color: var(--mid-grey); line-height: 1.7; margin: 0; }
+  .footer-copy strong { color: var(--black); }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="shell">
+    <a href="/" class="wordmark"><svg width="14" height="30" viewBox="75 42 51 110" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="100" cy="66" r="19" stroke="currentColor" stroke-width="7"/><rect x="95.5" y="85" width="9" height="62" fill="currentColor"/><rect x="104.5" y="126" width="15" height="7" fill="currentColor"/><rect x="104.5" y="138" width="11" height="7" fill="currentColor"/></svg>Golden Key<span> · </span>Property</a>
+    <a class="head-cta" href="/uk-workshop/booking.html">Book a call</a>
+  </div>
+</header>
+
+<div class="shell">
+
+  <section class="hero">
+    <div class="eyebrow">The recording</div>
+    <h1>Watch it whenever suits you</h1>
+    <p>No slot to catch. Thirty minutes on how UK supported housing produces its yields, what the 25 year agreement covers, and what happens between reservation and your first rent payment.</p>
+  </section>
+
+  <!-- TEMPORARY: the stand-in recording, until the real workshop capture
+       replaces it. Same source as the live room; genuinely on-demand here,
+       so it just plays from the top rather than seeking to a live offset. -->
+  <div class="player">
+    <iframe id="recordingFrame" src="https://www.tella.tv/video/vid_cmu1b8mm300cm0agmdoqnhkfg/embed?b=0&amp;title=0&amp;loop=0&amp;wt=0&amp;o=0&amp;a=0" title="Golden Key Property Workshop Recording" allow="autoplay; fullscreen" allowfullscreen></iframe>
+  </div>
+  <p class="player-note"><span class="dot"></span>Recording &middot; tap to play, sound is on</p>
+
+  <section class="covers">
+    <h2>What it covers</h2>
+    <ul class="cover-list">
+      <li>Where the contracted rent actually comes from, and why it holds when the market doesn't</li>
+      <li>The 16.8% net yield, broken down against an ordinary buy-to-let</li>
+      <li>What the 25 year agreement covers, and what stays your responsibility</li>
+      <li>Cash versus finance, worked through on a real example</li>
+      <li>What can go wrong, and how the structure is built around it</li>
+    </ul>
+  </section>
+
+  <section class="cta">
+    <h2>Enough to make a conversation worth having?</h2>
+    <p>Twenty minutes, on Oliver's calendar, with Oliver. We go through your actual position and whether this fits it. If it doesn't, he'll say so.</p>
+    <a class="btn" href="/uk-workshop/booking.html">Book your call &rarr;</a>
+  </section>
+
+</div>
+
+<footer class="footer">
+  <div class="shell">
+    <div class="wordmark" style="color:var(--black)"><svg width="14" height="30" viewBox="75 42 51 110" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="100" cy="66" r="19" stroke="currentColor" stroke-width="7"/><rect x="95.5" y="85" width="9" height="62" fill="currentColor"/><rect x="104.5" y="126" width="15" height="7" fill="currentColor"/><rect x="104.5" y="138" width="11" height="7" fill="currentColor"/></svg>Golden Key<span> · </span>Property</div>
+    <div class="footer-links">
+      <a href="/uk-workshop/booking.html">Book a call</a>
+      <a href="/uk-workshop/calculator">The calculator</a>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms &amp; Conditions</a>
+    </div>
+    <p class="footer-copy">
+      &copy; 2026 Golden Key Property. All rights reserved.<br />
+      Golden Key Property is a trading name of Asbach Enterprises Ltd, registered in England &amp; Wales. Registration number: 16016190.<br />
+      167-169 Great Portland Street, 5th Floor, London, England, W1W 5PF &nbsp;·&nbsp; info@goldenkeypropertyco.com<br /><br />
+      <strong>Risk warning.</strong> Property investment places your capital at risk and you may get back less than you invest. Property values can fall as well as rise, rental income is not guaranteed, and property is generally illiquid, so it may be difficult to sell or exit quickly. Contracted rental income depends on the continuing performance of the housing provider under the agreement. Where borrowing is used it increases both potential returns and potential losses, and your property may be repossessed if you do not keep up repayments. Past or targeted performance is not a reliable indicator of future results. Golden Key Property is not authorised or regulated by the Financial Conduct Authority to give investment advice. Seek independent financial and legal advice before making any investment decision.
+    </p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  // Same tracking engine as the live room, deliberately: someone who watches
+  // via this page should be tagged exactly as if they had watched live, so
+  // the rest of the nurture sequence segments them correctly either way.
+  // No countdown, no late-join maths and no simulated chat here - those are
+  // part of the live illusion, and this page explicitly says it is a
+  // recording, so it plays from the top on load and nothing pretends anyone
+  // is live.
+  const GHL_PROGRESS_WEBHOOK = 'https://services.leadconnectorhq.com/hooks/HEOut7IJQ2GxJIUq9qIb/webhook-trigger/42c95c56-93f9-47ff-8f11-8cb3a6749ba6';
+  const WORKSHOP_SECONDS = 90; // TEMPORARY: matches the stand-in video. Put back to 30 * 60 when the real recording goes in.
+  const MARKS = [
+    { at: 0.25, ev: 'Recording25',       tag: 'watched-25',       pct: 25 },
+    { at: 0.50, ev: 'Recording50',       tag: 'watched-50',       pct: 50 },
+    { at: 0.75, ev: 'Recording75',       tag: 'watched-75',       pct: 75 },
+    { at: 0.90, ev: 'RecordingComplete', tag: 'watched-complete', pct: 100 }
+  ];
+  let watchedSeconds = 0;
+  let lastTick = null;
+  const firedMarks = {};
+
+  // Ignore an unresolved merge field arriving literally as {{contact.id}}.
+  let cid = new URLSearchParams(window.location.search).get('c');
+  if (cid && /[{}]/.test(decodeURIComponent(cid))) cid = null;
+
+  function fireMeta(name) {
+    if (typeof fbq === 'function') {
+      fbq('trackCustom', name, { content_name: 'UK Workshop', seconds_watched: Math.round(watchedSeconds) });
+    }
+  }
+
+  function pingProgress(tag, pct) {
+    if (!cid) return;
+    fetch(GHL_PROGRESS_WEBHOOK, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type: 'workshop_progress',
+        tag: tag,
+        percent: pct,
+        seconds_watched: Math.round(watchedSeconds),
+        watched_at: new Date().toISOString(),
+        contact_id: cid
+      })
+    }).catch(function () {});   // best effort, never block the page
+  }
+
+  function engagementTick() {
+    const now = Date.now();
+    if (document.visibilityState === 'visible') {
+      if (lastTick !== null) watchedSeconds += (now - lastTick) / 1000;
+      lastTick = now;
+    } else {
+      lastTick = null;   // paused while the tab is hidden, same as the live room
+    }
+    for (let i = 0; i < MARKS.length; i++) {
+      const m = MARKS[i];
+      if (!firedMarks[m.ev] && watchedSeconds >= WORKSHOP_SECONDS * m.at) {
+        firedMarks[m.ev] = true;
+        fireMeta(m.ev);
+        pingProgress(m.tag, m.pct);
+      }
+    }
+  }
+
+  fireMeta('RecordingStart');
+  pingProgress('watched-start', 0);
+  lastTick = Date.now();
+  document.addEventListener('visibilitychange', function () {
+    lastTick = document.visibilityState === 'visible' ? Date.now() : null;
+  });
+  setInterval(engagementTick, 1000);
+})();
+</script>
+
+</body>
+</html>

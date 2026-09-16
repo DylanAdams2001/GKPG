@@ -186,14 +186,13 @@
       <h2>Buying costs</h2>
       <div class="fieldset">
         <div class="f"><label for="legal">Solicitor fees</label><input id="legal" type="number" value="2000" step="100" min="0"></div>
-        <div class="f"><label for="coSetup">Company setup</label><input id="coSetup" type="number" value="300" step="50" min="0"></div>
       </div>
 
       <h2>Ongoing</h2>
       <div class="fieldset">
         <div class="f"><label for="opex">Annual costs</label><input id="opex" type="number" value="0" step="100" min="0"></div>
       </div>
-      <p class="hint" style="margin:9px 0 0">Nil by default. Maintenance, management, insurance and re-letting sit with the housing association under the agreement, not with you.</p>
+      <p class="hint" style="margin:9px 0 0">Nil by default. Maintenance, management, insurance and re-letting sit with the housing association under the agreement, not with you. Setting up a limited company is something you can do yourself at Companies House, so no accountancy cost is assumed.</p>
 
       <button type="button" class="reset" id="reset">Reset to the example</button>
     </form>
@@ -299,7 +298,7 @@
   var financed = true;
   var DEFAULTS = {
     price: 325000, rent: 54600, lvr: 70, rate: 9, arrPct: 1, valFee: 750,
-    brokerSetup: 3000, brokerPct: 1, lendLegal: 1200, legal: 2000, coSetup: 300, opex: 0
+    brokerSetup: 3000, brokerPct: 1, lendLegal: 1200, legal: 2000, opex: 0
   };
 
   var $ = function (id) { return document.getElementById(id); };
@@ -343,7 +342,7 @@
   function model(valuationOverride) {
     var price = num('price'), rent = num('rent');
     var duty = sdlt(price);
-    var legal = num('legal'), coSetup = num('coSetup'), opex = num('opex');
+    var legal = num('legal'), opex = num('opex');
 
     var loan = 0, deposit = price, interest = 0, arr = 0, valFee = 0,
         brokerSetup = 0, brokerPct = 0, lendLegal = 0;
@@ -363,8 +362,7 @@
     var costs = [
       { k: financed ? 'Deposit' : 'Purchase price', v: deposit },
       { k: 'Stamp Duty', v: duty.total },
-      { k: 'Solicitor fees', v: legal },
-      { k: 'Company setup', v: coSetup }
+      { k: 'Solicitor fees', v: legal }
     ];
     if (financed) {
       costs.push({ k: 'Lender fee (' + num('arrPct') + '% of the loan)', v: arr });
@@ -377,7 +375,7 @@
     var cashIn = costs.reduce(function (s, c) { return s + c.v; }, 0);
     var netPre = rent - interest - opex;
     var tax = corpTax(netPre);
-    var totalCost = price + duty.total + legal + coSetup;
+    var totalCost = price + duty.total + legal;
 
     return {
       price: price, rent: rent, duty: duty, costs: costs, cashIn: cashIn,

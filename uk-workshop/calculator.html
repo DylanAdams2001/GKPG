@@ -179,8 +179,6 @@
         <div class="f"><label for="arrPct">Lender fee %</label><input id="arrPct" type="number" value="1" step="0.1" min="0"></div>
         <div class="f"><label for="valFee">Valuation</label><input id="valFee" type="number" value="750" step="50" min="0"></div>
         <div class="f"><label for="brokerSetup">Broker setup fee</label><input id="brokerSetup" type="number" value="3000" step="100" min="0"></div>
-        <div class="f"><label for="brokerPct">Broker fee %</label><input id="brokerPct" type="number" value="1" step="0.1" min="0"></div>
-        <div class="f"><label for="lendLegal">Lender legal fees</label><input id="lendLegal" type="number" value="1200" step="100" min="0"></div>
       </div>
 
       <h2>Buying costs</h2>
@@ -202,7 +200,7 @@
         <div class="metric hero-m">
           <div class="lab">Return on your cash</div>
           <div class="val" id="oCoC">—</div>
-          <div class="sub" id="oCoCNote">before tax</div>
+          <div class="sub" id="oCoCNote">a year</div>
         </div>
         <div class="metric">
           <div class="lab">Cash you need</div>
@@ -245,7 +243,7 @@
             <tbody id="tAnnual"></tbody>
           </table>
         </div>
-        <p class="hint" style="margin:11px 0 0">Corporation tax is shown at the small profits rate to £50,000, with marginal relief above that. If you hold other companies those thresholds are shared between them and your rate will be higher — one for your accountant.</p>
+        <p class="hint" style="margin:11px 0 0"><strong>These figures are before tax.</strong> What you actually keep depends on how you hold the property and on your own circumstances, so tax is deliberately left out rather than guessed at. Your accountant can apply it to the numbers above.</p>
       </div>
 
       <div class="block" id="icrBlock">
@@ -298,7 +296,7 @@
   var financed = true;
   var DEFAULTS = {
     price: 325000, rent: 54600, lvr: 70, rate: 9, arrPct: 1, valFee: 750,
-    brokerSetup: 3000, brokerPct: 1, lendLegal: 1200, legal: 2000, opex: 0
+    brokerSetup: 3000, legal: 2000, opex: 0
   };
 
   var $ = function (id) { return document.getElementById(id); };
@@ -332,20 +330,12 @@
     return { rows: rows, total: total };
   }
 
-  function corpTax(profit) {
-    if (profit <= 0) return 0;
-    if (profit <= 50000) return profit * 0.19;
-    if (profit >= 250000) return profit * 0.25;
-    return profit * 0.25 - (250000 - profit) * 3 / 200;
-  }
-
   function model(valuationOverride) {
     var price = num('price'), rent = num('rent');
     var duty = sdlt(price);
     var legal = num('legal'), opex = num('opex');
 
-    var loan = 0, deposit = price, interest = 0, arr = 0, valFee = 0,
-        brokerSetup = 0, brokerPct = 0, lendLegal = 0;
+    var loan = 0, deposit = price, interest = 0, arr = 0, valFee = 0, brokerSetup = 0;
 
     if (financed) {
       var basis = valuationOverride === undefined ? price : Math.min(price, valuationOverride);
@@ -355,8 +345,6 @@
       arr = loan * num('arrPct') / 100;
       valFee = num('valFee');
       brokerSetup = num('brokerSetup');
-      brokerPct = loan * num('brokerPct') / 100;
-      lendLegal = num('lendLegal');
     }
 
     var costs = [
@@ -368,21 +356,17 @@
       costs.push({ k: 'Lender fee (' + num('arrPct') + '% of the loan)', v: arr });
       costs.push({ k: 'Valuation', v: valFee });
       costs.push({ k: 'Broker setup fee', v: brokerSetup });
-      costs.push({ k: 'Broker fee (' + num('brokerPct') + '% of the loan)', v: brokerPct });
-      costs.push({ k: 'Lender legal fees', v: lendLegal });
     }
 
     var cashIn = costs.reduce(function (s, c) { return s + c.v; }, 0);
     var netPre = rent - interest - opex;
-    var tax = corpTax(netPre);
     var totalCost = price + duty.total + legal;
 
     return {
       price: price, rent: rent, duty: duty, costs: costs, cashIn: cashIn,
       loan: loan, interest: interest, opex: opex,
-      netPre: netPre, tax: tax, netPost: netPre - tax,
+      netPre: netPre,
       coc: cashIn > 0 ? netPre / cashIn : 0,
-      cocPost: cashIn > 0 ? (netPre - tax) / cashIn : 0,
       yoc: totalCost > 0 ? rent / totalCost : 0,
       headline: price > 0 ? rent / price : 0,
       icr: interest > 0 ? rent / interest : Infinity
@@ -393,10 +377,10 @@
     var m = model();
 
     $('oCoC').textContent = pct(m.coc);
-    $('oCoCNote').textContent = 'before tax · ' + pct(m.cocPost) + ' after';
+    $('oCoCNote').textContent = 'a year, on the cash you put in';
     $('oCashIn').textContent = gbp(m.cashIn);
     $('oNet').textContent = gbp(m.netPre);
-    $('oNetNote').textContent = 'a year · ' + gbp(m.netPost) + ' after tax';
+    $('oNetNote').textContent = 'a year, before tax';
     $('oYoC').textContent = pct(m.yoc);
     $('oYoCNote').textContent = 'headline is ' + pct(m.headline) + ' on price alone';
 
@@ -432,9 +416,7 @@
     a += line('Rent from the housing association', m.rent);
     if (financed) a += line('Loan interest', -m.interest);
     if (m.opex > 0) a += line('Annual running costs', -m.opex);
-    a += line('Profit before tax', m.netPre, 'sub-t');
-    a += line('Corporation tax', -m.tax);
-    a += line('What you keep', m.netPost, 'sum');
+    a += line('Income before tax', m.netPre, 'sum');
     $('tAnnual').innerHTML = a;
 
     $('icrBlock').hidden = !financed;

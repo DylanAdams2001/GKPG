@@ -194,12 +194,18 @@ far they got.
 
 ### Branching the follow-up on it
 
-| Tags present | Read | Send |
+Contacts accumulate tags, so branch on the **furthest** one present. Three
+paths:
+
+| Furthest tag | Read | Branch |
 |---|---|---|
-| none | Registered, never opened the room | "You missed it, here's the link" |
-| `watched-start` only | Opened, left almost immediately | Re-engage, something put them off |
-| up to `watched-25` / `watched-50` | Dropped part way | Address what comes after that point |
-| `watched-75` or `watched-complete` | Saw the offer | Push the booking |
+| `watched-complete` (90%+) | Watched it through | **A — Full.** Guide, then calculator, then the rest of the sequence |
+| `watched-25` / `-50` / `-75` | Dropped part way | **B — Partial.** No guide, no calculator. One re-engagement email carrying a 60–90 second condensed video and a booking link, then rejoins A |
+| none, or `watched-start` only | Never watched | **C — Missed.** No guide, no calculator. One "you missed the workshop" email with a link to the next session, then rejoins A |
+
+The guide and the calculator are the reward for finishing. B and C never get
+them, so anything later in the sequence that refers back to "the guide" has to
+be reworded on those two paths.
 
 Those groups behave nothing alike. Sending them the same sequence is the
 usual reason webinar follow-up underperforms.

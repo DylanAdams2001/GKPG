@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Short Version | Golden Key Property</title>
+<meta name="description" content="The ninety-second version of the workshop: where the 25 year contracted rent comes from, and why the numbers hold when the market doesn't." />
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<!-- Meta Pixel. Dataset 1397390558441912, the same one the Conversions API
+     posts to from GHL. This page is the recap for people who left the room
+     early, so it also fires a custom RecapView you can build an audience on. -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1397390558441912');
+fbq('track', 'PageView');
+fbq('trackCustom', 'RecapView', { content_name: 'UK Workshop' });
+</script>
+<!-- End Meta Pixel -->
+<style>
+  :root {
+    --black: #0a0a0a;
+    --white: #ffffff;
+    --graphite: #45474b;
+    --gold: #D4AF37;
+    --gold-deep: #96751F;
+    --gold-pale: #F8F0DA;
+    --brand-gradient: linear-gradient(135deg, #F5E6BC 0%, #D4AF37 50%, #B8922E 100%);
+    --light-grey: #f7f7f5;
+    --mid-grey: #57595c;
+    --line: #e3e3e0;
+    --face: 'Inter', -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", Arial, sans-serif;
+    --face-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: var(--white); color: var(--black); font-family: var(--face); font-size: 15.5px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  h1, h2, h3 { font-family: var(--face-display); font-weight: 800; margin: 0; letter-spacing: -0.01em; }
+  a { color: inherit; }
+
+  .shell { max-width: 820px; margin: 0 auto; padding-inline: 20px; }
+
+  .header { border-bottom: 1px solid var(--line); }
+  .header .shell { display: flex; align-items: center; justify-content: space-between; padding-block: 16px; gap: 16px; max-width: 1120px; }
+  .wordmark { display: inline-flex; align-items: center; gap: 7px; font-family: var(--face-display); font-weight: 800; font-size: 16px; text-decoration: none; color: var(--black); }
+  .wordmark span { color: var(--gold); }
+  .head-cta { font-size: 12px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; text-decoration: none; padding: 10px 18px; border-radius: 8px; background: var(--black); color: #fff; white-space: nowrap; }
+  .head-cta:hover { background: var(--brand-gradient); color: var(--black); }
+
+  .hero { padding-block: 44px 24px; text-align: center; }
+  .eyebrow { font-size: 11px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold-deep); margin-bottom: 12px; }
+  .hero h1 { font-size: clamp(30px, 5.4vw, 46px); line-height: 1.06; margin-bottom: 14px; text-wrap: balance; }
+  .hero p { color: var(--mid-grey); max-width: 56ch; margin: 0 auto; font-size: 16.5px; }
+
+  .player { position: relative; width: 100%; max-width: 100%; aspect-ratio: 16 / 9; background: #0a0a0a; border-radius: 14px; overflow: hidden; box-shadow: 0 18px 48px rgba(0,0,0,0.18); }
+  .player iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  .player-note { text-align: center; font-size: 13px; color: var(--mid-grey); margin: 12px 0 0; }
+
+  .takeaways { margin-top: 44px; }
+  .takeaways h2 { font-family: var(--face); font-size: 11px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mid-grey); margin-bottom: 16px; display: flex; align-items: baseline; gap: 12px; }
+  .takeaways h2::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+  .take { display: grid; grid-template-columns: 34px 1fr; gap: 14px; padding: 16px 0; border-bottom: 1px solid var(--light-grey); }
+  .take:last-child { border-bottom: none; }
+  .take .n { width: 30px; height: 30px; border-radius: 50%; background: var(--black); color: #fff; font-weight: 800; font-size: 13px; display: flex; align-items: center; justify-content: center; margin-top: 2px; }
+  .take b { display: block; font-family: var(--face-display); font-size: 18px; font-weight: 700; margin-bottom: 3px; }
+  .take p { margin: 0; color: var(--graphite); }
+
+  .cta { margin-top: 44px; background: var(--black); border-radius: 14px; padding: 36px 32px; text-align: center; color: #fff; }
+  .cta h2 { font-size: clamp(22px, 3.6vw, 30px); color: #fff; margin-bottom: 10px; text-wrap: balance; }
+  .cta p { color: #c7c8ca; max-width: 52ch; margin: 0 auto 22px; }
+  .cta a.btn { display: inline-block; padding: 16px 36px; background: var(--gold); color: var(--black); text-decoration: none; border-radius: 9px; font-size: 13px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; }
+  .cta a.btn:hover { background: var(--brand-gradient); }
+  .cta .quiet { display: block; margin-top: 18px; font-size: 13px; color: #9a9b9e; }
+  .cta .quiet a { color: #c7c8ca; }
+
+  .footer { margin-top: 56px; border-top: 1px solid var(--line); background: var(--light-grey); }
+  .footer .shell { padding-block: 32px 40px; max-width: 1120px; }
+  .footer-links { margin: 14px 0; display: flex; gap: 18px; flex-wrap: wrap; }
+  .footer-links a { font-size: 13px; color: var(--mid-grey); text-decoration: none; }
+  .footer-links a:hover { color: var(--gold-deep); }
+  .footer-copy { font-size: 12px; color: var(--mid-grey); line-height: 1.7; margin: 0; }
+  .footer-copy strong { color: var(--black); }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="shell">
+    <a href="/" class="wordmark"><svg width="14" height="30" viewBox="75 42 51 110" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="100" cy="66" r="19" stroke="currentColor" stroke-width="7"/><rect x="95.5" y="85" width="9" height="62" fill="currentColor"/><rect x="104.5" y="126" width="15" height="7" fill="currentColor"/><rect x="104.5" y="138" width="11" height="7" fill="currentColor"/></svg>Golden Key<span> · </span>Property</a>
+    <a class="head-cta" href="/uk-workshop/booking.html">Book a call</a>
+  </div>
+</header>
+
+<div class="shell">
+
+  <section class="hero">
+    <div class="eyebrow">The short version</div>
+    <h1>Ninety seconds, then you decide</h1>
+    <p>You were in the workshop and dropped off. This is the one thing the second half was building to: where the rent actually comes from, and why the numbers hold when the market doesn't.</p>
+  </section>
+
+  <!-- TEMPORARY: the stand-in recording from the live room, until the
+       60 to 90 second cut exists. Swap the src and delete this comment. -->
+  <div class="player">
+    <iframe src="https://www.tella.tv/video/vid_cmu1b8mm300cm0agmdoqnhkfg/embed?b=0&amp;title=0&amp;loop=0&amp;wt=0&amp;o=0&amp;a=0" title="The short version of the Golden Key Property workshop" allow="autoplay; fullscreen" allowfullscreen></iframe>
+  </div>
+  <p class="player-note">Tap to play. Sound is on.</p>
+
+  <section class="takeaways">
+    <h2>If you only take three things</h2>
+
+    <div class="take">
+      <div class="n">1</div>
+      <div>
+        <b>The rent is contracted, not hoped for</b>
+        <p>The property is let to a registered housing association on a 25 year agreement. The rent is agreed upfront, funded through Housing Benefit for supported accommodation, and rises annually with CPI. It does not depend on a tenant paying.</p>
+      </div>
+    </div>
+
+    <div class="take">
+      <div class="n">2</div>
+      <div>
+        <b>The headaches move to someone else</b>
+        <p>Voids, arrears, maintenance, re-letting and every tenant call sit with the housing association under the agreement. You own the house. You are not the one running it.</p>
+      </div>
+    </div>
+
+    <div class="take">
+      <div class="n">3</div>
+      <div>
+        <b>The same money buys two houses, not one</b>
+        <p>A three-bed semi at £325,000 pays £54,600 a year. Buy it cash and you're in for £349,500. Use that same money as deposits instead and it covers two financed houses paying £68,250 a year combined, with £93,450 still in your account.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <h2>Enough to make a conversation worth having?</h2>
+    <p>Twenty minutes, on Oliver's calendar, with Oliver. We go through your actual position and whether this fits it. If it doesn't, he'll say so.</p>
+    <a class="btn" href="/uk-workshop/booking.html">Book your call &rarr;</a>
+    <span class="quiet">Rather see the full session? <a id="fullSession" href="/uk-workshop/live">It's still there, and you'll drop straight in.</a></span>
+  </section>
+
+</div>
+
+<footer class="footer">
+  <div class="shell">
+    <div class="wordmark" style="color:var(--black)"><svg width="14" height="30" viewBox="75 42 51 110" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="100" cy="66" r="19" stroke="currentColor" stroke-width="7"/><rect x="95.5" y="85" width="9" height="62" fill="currentColor"/><rect x="104.5" y="126" width="15" height="7" fill="currentColor"/><rect x="104.5" y="138" width="11" height="7" fill="currentColor"/></svg>Golden Key<span> · </span>Property</div>
+    <div class="footer-links">
+      <a href="/uk-workshop/booking.html">Book a call</a>
+      <a href="/uk-workshop/calculator">The calculator</a>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms &amp; Conditions</a>
+    </div>
+    <p class="footer-copy">
+      &copy; 2026 Golden Key Property. All rights reserved.<br />
+      Golden Key Property is a trading name of Asbach Enterprises Ltd, registered in England &amp; Wales. Registration number: 16016190.<br />
+      167-169 Great Portland Street, 5th Floor, London, England, W1W 5PF &nbsp;·&nbsp; info@goldenkeypropertyco.com<br /><br />
+      <strong>About these figures.</strong> The figures on this page are illustrations based on a representative unit and current costs. They are not quotations, valuations, offers, or projections for any particular property, and they vary by property. Financing is subject to status and lender approval. Nothing here is personal financial, legal or tax advice, and nothing here is a recommendation.<br /><br />
+      <strong>Risk warning.</strong> Property investment places your capital at risk and you may get back less than you invest. Property values can fall as well as rise, rental income is not guaranteed, and property is generally illiquid, so it may be difficult to sell or exit quickly. Contracted rental income depends on the continuing performance of the housing provider under the agreement. Where borrowing is used it increases both potential returns and potential losses, and your property may be repossessed if you do not keep up repayments. Past or targeted performance is not a reliable indicator of future results. Golden Key Property is not authorised or regulated by the Financial Conduct Authority to give investment advice. Seek independent financial and legal advice before making any investment decision.
+    </p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  // The email link carries ?c={{contact.id}}. Tell GHL this contact opened the
+  // recap, so the partial-watch branch can tell who re-engaged and who did not.
+  // Same webhook and payload shape as the room's progress pings; Workflow 4
+  // applies whatever tag arrives, so nothing there needs changing.
+  var GHL_PROGRESS_WEBHOOK = 'https://services.leadconnectorhq.com/hooks/HEOut7IJQ2GxJIUq9qIb/webhook-trigger/42c95c56-93f9-47ff-8f11-8cb3a6749ba6';
+
+  // Ignore an unresolved merge field arriving literally as {{contact.id}}.
+  var cid = new URLSearchParams(window.location.search).get('c');
+  if (cid && /[{}]/.test(decodeURIComponent(cid))) cid = null;
+  if (!cid) return;
+
+  // Carry identity through to the full session, so it can keep tracking them.
+  var full = document.getElementById('fullSession');
+  if (full) full.href = '/uk-workshop/live?c=' + encodeURIComponent(cid);
+
+  fetch(GHL_PROGRESS_WEBHOOK, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      type: 'workshop_progress',
+      tag: 'recap-opened',
+      percent: 0,
+      seconds_watched: 0,
+      watched_at: new Date().toISOString(),
+      contact_id: cid
+    })
+  }).catch(function () {});   // best effort, never block the page
+})();
+</script>
+
+</body>
+</html>

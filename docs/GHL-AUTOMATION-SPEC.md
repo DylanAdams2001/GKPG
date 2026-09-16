@@ -122,6 +122,7 @@ needed.
 | `watched-50` | 50 | Half watched |
 | `watched-75` | 75 | Three quarters watched |
 | `watched-complete` | 100 | Effectively finished |
+| `recap-opened` | 0 | Opened the short-version page from the partial-watch email. Sent by `/uk-workshop/recap`, not the room; useful for telling who on branch B re-engaged |
 
 Fields: `type` · `tag` · `percent` · `contact_id` · `email` · `first_name` ·
 `seconds_watched` · `watched_at`

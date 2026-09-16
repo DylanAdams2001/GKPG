@@ -182,6 +182,10 @@ field, notify Oliver.
 **Trigger:** Inbound Webhook
 **Filter:** `type` equals `workshop_progress`
 
+Note: `watched-complete` fires at **90%** watched, not 100%. People close the
+tab during an outro they have effectively finished, and this tag gates the guide
+and the calculator, so it errs generous deliberately.
+
 Find contact by `contact_id`, then **add the tag from the payload** —
 `{{inboundWebhookRequest.tag}}`. One action, no branching.
 

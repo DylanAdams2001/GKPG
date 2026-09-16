@@ -473,11 +473,16 @@ try { sessionStorage.setItem('gkOriginPage', '/uk-workshop/'); } catch (e) {}
   // 22s / 45s / 68s / 86s and can actually be tested. Put this back to
   // 30 * 60 when the real workshop goes in.
   const WORKSHOP_SECONDS = 90;
+  // watched-complete deliberately fires at 90%, not 100%. People close the tab
+  // in the last few seconds of an outro they have effectively finished, and
+  // holding out for the full length loses most of the audience that actually
+  // watched it. This tag gates the resource and the calculator, so erring
+  // generous is the right way to be wrong.
   const MARKS = [
     { at: 0.25, ev: 'Workshop25',       tag: 'watched-25',       pct: 25 },
     { at: 0.50, ev: 'Workshop50',       tag: 'watched-50',       pct: 50 },
     { at: 0.75, ev: 'Workshop75',       tag: 'watched-75',       pct: 75 },
-    { at: 0.95, ev: 'WorkshopComplete', tag: 'watched-complete', pct: 100 }
+    { at: 0.90, ev: 'WorkshopComplete', tag: 'watched-complete', pct: 100 }
   ];
   let watchedSeconds = 0;
   let lastTick = null;

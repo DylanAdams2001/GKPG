@@ -622,13 +622,20 @@ const SLOT_MS = 15 * 60 * 1000;
 const MIN_LEAD_MS = 3 * 60 * 1000;
 const SESSION_KEY = 'gkWorkshopStart';
 const CHOICE_KEY = 'gkWorkshopChoice';
-// Later sessions are same-day only, offered as offsets from now and rounded to
-// a clean quarter hour. Nothing is scheduled past the cutoff.
-// No offset shorter than the session itself: a 30 minute workshop cannot start
-// 15 minutes after the one before it, and offering both reads as a recording
-// rather than a schedule.
+// Later sessions are offered as offsets from now, rounded to a clean half
+// hour. No offset shorter than the session itself: a 30 minute workshop
+// cannot start 15 minutes after the one before it, and offering both reads
+// as a recording rather than a schedule.
 const OFFSETS_MS = [60 * 60000, 3 * 3600000, 6 * 3600000];
-const CUTOFF_HOUR = 21;                // 9pm, no later sessions after this
+const START_HOUR = 9;                  // 9am, nothing offered before this
+const CUTOFF_HOUR = 21;                // 9pm, later slots roll to tomorrow after this
+// Fixed, evenly spread times to roll a slot to when it lands outside today's
+// window. Without this, someone browsing at 8pm sees every later offset fall
+// after the cutoff and gets dropped, leaving just "starting shortly" and
+// nothing else to pick from - a near-empty dropdown that looks broken even
+// though the logic behind it is deliberate. One entry per offset above, in
+// the same order, so a rolled slot keeps roughly its original spacing.
+const ROLLOVER_HOURS = [9, 12, 17];    // tomorrow: 9am / noon / 5pm
 
 // The booked start is mirrored into localStorage as well as sessionStorage, so
 // that the confirmation and live pages still recognise it when the visitor
@@ -706,19 +713,40 @@ function offsetLabel(ms) {
   return 'in ' + h + ' hour' + (h > 1 ? 's' : '');
 }
 
-// Same-day sessions only, dropped once they would fall past the cutoff.
+// Offsets that land inside today's 9am-9pm window keep their normal time.
+// One that falls outside it - too late tonight, or before opening because
+// "now" itself is the middle of the night - rolls to a fixed slot tomorrow
+// instead of being dropped, so the picker always has real options in it.
 function laterSessions() {
   const now = new Date();
-  const cutoff = new Date(now.getFullYear(), now.getMonth(), now.getDate(), CUTOFF_HOUR, 0, 0, 0);
+  const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const windowStart = new Date(startOfDay); windowStart.setHours(START_HOUR, 0, 0, 0);
+  const windowEnd = new Date(startOfDay); windowEnd.setHours(CUTOFF_HOUR, 0, 0, 0);
+
   const out = [];
   const seen = {};
   seen[workshopStartAt()] = true;   // never offer the same slot twice
+
   for (let k = 0; k < OFFSETS_MS.length; k++) {
-    const t = roundUpTo30(new Date(now.getTime() + OFFSETS_MS[k]));
-    if (t > cutoff) continue;
+    let t = roundUpTo30(new Date(now.getTime() + OFFSETS_MS[k]));
+    let rolled = false;
+
+    if (t < windowStart) {
+      // "Now" is itself outside opening hours - e.g. browsing at 2am, where
+      // a real +1h offset would land before anyone is taking calls. Today's
+      // fixed spread is still ahead of "now", so it stays today.
+      t = new Date(startOfDay); t.setHours(ROLLOVER_HOURS[k], 0, 0, 0);
+      rolled = true;
+    } else if (t >= windowEnd) {
+      // Too late tonight - the same fixed spread, one day on.
+      t = new Date(startOfDay.getTime() + 24 * 3600000);
+      t.setHours(ROLLOVER_HOURS[k], 0, 0, 0);
+      rolled = true;
+    }
+
     if (seen[t.getTime()]) continue;
     seen[t.getTime()] = true;
-    out.push({ at: t, offset: OFFSETS_MS[k] });
+    out.push({ at: t, offset: OFFSETS_MS[k], rolled: rolled });
   }
   return out;
 }
@@ -736,7 +764,9 @@ function buildSessionOptions() {
   laterSessions().forEach(function (item) {
     const o = document.createElement('option');
     o.value = String(item.at.getTime());
-    o.textContent = 'Today at ' + timeLabel(item.at) + ' (' + offsetLabel(item.offset) + ')';
+    o.textContent = item.rolled
+      ? dayLabel(item.at) + ' at ' + timeLabel(item.at)
+      : 'Today at ' + timeLabel(item.at) + ' (' + offsetLabel(item.offset) + ')';
     sessionSelect.appendChild(o);
   });
   sessionSelect.selectedIndex = 0;   // soonest preselected

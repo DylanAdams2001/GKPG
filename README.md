@@ -27,6 +27,7 @@ folder name is the public URL: `hong-kong/index.html` is served at
 | `uk-workshop/live.html` | `/uk-workshop/live.html` | The workshop room itself: player, one-way chat, watch tracking |
 | `uk-workshop/booking.html` | `/uk-workshop/booking.html` | Call booking for workshop attendees |
 | `uk-workshop/resource.html` | `/uk-workshop/resource` | Workshop companion guide. Sent to attendees who reach `watched-complete` |
+| `uk-workshop/calculator.html` | `/uk-workshop/calculator` | Investor calculator. Sent to attendees alongside the guide |
 | `reservation-agreement.html` | `/reservation-agreement.html` | Reservation paperwork |
 
 Supporting folders:

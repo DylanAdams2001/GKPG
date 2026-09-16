@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Investment Calculator | Golden Key Property</title>
+<meta name="description" content="Work out the numbers on a supported housing purchase: cash required, net income, and return on capital, with Stamp Duty and every acquisition cost included." />
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --black: #0a0a0a;
+    --white: #ffffff;
+    --graphite: #45474b;
+    --gold: #D4AF37;
+    --gold-deep: #96751F;
+    --gold-pale: #F8F0DA;
+    --brand-gradient: linear-gradient(135deg, #F5E6BC 0%, #D4AF37 50%, #B8922E 100%);
+    --light-grey: #f7f7f5;
+    --mid-grey: #57595c;
+    --line: #e3e3e0;
+    --pos: #2f6f4f;  --pos-bg: #e8f2ec;
+    --warn: #8a5a12; --warn-bg: #fbf3e2;
+    --crit: #9c3327; --crit-bg: #f9e8e5;
+    --face: 'Inter', -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", Arial, sans-serif;
+    --face-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: var(--white); color: var(--black); font-family: var(--face); font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  h1, h2, h3 { font-family: var(--face-display); font-weight: 800; margin: 0; letter-spacing: -0.01em; }
+  a { color: inherit; }
+
+  .shell { max-width: 1120px; margin: 0 auto; padding-inline: 20px; }
+
+  /* header */
+  .header { border-bottom: 1px solid var(--line); }
+  .header .shell { display: flex; align-items: center; justify-content: space-between; padding-block: 16px; gap: 16px; }
+  .wordmark { display: inline-flex; align-items: center; gap: 7px; font-family: var(--face-display); font-weight: 800; font-size: 16px; text-decoration: none; color: var(--black); }
+  .wordmark span { color: var(--gold); }
+  .wordmark-icon { flex-shrink: 0; }
+  .head-cta { font-size: 12px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; text-decoration: none; padding: 10px 18px; border-radius: 8px; background: var(--black); color: #fff; white-space: nowrap; }
+  .head-cta:hover { background: var(--brand-gradient); color: var(--black); }
+
+  /* hero */
+  .hero { padding-block: 44px 8px; }
+  .eyebrow { font-size: 11px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold-deep); margin-bottom: 12px; }
+  .hero h1 { font-size: clamp(30px, 5vw, 44px); line-height: 1.08; margin-bottom: 14px; text-wrap: balance; }
+  .hero p { color: var(--mid-grey); max-width: 62ch; margin: 0; font-size: 16px; }
+
+  .note {
+    margin-top: 22px; background: var(--light-grey); border-left: 3px solid var(--gold);
+    padding: 14px 18px; font-size: 14px; color: var(--mid-grey); border-radius: 0 8px 8px 0;
+  }
+  .note b { color: var(--black); }
+
+  /* layout */
+  .cols { display: grid; grid-template-columns: 318px 1fr; gap: 30px; margin-top: 32px; align-items: start; }
+  @media (max-width: 920px) { .cols { grid-template-columns: 1fr; } .panel { position: static !important; } }
+
+  .panel { background: var(--white); border: 1px solid var(--line); border-radius: 12px; padding: 20px; position: sticky; top: 16px; }
+  .panel h2 { font-family: var(--face); font-size: 11px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mid-grey); margin-bottom: 14px; }
+  .fieldset { display: flex; flex-direction: column; gap: 11px; }
+  .fieldset + h2 { margin-top: 24px; }
+  .f { display: grid; grid-template-columns: 1fr 104px; align-items: center; gap: 10px; }
+  .f label { font-size: 13.5px; color: var(--graphite); }
+  .f input { font-size: 14px; width: 100%; padding: 8px 10px; border: 1px solid var(--line); border-radius: 7px; background: var(--light-grey); color: var(--black); text-align: right; font-variant-numeric: tabular-nums; font-family: var(--face); }
+  .f input:focus-visible { outline: 2px solid var(--gold); outline-offset: 1px; border-color: var(--gold); }
+  .modes { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-bottom: 18px; }
+  .modes button { font-family: var(--face); font-size: 13.5px; font-weight: 700; padding: 10px 6px; cursor: pointer; border: 1px solid var(--line); background: var(--white); color: var(--mid-grey); border-radius: 8px; }
+  .modes button[aria-pressed="true"] { background: var(--black); color: #fff; border-color: var(--black); }
+  .modes button:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+  .reset { margin-top: 18px; width: 100%; font-family: var(--face); font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; padding: 9px; cursor: pointer; border: 1px solid var(--line); background: var(--white); color: var(--mid-grey); border-radius: 8px; }
+  .reset:hover { border-color: var(--gold); color: var(--gold-deep); }
+
+  /* metrics */
+  .metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  @media (max-width: 760px) { .metrics { grid-template-columns: repeat(2, 1fr); } }
+  .metric { background: var(--white); padding: 17px 16px; }
+  .metric .lab { font-size: 10.5px; font-weight: 800; letter-spacing: 0.09em; text-transform: uppercase; color: var(--mid-grey); }
+  .metric .val { font-family: var(--face-display); font-size: 28px; font-weight: 800; margin-top: 4px; font-variant-numeric: tabular-nums; }
+  .metric .sub { font-size: 11.5px; color: var(--mid-grey); margin-top: 2px; }
+  .metric.hero-m { background: var(--gold-pale); }
+  .metric.hero-m .val { color: var(--gold-deep); }
+
+  /* blocks */
+  .block { margin-top: 30px; }
+  .block > h3 { font-family: var(--face); font-size: 11px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mid-grey); margin-bottom: 12px; display: flex; align-items: baseline; gap: 12px; }
+  .block > h3::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+
+  .scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  td, th { padding: 10px 12px; text-align: left; font-size: 14.5px; }
+  th { font-size: 10.5px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--mid-grey); border-bottom: 1px solid var(--line); }
+  td.n, th.n { text-align: right; }
+  tbody tr { border-bottom: 1px solid var(--light-grey); }
+  tbody tr:last-child { border-bottom: none; }
+  tr.sum td { border-top: 2px solid var(--black); font-weight: 800; background: var(--light-grey); }
+  tr.sub-t td { font-weight: 700; background: var(--light-grey); }
+  .hint { font-size: 13px; color: var(--mid-grey); font-weight: 400; }
+
+  .working { background: var(--light-grey); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; font-size: 14px; color: var(--graphite); font-variant-numeric: tabular-nums; }
+  .working .row { display: flex; justify-content: space-between; gap: 14px; padding: 4px 0; }
+  .working .row.tot { border-top: 1px solid var(--line); margin-top: 8px; padding-top: 9px; color: var(--black); font-weight: 800; }
+
+  .pill { display: inline-flex; align-items: center; font-size: 11.5px; font-weight: 800; padding: 3px 10px; border-radius: 999px; }
+  .pill.ok { background: var(--pos-bg); color: var(--pos); }
+  .pill.warn { background: var(--warn-bg); color: var(--warn); }
+  .pill.bad { background: var(--crit-bg); color: var(--crit); }
+
+  .stress { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  @media (max-width: 760px) { .stress { grid-template-columns: 1fr; } }
+  .scard { background: var(--white); border: 1px solid var(--line); border-radius: 10px; padding: 16px; }
+  .scard .t { font-size: 12.5px; font-weight: 700; color: var(--graphite); }
+  .scard .v { font-family: var(--face-display); font-size: 23px; font-weight: 800; margin: 6px 0 3px; font-variant-numeric: tabular-nums; }
+  .scard .d { font-size: 12.5px; color: var(--mid-grey); }
+
+  /* cta */
+  .cta { margin-top: 44px; background: var(--black); border-radius: 14px; padding: 34px 32px; text-align: center; color: #fff; }
+  .cta h2 { font-size: clamp(22px, 3.4vw, 28px); color: #fff; margin-bottom: 10px; }
+  .cta p { color: #c7c8ca; max-width: 54ch; margin: 0 auto 20px; font-size: 15px; }
+  .cta a { display: inline-block; padding: 15px 34px; background: var(--gold); color: var(--black); text-decoration: none; border-radius: 9px; font-size: 13px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; }
+  .cta a:hover { background: var(--brand-gradient); }
+
+  /* footer */
+  .footer { margin-top: 56px; border-top: 1px solid var(--line); background: var(--light-grey); }
+  .footer .shell { padding-block: 32px 40px; }
+  .footer-links { margin: 14px 0; display: flex; gap: 18px; flex-wrap: wrap; }
+  .footer-links a { font-size: 13px; color: var(--mid-grey); text-decoration: none; }
+  .footer-links a:hover { color: var(--gold-deep); }
+  .footer-copy { font-size: 12px; color: var(--mid-grey); line-height: 1.7; margin: 0; }
+  .footer-copy strong { color: var(--black); }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="shell">
+    <a href="/" class="wordmark"><svg class="wordmark-icon" width="14" height="30" viewBox="75 42 51 110" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="100" cy="66" r="19" stroke="currentColor" stroke-width="7"/><rect x="95.5" y="85" width="9" height="62" fill="currentColor"/><rect x="104.5" y="126" width="15" height="7" fill="currentColor"/><rect x="104.5" y="138" width="11" height="7" fill="currentColor"/></svg>Golden Key<span> · </span>Property</a>
+    <a class="head-cta" href="/uk-workshop/booking.html">Book a call</a>
+  </div>
+</header>
+
+<div class="shell">
+
+  <section class="hero">
+    <div class="eyebrow">Investor Resource</div>
+    <h1>Run the numbers yourself</h1>
+    <p>Put a purchase price and a contracted rent in, and this works out what you would actually need at completion and what the property would actually pay you — with Stamp Duty and every acquisition cost included, not just the headline yield.</p>
+
+    <div class="note">
+      <b>Why the headline yield is never the whole story.</b> A yield divides rent by the purchase price. It ignores Stamp Duty, legal fees and, if you are borrowing, the cost of arranging the loan. Those are real pounds you have to find, and they belong in the return. This calculator puts them back in.
+    </div>
+  </section>
+
+  <div class="cols">
+
+    <form class="panel" id="inputs" onsubmit="return false">
+      <h2>How you are buying</h2>
+      <div class="modes" role="group" aria-label="Purchase method">
+        <button type="button" id="mCash" aria-pressed="false">Cash</button>
+        <button type="button" id="mFin" aria-pressed="true">With finance</button>
+      </div>
+      <div class="fieldset">
+        <div class="f"><label for="price">Purchase price</label><input id="price" type="number" value="325000" step="1000" min="0"></div>
+        <div class="f"><label for="rent">Net annual rent</label><input id="rent" type="number" value="54600" step="100" min="0"></div>
+      </div>
+
+      <h2 id="finHead">Your borrowing</h2>
+      <div class="fieldset" id="finFields">
+        <div class="f"><label for="lvr">Loan to value %</label><input id="lvr" type="number" value="70" step="1" min="0" max="100"></div>
+        <div class="f"><label for="rate">Interest rate %</label><input id="rate" type="number" value="9" step="0.1" min="0"></div>
+        <div class="f"><label for="arrPct">Lender fee %</label><input id="arrPct" type="number" value="1" step="0.1" min="0"></div>
+        <div class="f"><label for="valFee">Valuation</label><input id="valFee" type="number" value="750" step="50" min="0"></div>
+        <div class="f"><label for="brokerSetup">Broker setup fee</label><input id="brokerSetup" type="number" value="3000" step="100" min="0"></div>
+        <div class="f"><label for="brokerPct">Broker fee %</label><input id="brokerPct" type="number" value="1" step="0.1" min="0"></div>
+        <div class="f"><label for="lendLegal">Lender legal fees</label><input id="lendLegal" type="number" value="1200" step="100" min="0"></div>
+      </div>
+
+      <h2>Buying costs</h2>
+      <div class="fieldset">
+        <div class="f"><label for="legal">Solicitor fees</label><input id="legal" type="number" value="2000" step="100" min="0"></div>
+        <div class="f"><label for="coSetup">Company setup</label><input id="coSetup" type="number" value="300" step="50" min="0"></div>
+      </div>
+
+      <h2>Ongoing</h2>
+      <div class="fieldset">
+        <div class="f"><label for="opex">Annual costs</label><input id="opex" type="number" value="0" step="100" min="0"></div>
+      </div>
+      <p class="hint" style="margin:9px 0 0">Nil by default. Maintenance, management, insurance and re-letting sit with the housing association under the agreement, not with you.</p>
+
+      <button type="button" class="reset" id="reset">Reset to the example</button>
+    </form>
+
+    <div>
+      <div class="metrics">
+        <div class="metric hero-m">
+          <div class="lab">Return on your cash</div>
+          <div class="val" id="oCoC">—</div>
+          <div class="sub" id="oCoCNote">before tax</div>
+        </div>
+        <div class="metric">
+          <div class="lab">Cash you need</div>
+          <div class="val" id="oCashIn">—</div>
+          <div class="sub">all in, at completion</div>
+        </div>
+        <div class="metric">
+          <div class="lab">Income</div>
+          <div class="val" id="oNet">—</div>
+          <div class="sub" id="oNetNote">a year, before tax</div>
+        </div>
+        <div class="metric">
+          <div class="lab">Yield on total cost</div>
+          <div class="val" id="oYoC">—</div>
+          <div class="sub" id="oYoCNote">vs headline</div>
+        </div>
+      </div>
+
+      <div class="block">
+        <h3>What you need at completion</h3>
+        <div class="scroll">
+          <table>
+            <thead><tr><th>Item</th><th class="n">Amount</th><th class="n">% of price</th></tr></thead>
+            <tbody id="tCosts"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="block">
+        <h3>How the Stamp Duty is worked out</h3>
+        <div class="working" id="sdltWork"></div>
+        <p class="hint" style="margin:11px 0 0">Buying through a limited company means the higher rates for additional dwellings apply from the first pound — there is no nil-rate band. It is the second largest cheque you write after the deposit, so it is worth seeing in full. Your solicitor will confirm the figure for your purchase.</p>
+      </div>
+
+      <div class="block">
+        <h3>What it pays you each year</h3>
+        <div class="scroll">
+          <table>
+            <thead><tr><th>Line</th><th class="n">A year</th><th class="n">A month</th></tr></thead>
+            <tbody id="tAnnual"></tbody>
+          </table>
+        </div>
+        <p class="hint" style="margin:11px 0 0">Corporation tax is shown at the small profits rate to £50,000, with marginal relief above that. If you hold other companies those thresholds are shared between them and your rate will be higher — one for your accountant.</p>
+      </div>
+
+      <div class="block" id="icrBlock">
+        <h3>What a lender will look at</h3>
+        <div class="scroll">
+          <table>
+            <thead><tr><th>Measure</th><th class="n">Value</th><th>What it means</th></tr></thead>
+            <tbody id="tIcr"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="block">
+        <h3>If the valuation comes in low</h3>
+        <div class="stress" id="tStress"></div>
+        <p class="hint" style="margin:13px 0 0">Worth understanding before you commit. Supported housing sits between standard buy-to-let and commercial lending, and surveyors often value it on bricks and mortar rather than fully crediting the contracted income. A valuation below the price does not change what you pay — it changes what the lender will advance, and the difference has to come from you in cash. We would rather you saw that here than at the point of exchange.</p>
+      </div>
+    </div>
+  </div>
+
+  <section class="cta">
+    <h2>Want us to run it on a live unit?</h2>
+    <p>Book a short call and we will go through current availability against your own position, your own capital, and your own numbers.</p>
+    <a href="/uk-workshop/booking.html">Book your call &rarr;</a>
+  </section>
+
+</div>
+
+<footer class="footer">
+  <div class="shell">
+    <div class="wordmark" style="color:var(--black)"><svg class="wordmark-icon" width="14" height="30" viewBox="75 42 51 110" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="100" cy="66" r="19" stroke="currentColor" stroke-width="7"/><rect x="95.5" y="85" width="9" height="62" fill="currentColor"/><rect x="104.5" y="126" width="15" height="7" fill="currentColor"/><rect x="104.5" y="138" width="11" height="7" fill="currentColor"/></svg>Golden Key<span> · </span>Property</div>
+    <div class="footer-links">
+      <a href="/uk-workshop/resource">The investor guide</a>
+      <a href="/uk-workshop/booking.html">Book a call</a>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms &amp; Conditions</a>
+    </div>
+    <p class="footer-copy">
+      &copy; 2026 Golden Key Property. All rights reserved.<br />
+      Golden Key Property is a trading name of Asbach Enterprises Ltd, registered in England &amp; Wales. Registration number: 16016190.<br />
+      167-169 Great Portland Street, 5th Floor, London, England, W1W 5PF &nbsp;·&nbsp; info@goldenkeypropertyco.com<br /><br />
+      <strong>About these figures.</strong> This calculator is a general information tool. The figures it produces are illustrations generated from the numbers you enter, not quotations, valuations, offers, or projections for any particular property. Costs shown by default are typical figures and will vary: your solicitor, lender, broker and accountant will quote their own, and Stamp Duty depends on your circumstances and on rates at the time of purchase. Nothing here is personal financial, legal or tax advice, and nothing here is a recommendation.<br /><br />
+      <strong>Risk warning.</strong> Property investment places your capital at risk and you may get back less than you invest. Property values can fall as well as rise, rental income is not guaranteed, and property is generally illiquid, so it may be difficult to sell or exit quickly. Contracted rental income depends on the continuing performance of the housing provider under the agreement. Where borrowing is used it increases both potential returns and potential losses, and your property may be repossessed if you do not keep up repayments. Past or targeted performance is not a reliable indicator of future results. Golden Key Property is not authorised or regulated by the Financial Conduct Authority to give investment advice. Seek independent financial and legal advice before making any investment decision.
+    </p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var financed = true;
+  var DEFAULTS = {
+    price: 325000, rent: 54600, lvr: 70, rate: 9, arrPct: 1, valFee: 750,
+    brokerSetup: 3000, brokerPct: 1, lendLegal: 1200, legal: 2000, coSetup: 300, opex: 0
+  };
+
+  var $ = function (id) { return document.getElementById(id); };
+  var gbp = function (n) { return '£' + Math.round(n).toLocaleString('en-GB'); };
+  var pct = function (n, d) { return (n * 100).toFixed(d === undefined ? 1 : d) + '%'; };
+  var num = function (id) { var v = parseFloat($(id).value); return isFinite(v) && v > 0 ? v : 0; };
+
+  // Higher rates for additional dwellings, England and Northern Ireland. A company
+  // buying a dwelling pays these from the first pound, with no nil-rate band.
+  var BANDS = [
+    { upto: 125000,   rate: 0.05 },
+    { upto: 250000,   rate: 0.07 },
+    { upto: 925000,   rate: 0.10 },
+    { upto: 1500000,  rate: 0.15 },
+    { upto: Infinity, rate: 0.17 }
+  ];
+
+  function sdlt(price) {
+    var rows = [], total = 0, lower = 0;
+    for (var i = 0; i < BANDS.length; i++) {
+      if (price <= lower) break;
+      var upper = Math.min(price, BANDS[i].upto);
+      var slice = upper - lower;
+      if (slice > 0) {
+        var tax = slice * BANDS[i].rate;
+        rows.push({ from: lower, to: upper, rate: BANDS[i].rate, tax: tax });
+        total += tax;
+      }
+      lower = BANDS[i].upto;
+    }
+    return { rows: rows, total: total };
+  }
+
+  function corpTax(profit) {
+    if (profit <= 0) return 0;
+    if (profit <= 50000) return profit * 0.19;
+    if (profit >= 250000) return profit * 0.25;
+    return profit * 0.25 - (250000 - profit) * 3 / 200;
+  }
+
+  function model(valuationOverride) {
+    var price = num('price'), rent = num('rent');
+    var duty = sdlt(price);
+    var legal = num('legal'), coSetup = num('coSetup'), opex = num('opex');
+
+    var loan = 0, deposit = price, interest = 0, arr = 0, valFee = 0,
+        brokerSetup = 0, brokerPct = 0, lendLegal = 0;
+
+    if (financed) {
+      var basis = valuationOverride === undefined ? price : Math.min(price, valuationOverride);
+      loan = basis * num('lvr') / 100;
+      deposit = Math.max(0, price - loan);
+      interest = loan * num('rate') / 100;
+      arr = loan * num('arrPct') / 100;
+      valFee = num('valFee');
+      brokerSetup = num('brokerSetup');
+      brokerPct = loan * num('brokerPct') / 100;
+      lendLegal = num('lendLegal');
+    }
+
+    var costs = [
+      { k: financed ? 'Deposit' : 'Purchase price', v: deposit },
+      { k: 'Stamp Duty', v: duty.total },
+      { k: 'Solicitor fees', v: legal },
+      { k: 'Company setup', v: coSetup }
+    ];
+    if (financed) {
+      costs.push({ k: 'Lender fee (' + num('arrPct') + '% of the loan)', v: arr });
+      costs.push({ k: 'Valuation', v: valFee });
+      costs.push({ k: 'Broker setup fee', v: brokerSetup });
+      costs.push({ k: 'Broker fee (' + num('brokerPct') + '% of the loan)', v: brokerPct });
+      costs.push({ k: 'Lender legal fees', v: lendLegal });
+    }
+
+    var cashIn = costs.reduce(function (s, c) { return s + c.v; }, 0);
+    var netPre = rent - interest - opex;
+    var tax = corpTax(netPre);
+    var totalCost = price + duty.total + legal + coSetup;
+
+    return {
+      price: price, rent: rent, duty: duty, costs: costs, cashIn: cashIn,
+      loan: loan, interest: interest, opex: opex,
+      netPre: netPre, tax: tax, netPost: netPre - tax,
+      coc: cashIn > 0 ? netPre / cashIn : 0,
+      cocPost: cashIn > 0 ? (netPre - tax) / cashIn : 0,
+      yoc: totalCost > 0 ? rent / totalCost : 0,
+      headline: price > 0 ? rent / price : 0,
+      icr: interest > 0 ? rent / interest : Infinity
+    };
+  }
+
+  function render() {
+    var m = model();
+
+    $('oCoC').textContent = pct(m.coc);
+    $('oCoCNote').textContent = 'before tax · ' + pct(m.cocPost) + ' after';
+    $('oCashIn').textContent = gbp(m.cashIn);
+    $('oNet').textContent = gbp(m.netPre);
+    $('oNetNote').textContent = 'a year · ' + gbp(m.netPost) + ' after tax';
+    $('oYoC').textContent = pct(m.yoc);
+    $('oYoCNote').textContent = 'headline is ' + pct(m.headline) + ' on price alone';
+
+    var h = '';
+    m.costs.forEach(function (c) {
+      h += '<tr><td>' + c.k + '</td><td class="n">' + gbp(c.v) + '</td><td class="n">' +
+           (m.price > 0 ? pct(c.v / m.price, 2) : '—') + '</td></tr>';
+    });
+    h += '<tr class="sum"><td>Total you need</td><td class="n">' + gbp(m.cashIn) + '</td><td class="n">' +
+         (m.price > 0 ? pct(m.cashIn / m.price, 2) : '—') + '</td></tr>';
+    if (m.loan > 0) {
+      h += '<tr><td class="hint">Plus the mortgage advance</td><td class="n hint">' + gbp(m.loan) +
+           '</td><td class="n hint">' + pct(m.loan / m.price, 2) + '</td></tr>';
+    }
+    $('tCosts').innerHTML = h;
+
+    var w = '';
+    m.duty.rows.forEach(function (r) {
+      w += '<div class="row"><span>' + gbp(r.from) + ' to ' + gbp(r.to) + ' at ' + pct(r.rate, 0) +
+           '</span><span>' + gbp(r.tax) + '</span></div>';
+    });
+    w += '<div class="row tot"><span>Stamp Duty</span><span>' + gbp(m.duty.total) +
+         (m.price > 0 ? '  (' + pct(m.duty.total / m.price, 2) + ' of the price)' : '') + '</span></div>';
+    $('sdltWork').innerHTML = w;
+
+    var a = '';
+    var line = function (k, v, cls) {
+      var neg = v < 0;
+      return '<tr' + (cls ? ' class="' + cls + '"' : '') + '><td>' + k + '</td><td class="n">' +
+             (neg ? '−' + gbp(-v) : gbp(v)) + '</td><td class="n">' +
+             (neg ? '−' + gbp(-v / 12) : gbp(v / 12)) + '</td></tr>';
+    };
+    a += line('Rent from the housing association', m.rent);
+    if (financed) a += line('Loan interest', -m.interest);
+    if (m.opex > 0) a += line('Annual running costs', -m.opex);
+    a += line('Profit before tax', m.netPre, 'sub-t');
+    a += line('Corporation tax', -m.tax);
+    a += line('What you keep', m.netPost, 'sum');
+    $('tAnnual').innerHTML = a;
+
+    $('icrBlock').hidden = !financed;
+    if (financed) {
+      var icr = m.icr, cls, read;
+      if (icr >= 1.45) { cls = 'ok'; read = 'Comfortable'; }
+      else if (icr >= 1.25) { cls = 'warn'; read = 'Tight'; }
+      else { cls = 'bad'; read = 'Below typical lender tests'; }
+      var breakRate = m.loan > 0 ? (m.rent - m.opex) / m.loan : 0;
+      $('tIcr').innerHTML =
+        '<tr><td>What the lender advances</td><td class="n">' + gbp(m.loan) + '</td>' +
+        '<td class="hint">' + num('lvr') + '% of the price</td></tr>' +
+        '<tr><td>Rent cover on the interest</td><td class="n">' + (isFinite(icr) ? icr.toFixed(2) + '×' : '—') + '</td>' +
+        '<td><span class="pill ' + cls + '">' + read + '</span> <span class="hint">lenders usually want 1.25 to 1.45</span></td></tr>' +
+        '<tr><td>Rate at which income runs out</td><td class="n">' + pct(breakRate, 2) + '</td>' +
+        '<td class="hint">the interest rate that would leave you at nil</td></tr>';
+    }
+
+    var s = '';
+    [0, 0.05, 0.10].forEach(function (cut) {
+      var val = m.price * (1 - cut);
+      var sm = model(val);
+      var delta = sm.cashIn - m.cashIn;
+      s += '<div class="scard">' +
+             '<div class="t">' + (cut === 0 ? 'Valued at the price' : 'Valued ' + pct(cut, 0) + ' below') + '</div>' +
+             '<div class="v">' + gbp(sm.cashIn) + '</div>' +
+             '<div class="d">cash needed' +
+               (delta > 1 ? ' &middot; <span style="color:var(--crit);font-weight:800">' + gbp(delta) + ' more</span>' : '') +
+               '<br>surveyor at ' + gbp(val) + ' &middot; return ' + pct(sm.coc) +
+             '</div>' +
+           '</div>';
+    });
+    $('tStress').innerHTML = s;
+  }
+
+  function setMode(f) {
+    financed = f;
+    $('mFin').setAttribute('aria-pressed', String(f));
+    $('mCash').setAttribute('aria-pressed', String(!f));
+    $('finHead').hidden = !f;
+    $('finFields').hidden = !f;
+    render();
+  }
+
+  $('mFin').addEventListener('click', function () { setMode(true); });
+  $('mCash').addEventListener('click', function () { setMode(false); });
+  $('inputs').addEventListener('input', render);
+  $('reset').addEventListener('click', function () {
+    Object.keys(DEFAULTS).forEach(function (k) { if ($(k)) $(k).value = DEFAULTS[k]; });
+    setMode(true);
+  });
+
+  setMode(true);
+})();
+</script>
+
+</body>
+</html>

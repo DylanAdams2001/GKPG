@@ -201,7 +201,7 @@ paths:
 | Furthest tag | Read | Branch |
 |---|---|---|
 | `watched-complete` (90%+) | Watched it through | **A — Full.** Guide, then calculator, then the rest of the sequence |
-| `watched-25` / `-50` / `-75` | Dropped part way | **B — Partial.** No guide, no calculator. One re-engagement email carrying a 60–90 second condensed video and a booking link, then rejoins A |
+| `watched-25` / `-50` / `-75` | Dropped part way | **B — Partial.** No guide, no calculator. One re-engagement email carrying a 5 minute condensed video and a booking link, then rejoins A |
 | none, or `watched-start` only | Never watched | **C — Missed.** No guide, no calculator. One "you missed the workshop" email with a link to the next session, then rejoins A |
 
 The guide and the calculator are the reward for finishing. B and C never get

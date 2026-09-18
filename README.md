@@ -4,7 +4,7 @@ The public website and marketing funnels for Golden Key Property, a trading
 name of Asbach Enterprises Ltd (company number 16016190).
 
 Served by GitHub Pages from the root of this repository at
-**www.goldenkeypropertyco.com**. Every tracked file is publicly reachable at
+**www.gkpg.co.uk**. Every tracked file is publicly reachable at
 its own path, so nothing private belongs in here.
 
 ## Layout

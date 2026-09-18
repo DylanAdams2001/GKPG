@@ -14,7 +14,7 @@ Everything needed to build the GoHighLevel side of the UK workshop funnel.
 **Link people straight to the room, with the contact id appended:**
 
 ```
-https://www.goldenkeypropertyco.com/uk-workshop/live?c={{contact.id}}
+https://www.gkpg.co.uk/uk-workshop/live?c={{contact.id}}
 ```
 
 Without `?c=`, anyone arriving from an email is anonymous to the page and no

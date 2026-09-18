@@ -239,24 +239,6 @@ fbq('track', 'ViewContent', { content_name: 'UK Workshop' });
   .next-card h4 { font-size: 15px; font-weight: 700; color: var(--black); margin-bottom: 6px; }
   .next-card p { font-size: 13px; color: var(--mid-grey); line-height: 1.6; }
 
-  /* BOTTOM CTA */
-  .bottom-cta {
-    background: var(--black);
-    background-image: radial-gradient(ellipse at 30% 100%, rgba(212,175,55,0.14) 0%, transparent 55%);
-    padding: 80px 24px; text-align: center;
-  }
-  .bottom-cta h2 { font-family: var(--face-display); font-size: clamp(25px, 4.5vw, 40px); font-weight: 800; color: #fff; margin-bottom: 16px; letter-spacing: -0.01em; }
-  .bottom-cta h2 em { color: var(--gold); font-style: normal; }
-  .bottom-cta p { font-size: 16px; color: rgba(255,255,255,0.58); max-width: 520px; margin: 0 auto 32px; }
-  .cta-link {
-    display: inline-block; padding: 17px 42px; background: var(--brand-gradient); color: var(--black);
-    border: none; border-radius: 12px; font-family: var(--face); font-size: 13.5px;
-    font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; cursor: pointer;
-    text-decoration: none; transition: all 0.2s ease;
-  }
-  .cta-link:hover { background: var(--gold-deep); color: #fff; transform: translateY(-2px); box-shadow: 0 12px 36px rgba(212,175,55,0.3); }
-  .bottom-cta .cta-note { font-size: 12.5px; color: rgba(255,255,255,0.4); margin: 22px auto 0; line-height: 1.4; }
-
   /* FOOTER */
   .footer { background: var(--black); padding: 44px 24px; text-align: center; border-top: 1px solid rgba(255,255,255,0.06); }
   .footer .wordmark { display: inline-flex; align-items: center; gap: 8px; font-family: var(--face-display); font-weight: 800; font-size: 1.05rem; letter-spacing: 0.01em; color: #fff; margin-bottom: 20px; }
@@ -332,17 +314,9 @@ fbq('track', 'ViewContent', { content_name: 'UK Workshop' });
     <div class="watch-meta" id="watchMeta" hidden>
       <div class="watch-meta-item"><strong>30</strong> minutes</div>
       <div class="watch-meta-item"><strong>Link</strong> sent to your inbox</div>
-      <div class="watch-meta-item"><strong>Questions?</strong> Book a call below</div>
+      <div class="watch-meta-item"><strong>Questions?</strong> Oliver takes them at the end</div>
     </div>
   </div>
-</section>
-
-<!-- BOTTOM CTA -->
-<section class="bottom-cta">
-  <h2>Questions After The Workshop?</h2>
-  <p>Book a short call with a senior team member to go through current availability, pricing, and anything the workshop left open.</p>
-  <a href="/uk-workshop/booking.html" class="cta-link">Book A Call →</a>
-  <p class="cta-note">No pitch. No pressure. No commitment.</p>
 </section>
 
 <!-- FOOTER -->
@@ -424,7 +398,7 @@ try { sessionStorage.setItem('gkOriginPage', '/uk-workshop/'); } catch (e) {}
   // Edit freely. `at` is seconds of *watched* time, so the chat stays in step
   // with the viewer even if they switch tabs and come back.
   const HOST_MESSAGES = [
-    { at: 5,    from: 'Golden Key Team', text: 'Welcome in. Oliver is about to walk through the numbers. Anything he does not cover, there is a link below to put it to him directly.' },
+    { at: 5,    from: 'Golden Key Team', text: 'Welcome in. Oliver is about to walk through the numbers. Anything he does not cover, we will post a link in here so you can put it to him directly.' },
     { at: 60,   from: 'Golden Key Team', text: 'PLACEHOLDER: time this to where Oliver introduces the model.' },
     { at: 420,  from: 'Golden Key Team', text: 'PLACEHOLDER: time this to the 16% breakdown. Worth noting the figure is net, after costs.' },
     { at: 900,  from: 'Golden Key Team', text: 'PLACEHOLDER: time this to the 25 year agreement section.' },

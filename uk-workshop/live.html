@@ -112,6 +112,20 @@ fbq('track', 'ViewContent', { content_name: 'UK Workshop' });
   }
   .player-placeholder p { font-size: 13.5px; color: rgba(255,255,255,0.6); max-width: 460px; line-height: 1.65; }
 
+  .workbook-bar {
+    display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap;
+    max-width: 880px; margin: 20px auto 0; padding: 14px 22px;
+    background: rgba(212,175,55,0.07); border: 1px solid rgba(212,175,55,0.3); border-radius: 12px;
+  }
+  .workbook-bar p { font-size: 13px; color: rgba(255,255,255,0.68); line-height: 1.5; }
+  .workbook-bar strong { color: var(--gold); font-weight: 800; }
+  .workbook-bar a {
+    display: inline-block; flex-shrink: 0; padding: 10px 20px; border-radius: 9px;
+    background: var(--brand-gradient); color: var(--black); text-decoration: none;
+    font-size: 11.5px; font-weight: 800; letter-spacing: 0.9px; text-transform: uppercase; transition: all 0.2s ease;
+  }
+  .workbook-bar a:hover { background: #fff; }
+
   .watch-meta { display: flex; align-items: center; justify-content: center; gap: 26px; flex-wrap: wrap; margin-top: 22px; }
   .watch-meta-item { font-size: 12.5px; color: rgba(255,255,255,0.55); font-weight: 600; }
   .watch-meta-item strong { color: var(--gold); font-weight: 800; }
@@ -287,6 +301,11 @@ fbq('track', 'ViewContent', { content_name: 'UK Workshop' });
           Tap for sound
         </button>
       </div>
+    </div>
+
+    <div class="workbook-bar">
+      <p><strong>Workbook:</strong> four pages to fill in as you watch. We pause four times so you can write your answers down.</p>
+      <a href="/uk-workshop/workbook.pdf" download="Golden-Key-Property-Workshop-Workbook.pdf">Download PDF →</a>
     </div>
 
     <div class="watch-meta" id="watchMeta" hidden>

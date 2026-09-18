@@ -180,6 +180,18 @@ fbq('track', 'PageView');
   .welcome { max-width: 720px; margin: 0 auto; }
   .welcome-head { font-size: 17px; font-weight: 800; color: var(--black); text-align: center; margin-bottom: 16px; }
 
+  /* WORKBOOK */
+  .workbook { max-width: 720px; margin: 0 auto; display: flex; align-items: center; gap: 26px; background: var(--white); border: 1px solid var(--line); border-left: 3px solid var(--gold); border-radius: 14px; padding: 26px 30px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .workbook-icon { width: 46px; height: 58px; flex-shrink: 0; border-radius: 4px; background: var(--gold-pale); border: 1px solid var(--line); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 7px; font-size: 9px; font-weight: 800; letter-spacing: 0.6px; color: var(--gold-deep); }
+  .workbook-body { flex: 1; }
+  .workbook-body h4 { font-size: 16px; font-weight: 800; color: var(--black); margin-bottom: 5px; }
+  .workbook-body p { font-size: 13.5px; color: var(--mid-grey); line-height: 1.6; }
+  .workbook-btn { display: inline-block; flex-shrink: 0; padding: 14px 26px; border-radius: 10px; background: var(--brand-gradient); color: var(--black); text-decoration: none; font-size: 12.5px; font-weight: 800; letter-spacing: 0.9px; text-transform: uppercase; transition: all 0.2s ease; }
+  .workbook-btn:hover { background: var(--gold-deep); color: #fff; transform: translateY(-2px); box-shadow: 0 12px 30px rgba(212,175,55,0.28); }
+  @media (max-width: 640px) {
+    .workbook { flex-direction: column; text-align: center; gap: 18px; }
+  }
+
   /* CHECKLIST */
   .checklist { max-width: 620px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
   .check-item { display: flex; gap: 14px; align-items: flex-start; background: var(--white); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; }
@@ -307,8 +319,25 @@ fbq('track', 'PageView');
   </div>
 </section>
 
-<!-- CHECKLIST -->
+<!-- WORKBOOK -->
 <section class="section section-grey" data-session-only>
+  <div class="container">
+    <span class="section-eyebrow">Print This First</span>
+    <h2 class="section-title">Your Workshop Workbook</h2>
+    <p class="section-sub">Four pages to fill in as you watch. Oliver pauses four times during the session so you can write your answers down.</p>
+    <div class="workbook">
+      <div class="workbook-icon">PDF</div>
+      <div class="workbook-body">
+        <h4>Golden Key Workshop Workbook</h4>
+        <p>Your goal, what is holding you back, your timeline, and space for the questions you want answered on a call afterwards.</p>
+      </div>
+      <a class="workbook-btn" href="/uk-workshop/workbook.pdf" download="Golden-Key-Property-Workshop-Workbook.pdf">Download →</a>
+    </div>
+  </div>
+</section>
+
+<!-- CHECKLIST -->
+<section class="section" data-session-only>
   <div class="container">
     <span class="section-eyebrow">Before It Starts</span>
     <h2 class="section-title">Your Workshop Checklist</h2>
@@ -330,7 +359,7 @@ fbq('track', 'PageView');
       <div class="check-item">
         <div class="check-tick">✓</div>
         <div>
-          <h4>Have a pen handy</h4>
+          <h4>Print the workbook, and have a pen handy</h4>
           <p>The yield breakdown moves quickly. Worth noting the numbers so you can check them against your own stock afterwards.</p>
         </div>
       </div>
@@ -338,7 +367,7 @@ fbq('track', 'PageView');
         <div class="check-tick">✓</div>
         <div>
           <h4>Write down your questions</h4>
-          <p>Anything the workshop does not answer, note it down and put it straight to the team on a call.</p>
+          <p>Page three of the workbook has room for six. Anything the workshop does not answer, put it straight to the team on a call.</p>
         </div>
       </div>
     </div>

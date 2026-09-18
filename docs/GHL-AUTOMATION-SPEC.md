@@ -10,6 +10,7 @@ Everything needed to build the GoHighLevel side of the UK workshop funnel.
 | Confirmation | `/uk-workshop/confirmation` | Countdown, welcome video, checklist, join button |
 | Workshop room | `/uk-workshop/live` | The session: player, chat, engagement tracking |
 | Booking | `/uk-workshop/booking` | Call calendar |
+| Workbook | `/uk-workshop/workbook.pdf` | Fill-in PDF, linked from the opt-in email |
 
 **Link people straight to the room, with the contact id appended:**
 
@@ -158,6 +159,16 @@ Everything below sits on the YES branch.
    - **true** → send email A
    - **false** → send email B, then SMS C 15 minutes before `session_time_iso`
 5. Wait 2 hours → if no appointment booked, send email D
+
+Emails A and B both carry the workbook link, so it is in their inbox before the
+session rather than only on the page:
+
+```
+https://www.gkpg.co.uk/uk-workshop/workbook.pdf
+```
+
+It is a plain static file, so no merge field and no contact id. The same
+download sits on the confirmation page and in the workshop room.
 
 ## Workflow 2 — Booked call
 

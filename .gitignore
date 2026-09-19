@@ -6,3 +6,10 @@
 # so anything committed here is downloadable from the live domain by anyone
 # who guesses the path. Contracts, agreements and internal plans stay local.
 working-files/
+
+# Video masters and cuts. GitHub hard-rejects any file over 100 MB, so a
+# committed recording does not just bloat the repo, it blocks the push that
+# carries everything else. The workshop video is hosted off-repo and pointed
+# at from uk-workshop/video.js. Keep local copies here freely; none ship.
+*.mp4
+*.mov

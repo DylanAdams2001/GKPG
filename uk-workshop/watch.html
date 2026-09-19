@@ -67,7 +67,8 @@ fbq('trackCustom', 'RecordingView', { content_name: 'UK Workshop' });
   .hero p { color: var(--mid-grey); max-width: 58ch; margin: 0 auto; font-size: 16px; }
 
   .player { position: relative; width: 100%; max-width: 100%; aspect-ratio: 16 / 9; background: #0a0a0a; border-radius: 14px; overflow: hidden; box-shadow: 0 18px 48px rgba(0,0,0,0.18); }
-  .player iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  .player iframe, .player video { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
+  .player .wistia_embed { position: absolute; inset: 0; width: 100%; height: 100%; }
   .player-note { text-align: center; font-size: 13px; color: var(--mid-grey); margin: 12px 0 0; }
   .player-note .dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--mid-grey); margin-right: 6px; vertical-align: 1px; }
 
@@ -110,22 +111,21 @@ fbq('trackCustom', 'RecordingView', { content_name: 'UK Workshop' });
     <p>No slot to catch. Thirty minutes on how UK supported housing produces its yields, what the 25 year agreement covers, and what happens between reservation and your first rent payment.</p>
   </section>
 
-  <!-- TEMPORARY: the stand-in recording, until the real workshop capture
-       replaces it. Same source as the live room; genuinely on-demand here,
-       so it just plays from the top rather than seeking to a live offset. -->
-  <div class="player">
-    <iframe id="recordingFrame" src="https://www.tella.tv/video/vid_cmu1b8mm300cm0agmdoqnhkfg/embed?b=0&amp;title=0&amp;loop=0&amp;wt=0&amp;o=0&amp;a=0" title="Golden Key Property Workshop Recording" allow="autoplay; fullscreen" allowfullscreen></iframe>
-  </div>
-  <p class="player-note"><span class="dot"></span>Recording &middot; tap to play, sound is on</p>
+  <!-- Controls stay on here, unlike the live room. This page says out loud
+       that it is a recording, so hiding the scrubber would only be annoying:
+       people arriving from the "you missed it" email want to skip to the
+       numbers. The media ID comes from uk-workshop/video.js. -->
+  <div class="player" id="playerStage"></div>
+  <p class="player-note"><span class="dot"></span>Recording &middot; 30 minutes &middot; press play, sound is on</p>
 
   <section class="covers">
     <h2>What it covers</h2>
     <ul class="cover-list">
       <li>Where the contracted rent actually comes from, and why it holds when the market doesn't</li>
-      <li>The 16.8% net yield, broken down against an ordinary buy-to-let</li>
+      <li>Up to 16% net, worked through on a real three bedroom at &pound;325,000</li>
       <li>What the 25 year agreement covers, and what stays your responsibility</li>
-      <li>Cash versus finance, worked through on a real example</li>
-      <li>What can go wrong, and how the structure is built around it</li>
+      <li>The same property bought two ways, cash and financed, side by side</li>
+      <li>What can go wrong &mdash; the funding, the housing association, and the genuine worst case</li>
     </ul>
   </section>
 
@@ -155,6 +155,8 @@ fbq('trackCustom', 'RecordingView', { content_name: 'UK Workshop' });
   </div>
 </footer>
 
+<script src="https://fast.wistia.com/assets/external/E-v1.js" async></script>
+<script src="/uk-workshop/video.js"></script>
 <script>
 (function () {
   // Same tracking engine as the live room, deliberately: someone who watches
@@ -165,7 +167,33 @@ fbq('trackCustom', 'RecordingView', { content_name: 'UK Workshop' });
   // recording, so it plays from the top on load and nothing pretends anyone
   // is live.
   const GHL_PROGRESS_WEBHOOK = 'https://services.leadconnectorhq.com/hooks/HEOut7IJQ2GxJIUq9qIb/webhook-trigger/42c95c56-93f9-47ff-8f11-8cb3a6749ba6';
-  const WORKSHOP_SECONDS = 90; // TEMPORARY: matches the stand-in video. Put back to 30 * 60 when the real recording goes in.
+
+  // Source and runtime from uk-workshop/video.js, shared with the live room so
+  // the URL is only ever edited in one place.
+  // Media ID and runtime from uk-workshop/video.js, shared with the live room
+  // so the video is only ever pointed at from one place. Full controls here,
+  // and none of the live room's shield: this page is honest about being a
+  // recording, so people are free to scrub to the part they came for.
+  const V = window.GK_WORKSHOP || {};
+  let WORKSHOP_SECONDS = V.seconds || 1886;
+  let video = null;
+
+  const stage = document.getElementById('playerStage');
+  if (stage && V.wistiaId) {
+    const mount = document.createElement('div');
+    mount.className = 'wistia_embed wistia_async_' + V.wistiaId;
+    stage.appendChild(mount);
+    window._wq = window._wq || [];
+    window._wq.push({
+      id: V.wistiaId,
+      options: { autoPlay: false, videoFoam: false, fitStrategy: 'contain', resumable: true },
+      onReady: function (v) {
+        video = v;
+        const d = v.duration();
+        if (d && isFinite(d) && d > 0) WORKSHOP_SECONDS = d;
+      }
+    });
+  }
   const MARKS = [
     { at: 0.25, ev: 'Recording25',       tag: 'watched-25',       pct: 25 },
     { at: 0.50, ev: 'Recording50',       tag: 'watched-50',       pct: 50 },
@@ -205,7 +233,15 @@ fbq('trackCustom', 'RecordingView', { content_name: 'UK Workshop' });
   function engagementTick() {
     const now = Date.now();
     if (document.visibilityState === 'visible') {
-      if (lastTick !== null) watchedSeconds += (now - lastTick) / 1000;
+      // Time actually played, accumulated - not the playhead position. This
+      // page has a scrubber, and reading the playhead directly would hand a
+      // watched-complete tag to anyone who dragged it to the end. That tag
+      // gates the guide and the calculator, so it has to mean something.
+      let playing = false;
+      if (video) { try { playing = video.state() === 'playing'; } catch (e) {} }
+      if (playing && lastTick !== null) {
+        watchedSeconds += Math.min((now - lastTick) / 1000, 2);
+      }
       lastTick = now;
     } else {
       lastTick = null;   // paused while the tab is hidden, same as the live room

@@ -95,6 +95,12 @@ fbq('track', 'ViewContent', { content_name: 'UK Workshop' });
     display: flex; align-items: center; justify-content: center;
   }
   .player iframe, .player video { width: 100%; height: 100%; border: 0; display: block; }
+  .player .wistia_embed { width: 100%; height: 100%; }
+  /* Wistia still toggles play/pause when the video surface is clicked, even
+     with every control switched off. A live session cannot be paused by a
+     stray click, so nothing reaches it: the shield sits over the player and
+     the tap-for-sound button sits over the shield. */
+  .player-shield { position: absolute; inset: 0; z-index: 2; }
   .soundbar {
     position: absolute; left: 50%; bottom: 20px; transform: translateX(-50%); z-index: 3;
     display: inline-flex; align-items: center; gap: 9px;
@@ -209,6 +215,28 @@ fbq('track', 'ViewContent', { content_name: 'UK Workshop' });
   .msg-link:hover { background: #fff; }
   .msg-note { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 3px; font-style: italic; }
 
+  /* The composer. Oliver asks people to put answers in the chat four times
+     during the recording, so there has to be somewhere to put them. */
+  .chat-form { display: flex; gap: 8px; padding: 12px 14px; border-top: 1px solid rgba(255,255,255,0.1); flex-shrink: 0; }
+  .chat-form input {
+    flex: 1; min-width: 0; padding: 10px 13px; border-radius: 8px; font-family: var(--face);
+    font-size: 13px; color: #fff; background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.14); outline: none;
+  }
+  .chat-form input::placeholder { color: rgba(255,255,255,0.35); }
+  .chat-form input:focus { border-color: var(--gold); background: rgba(255,255,255,0.09); }
+  .chat-form button {
+    flex-shrink: 0; padding: 10px 15px; border: 0; border-radius: 8px; cursor: pointer;
+    background: var(--brand-gradient); color: var(--black);
+    font-family: var(--face); font-weight: 800; font-size: 12.5px;
+  }
+  .chat-form button:hover { background: #fff; }
+  .msg.mine { align-self: flex-end; max-width: 85%; text-align: right; }
+  .msg.mine .msg-text {
+    background: rgba(255,255,255,0.08); padding: 9px 13px; border-radius: 10px;
+    color: rgba(255,255,255,0.92);
+  }
+
   @media (max-width: 900px) {
     .live-grid { grid-template-columns: 1fr; }
     .chat { min-height: 220px; max-height: 380px; }
@@ -274,7 +302,7 @@ fbq('track', 'ViewContent', { content_name: 'UK Workshop' });
          happens inside it rather than in front of a closed door. Both panels
          grow when the countdown hands over. -->
     <div class="live-grid" id="liveGrid">
-      <div class="player" id="playerStage">
+      <div class="player" id="playerStage" style="background-size:cover;background-position:center;">
         <div class="player-placeholder" id="playerIdle">
           <div class="icon">&#9654;</div>
           <h2>How UK Investors Are Generating £53,000 A Year Net</h2>
@@ -295,6 +323,10 @@ fbq('track', 'ViewContent', { content_name: 'UK Workshop' });
           <p class="chat-idle" id="chatIdle">The chat opens when the session starts.</p>
         </div>
         <div class="chat-foot" id="chatFoot">Oliver takes questions live at the end of the session. Note yours down as they come to you.</div>
+        <form class="chat-form" id="chatForm" hidden autocomplete="off">
+          <input id="chatInput" type="text" maxlength="240" placeholder="Type your answer..." aria-label="Send a message to the room" />
+          <button type="submit">Send</button>
+        </form>
       </aside>
     </div>
 
@@ -312,6 +344,10 @@ fbq('track', 'ViewContent', { content_name: 'UK Workshop' });
     </div>
 
     <div class="watch-meta" id="watchMeta" hidden>
+      <!-- 30, not the true 31:26. Oliver says on the recording that he ran
+           over, so the room promising thirty and delivering more matches what
+           they are watching. The tag marks use the real runtime regardless -
+           see WORKSHOP_SECONDS, which comes from Wistia, not from this label. -->
       <div class="watch-meta-item"><strong>30</strong> minutes</div>
       <div class="watch-meta-item"><strong>Link</strong> sent to your inbox</div>
       <div class="watch-meta-item"><strong>Questions?</strong> Oliver takes them at the end</div>
@@ -334,6 +370,8 @@ fbq('track', 'ViewContent', { content_name: 'UK Workshop' });
   </p>
 </footer>
 
+<script src="https://fast.wistia.com/assets/external/E-v1.js" async></script>
+<script src="/uk-workshop/video.js"></script>
 <script>
 // TEMPORARY - TEST DAY. Mirrors SESSION_ON_HOLD in uk-workshop/confirmation.html.
 // No session is running, so anyone who still has this URL is sent back to the
@@ -397,17 +435,37 @@ try { sessionStorage.setItem('gkOriginPage', '/uk-workshop/'); } catch (e) {}
 
   // Edit freely. `at` is seconds of *watched* time, so the chat stays in step
   // with the viewer even if they switch tabs and come back.
+  // Timed against the delivered presenter script, whose eleven sections carry
+  // their own minute budgets adding to ~34. The recording came in at 31:26, so
+  // every mark below is a section boundary scaled by 1886/2040. That puts them
+  // within about half a minute of the real cut - close enough to feel timed,
+  // and worth one watch-through with a stopwatch to tighten.
+  //
+  // `at` is seconds of watched video, not wall clock, so a viewer who pauses
+  // or tabs away still gets each line against the right part of the talk.
   const HOST_MESSAGES = [
-    { at: 5,    from: 'Golden Key Team', text: 'Welcome in. Oliver is about to walk through the numbers. Anything he does not cover, we will post a link in here so you can put it to him directly.' },
-    { at: 60,   from: 'Golden Key Team', text: 'PLACEHOLDER: time this to where Oliver introduces the model.' },
-    { at: 420,  from: 'Golden Key Team', text: 'PLACEHOLDER: time this to the 16% breakdown. Worth noting the figure is net, after costs.' },
-    { at: 900,  from: 'Golden Key Team', text: 'PLACEHOLDER: time this to the 25 year agreement section.' },
-    { at: 1320, from: 'Golden Key Team',
-      text: 'If you want to go through these numbers against your own situation, Oliver has a few times open this week.',
+    { at: 5,    from: 'Oliver Cullen',
+      text: 'Welcome in. Grab the workbook before we get going - there are four points in the session where I stop and ask you to fill something in.',
+      link: { href: '/uk-workshop/workbook.pdf', label: 'Download the workbook' } },
+    { at: 120,  from: 'Oliver Cullen', text: 'Two things worth staying to the end for: the written guide and the finance calculator, and a slot on my own calendar. Both come at the close.' },
+    { at: 235,  from: 'Oliver Cullen', text: 'That is the whole asset in four lines. Everything from here is me showing my working on it.' },
+    { at: 290,  from: 'Oliver Cullen', text: 'Workbook, first page. Sixty seconds: what is the goal for your next property, and what is your biggest gripe with the market right now? Put them in the chat if you would rather type.' },
+    { at: 470,  from: 'Oliver Cullen', text: 'Thirty seconds on this one: what is actually holding you back from the goal you just wrote down?' },
+    { at: 625,  from: 'Oliver Cullen', text: 'The model has a name: Specialist Supported Housing. New build, already tenanted, let to a registered housing association. Institutions have been buying it since 2011 - this is only new to private investors.' },
+    { at: 800,  from: 'Oliver Cullen', text: 'Last one before the numbers. Thirty seconds: which strategy have you tried before, and where did it let you down?' },
+    { at: 860,  from: 'Oliver Cullen', text: 'One real example on screen now - a three bedroom semi at \u00a3325,000 producing \u00a354,600 a year. I work it twice, once in cash and once financed.' },
+    { at: 935,  from: 'Oliver Cullen', text: 'Why the yield is quoted net: the agreement is Full Repair and Insurance, so repairs, management and re-letting sit with the housing association rather than coming out of your number.' },
+    { at: 1065, from: 'Oliver Cullen', text: 'This next part is the one most people came for - what happens if the funding stops, if the housing association fails, and the genuine worst case. All three, in order.' },
+    { at: 1245, from: 'Oliver Cullen', text: 'Twenty-five years, rent agreed upfront and rising annually with CPI. Paid by the housing association, not by the tenant.' },
+    { at: 1395, from: 'Oliver Cullen', text: 'Worth noting on the exit: the buy-back option only applies for the first three years. After that you sell when and how you like.' },
+    { at: 1455, from: 'Oliver Cullen',
+      text: 'Eight steps from reservation to first rent - about 45 days buying cash, about 90 with finance. If you want that mapped against your own position, I keep a few slots open each week.',
       link: { href: '/uk-workshop/booking.html', label: 'Book your call' } },
-    { at: 1680, from: 'Golden Key Team',
-      text: 'Link again while it is fresh. No pressure and nothing is for sale on the call.',
-      link: { href: '/uk-workshop/booking.html', label: 'Book your call' } }
+    { at: 1625, from: 'Oliver Cullen', text: 'Questions section. Anything still unanswered, write it in your workbook now - it is the best use of the twenty minutes if you do end up booking.' },
+    { at: 1790, from: 'Oliver Cullen',
+      text: 'Here is the link I just mentioned. Twenty minutes, my own calendar, and nothing is for sale on it.',
+      link: { href: '/uk-workshop/booking.html', label: 'Book your call' } },
+    { at: 1850, from: 'Oliver Cullen', text: 'The written guide and the finance calculator are on their way to your inbox. Thanks for staying to the end.' }
   ];
 
   const chatBody = document.getElementById('chatBody');
@@ -456,6 +514,13 @@ try { sessionStorage.setItem('gkOriginPage', '/uk-workshop/'); } catch (e) {}
       a.className = 'msg-link';
       a.href = opts.link.href;
       a.textContent = opts.link.label;
+      // New tab, always. Following a link in place would abandon the session
+      // mid-way and lose the watch tags with it - so the workbook opens
+      // alongside the room, and booking a call does not cost them the rest of
+      // the workshop. The room pauses itself while the tab is in the
+      // background and picks up where they left it.
+      a.target = '_blank';
+      a.rel = 'noopener';
       wrap.appendChild(a);
     }
     chatBody.appendChild(wrap);
@@ -476,17 +541,40 @@ try { sessionStorage.setItem('gkOriginPage', '/uk-workshop/'); } catch (e) {}
     }
   }
 
+  // The viewer's own messages, and only their own. Four times in the recording
+  // Oliver asks people to put an answer in the chat, so there has to be
+  // somewhere to put one - a prompt with no input is worse than no prompt.
+  //
+  // What goes in here stays on this screen: it is not posted anywhere and no
+  // other attendee is simulated. Writing fake attendees into a feed about an
+  // investment would be manufacturing social proof, which is a line we do not
+  // cross, and it is the reason every other message in the feed is Oliver's
+  // own. The trade is that he reads answers out that the viewer cannot
+  // see - which reads as other people being in the room, not as anything we
+  // have claimed. Note it in the copy rather than solving it with invention.
+  (function () {
+    const form = document.getElementById('chatForm');
+    const input = document.getElementById('chatInput');
+    if (!form || !input) return;
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const text = input.value.trim();
+      if (!text) return;
+      addMessage('You', text, { mine: true });
+      input.value = '';
+    });
+  })();
+
   // ---- Workshop engagement ------------------------------------------------
-  // The embed might be YouTube, Vimeo or GHL and each exposes playback
-  // differently, so this measures *visible* time on the page instead. The
-  // timer only advances while the tab is actually in view, which rules out
-  // someone leaving it open in a background tab and inflating the numbers.
-  // If you later settle on one player, swap watchedSeconds for its real
-  // progress callback and the rest of this keeps working unchanged.
-  // TEMPORARY: 90 to match the stand-in video, so the marks fire at roughly
-  // 22s / 45s / 68s / 86s and can actually be tested. Put this back to
-  // 30 * 60 when the real workshop goes in.
-  const WORKSHOP_SECONDS = 90;
+  // Progress is the video element's own currentTime, which is the honest
+  // measure: a stalled connection or a page left open no longer walks someone
+  // up to watched-complete without them seeing a frame. The tab still has to
+  // be in view - the video is paused on hide and resumed on show, so a
+  // backgrounded tab accrues nothing and nobody misses content either.
+  //
+  // Set from uk-workshop/video.js and corrected from the file's own metadata
+  // once it loads, so the marks track the real cut rather than a constant.
+  let WORKSHOP_SECONDS = (window.GK_WORKSHOP && window.GK_WORKSHOP.seconds) || 1886;
   // watched-complete deliberately fires at 90%, not 100%. People close the tab
   // in the last few seconds of an outro they have effectively finished, and
   // holding out for the full length loses most of the audience that actually
@@ -547,7 +635,17 @@ try { sessionStorage.setItem('gkOriginPage', '/uk-workshop/'); } catch (e) {}
   function engagementTick() {
     const now = Date.now();
     if (document.visibilityState === 'visible') {
-      if (lastTick !== null) watchedSeconds += (now - lastTick) / 1000;
+      // Real playback position from Wistia, which is the honest measure: a
+      // stalled connection no longer walks someone up to watched-complete
+      // without them seeing a frame. Monotonic, so nothing can un-fire a mark
+      // already sent and hand the contact the same tag twice.
+      let t = null;
+      if (video) { try { t = video.time(); } catch (e) { t = null; } }
+      if (t !== null && isFinite(t) && t > 0) {
+        watchedSeconds = Math.max(watchedSeconds, t);
+      } else if (lastTick !== null) {
+        watchedSeconds += (now - lastTick) / 1000;   // fallback if the player never loads
+      }
       lastTick = now;
     } else {
       lastTick = null;   // paused while the tab is hidden
@@ -579,30 +677,81 @@ try { sessionStorage.setItem('gkOriginPage', '/uk-workshop/'); } catch (e) {}
     releaseDueMessages(offsetSec);
     lastTick = Date.now();
     document.addEventListener('visibilitychange', function () {
-      if (document.visibilityState === 'visible') lastTick = Date.now();
-      else lastTick = null;
+      if (document.visibilityState === 'visible') {
+        lastTick = Date.now();
+        if (video) { try { if (video.state() === 'paused') video.play(); } catch (e) {} }
+      } else {
+        lastTick = null;
+        if (video) { try { video.pause(); } catch (e) {} }   // a hidden tab accrues nothing
+      }
     });
     setInterval(engagementTick, 1000);
   }
 
-  // Autoplay is only permitted while muted, and the click that got them here
-  // happened on the previous page so it does not carry. The session therefore
-  // starts muted and running, with a prompt for sound. Tapping it rebuilds the
-  // iframe unmuted at the point they had reached, rather than from the top.
-  const WORKSHOP_SRC = 'https://www.tella.tv/video/vid_cmu1b8mm300cm0agmdoqnhkfg/embed?b=0&title=0&loop=0&wt=0&o=0&a=1';
-  let sessionOpenedAt = 0;
+  // Wistia, with every control switched off one by one. This is the whole
+  // reason the options list below is so long: a player's chrome - progress bar,
+  // play button, settings cog, quality picker - is exactly what gives away that
+  // a "live" session is a file. None of it is drawn, nothing is scrubbable, and
+  // there is no timeline showing how much is left to run.
+  //
+  // Muted autoplay is the one form every browser permits without a gesture, so
+  // the session starts silent and running behind the tap-for-sound bar. The
+  // click that got them here happened on the previous page and does not carry.
+  const V = window.GK_WORKSHOP || {};
+  let video = null;          // the Wistia player handle, once it is ready
 
-  function buildPlayer(muted, startAt) {
+  function buildPlayer(startAt) {
     const holder = document.getElementById('playerStage');
     const bar = document.getElementById('soundBar');
-    const old = holder.querySelector('iframe');
-    if (old) old.remove();
-    const f = document.createElement('iframe');
-    f.src = WORKSHOP_SRC + '&muted=' + (muted ? 1 : 0) + '&t=' + Math.max(0, Math.round(startAt));
-    f.title = 'Golden Key Property Workshop';
-    f.setAttribute('allow', 'autoplay; fullscreen');
-    f.setAttribute('allowtransparency', '');
-    holder.insertBefore(f, bar);
+    const seekTo = Math.max(0, startAt || 0);
+
+    if (V.poster) holder.style.backgroundImage = 'url("' + V.poster + '")';
+
+    const mount = document.createElement('div');
+    mount.className = 'wistia_embed wistia_async_' + V.wistiaId;
+    holder.insertBefore(mount, bar);
+
+    // Blocks clicks from reaching the video surface, which Wistia would
+    // otherwise read as pause. Sits under the sound button, not over it.
+    const shield = document.createElement('div');
+    shield.className = 'player-shield';
+    holder.insertBefore(shield, bar);
+
+    window._wq = window._wq || [];
+    window._wq.push({
+      id: V.wistiaId,
+      options: {
+        autoPlay: true,
+        muted: true,
+        silentAutoPlay: 'allow',   // start muted rather than not starting at all
+        controlsVisibleOnLoad: false,
+        playbar: false,
+        playButton: false,
+        smallPlayButton: false,
+        volumeControl: false,
+        fullscreenButton: false,
+        settingsControl: false,
+        qualityControl: false,
+        playbackRateControl: false,
+        playPauseNotifier: false,
+        copyLinkAndThumbnailEnabled: false,
+        resumable: false,          // a live session never offers to resume
+        endVideoBehavior: 'default',
+        videoFoam: false,
+        fitStrategy: 'contain'
+      },
+      onReady: function (v) {
+        video = v;
+        // Wistia's own runtime beats the constant, so the tag marks stay right
+        // through a re-edit without anyone remembering to update video.js.
+        const d = v.duration();
+        if (d && isFinite(d) && d > 0) WORKSHOP_SECONDS = d;
+        // Drop a late arrival into the session already in progress, the way
+        // they would land on a real live call.
+        if (seekTo > 0) { try { v.time(Math.min(seekTo, (d || seekTo + 1) - 1)); } catch (e) {} }
+        try { v.play(); } catch (e) {}
+      }
+    });
   }
 
   function reveal(offsetSec) {
@@ -617,17 +766,18 @@ try { sessionStorage.setItem('gkOriginPage', '/uk-workshop/'); } catch (e) {}
     if (chatBodyEl) chatBodyEl.classList.remove('is-idle');
     const chatFoot = document.getElementById('chatFoot');
     if (chatFoot) chatFoot.hidden = true;
+    const chatForm = document.getElementById('chatForm');
+    if (chatForm) chatForm.hidden = false;
     document.querySelector('.player-wrap').classList.add('is-live');
     watchMeta.hidden = false;
-    // Wall clock time of video position zero, so the rebuild on unmute lands
-    // where they actually are rather than at the top.
-    sessionOpenedAt = Date.now() - offsetSec * 1000;
-    buildPlayer(true, offsetSec);
+    buildPlayer(offsetSec);
     const bar = document.getElementById('soundBar');
     if (bar) {
       bar.hidden = false;
       bar.addEventListener('click', function () {
-        buildPlayer(false, (Date.now() - sessionOpenedAt) / 1000);
+        if (video) {
+          try { video.unmute(); video.play(); } catch (e) {}   // also the gesture, if autoplay was refused
+        }
         bar.remove();
       });
     }

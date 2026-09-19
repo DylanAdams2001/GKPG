@@ -198,6 +198,17 @@ Note: `watched-complete` fires at **90%** watched, not 100%. People close the
 tab during an outro they have effectively finished, and this tag gates the guide
 and the calculator, so it errs generous deliberately.
 
+The workshop runs **31:26**, so against the current recording the marks land at
+roughly 07:52, 15:43, 23:35 and 28:17. `seconds_watched` in the payload is real
+playback, not time spent on the page: a backgrounded tab is paused rather than
+counted, and on `/uk-workshop/watch`, which has a scrubber, seconds played are
+accumulated so dragging to the end earns nothing. Treat the number as minutes
+actually watched when you read it on a contact.
+
+Runtime is not hard-coded into the workflows anywhere — the pages read it from
+`uk-workshop/video.js` and correct it from Wistia's own metadata on load — so a
+re-edit of the recording needs no change on the GHL side.
+
 Find contact by `contact_id`, then **add the tag from the payload** —
 `{{inboundWebhookRequest.tag}}`. One action, no branching.
 

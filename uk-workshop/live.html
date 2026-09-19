@@ -108,10 +108,10 @@ fbq('track', 'ViewContent', { content_name: 'UK Workshop' });
      on iOS Safari. With align-items:center it never stretched either, so once
      playerIdle was removed at reveal there was nothing left giving .player any
      content height and the player vanished on a phone.
-     The wrapper is ours because Wistia writes inline styles onto .wistia_embed
-     itself, and an inline style beats a stylesheet rule. */
+     The wrapper is ours because Wistia writes inline styles onto the player
+     element itself, and an inline style beats a stylesheet rule. */
   .player-fill { position: absolute; inset: 0; z-index: 1; }
-  .player .wistia_embed { width: 100%; height: 100%; }
+  .player wistia-player { width: 100%; height: 100%; display: block; }
   /* Wistia still toggles play/pause when the video surface is clicked, even
      with every control switched off. A live session cannot be paused by a
      stray click, so nothing reaches it: the shield sits over the player and
@@ -122,7 +122,7 @@ fbq('track', 'ViewContent', { content_name: 'UK Workshop' });
      own width attribute, and on a phone that one element sets the floor for
      the whole row and shoves the page sideways. */
   .live-grid > * { min-width: 0; }
-  .player .wistia_embed, .player iframe { max-width: 100%; }
+  .player wistia-player, .player iframe { max-width: 100%; }
   /* Bottom right. Not top right, which is where Oliver's camera inset sits
      for the whole recording, and not centred, which is the sound button's
      spot. On a narrow screen it drops to the icon alone so the two cannot
@@ -386,7 +386,7 @@ fbq('track', 'ViewContent', { content_name: 'UK Workshop' });
   </div>
 </section>
 
-<script src="https://fast.wistia.com/assets/external/E-v1.js" async></script>
+<script src="https://fast.wistia.com/player.js" async></script>
 <script src="/uk-workshop/video.js"></script>
 <script>
 // TEMPORARY - TEST DAY. Mirrors SESSION_ON_HOLD in uk-workshop/confirmation.html.
@@ -619,7 +619,7 @@ try { sessionStorage.setItem('gkOriginPage', '/uk-workshop/'); } catch (e) {}
       // without them seeing a frame. Monotonic, so nothing can un-fire a mark
       // already sent and hand the contact the same tag twice.
       let t = null;
-      if (video) { try { t = video.time(); } catch (e) { t = null; } }
+      if (video) { try { t = video.currentTime; } catch (e) { t = null; } }
       if (t !== null && isFinite(t) && t > 0) {
         watchedSeconds = Math.max(watchedSeconds, t);
       } else if (lastTick !== null) {
@@ -658,7 +658,7 @@ try { sessionStorage.setItem('gkOriginPage', '/uk-workshop/'); } catch (e) {}
     document.addEventListener('visibilitychange', function () {
       if (document.visibilityState === 'visible') {
         lastTick = Date.now();
-        if (video) { try { if (video.state() === 'paused') video.play(); } catch (e) {} }
+        if (video) { try { if (video.paused) video.play(); } catch (e) {} }
       } else {
         lastTick = null;
         if (video) { try { video.pause(); } catch (e) {} }   // a hidden tab accrues nothing
@@ -686,38 +686,42 @@ try { sessionStorage.setItem('gkOriginPage', '/uk-workshop/'); } catch (e) {}
 
     if (V.poster) holder.style.backgroundImage = 'url("' + V.poster + '")';
 
-    // Options ride on the class name, not in _wq. Wistia reads the class when
-    // it initialises the embed; an options object pushed to _wq after the div
-    // is already in the DOM arrives too late and is ignored, leaving the player
-    // on whatever the media is set to in the Wistia dashboard. This room looked
-    // right only because those defaults happened to suit it - one change in the
-    // dashboard and a progress bar appears over a session claiming to be live.
-    const OPTS = [
-      'autoPlay=true',
-      'muted=true',
-      'silentAutoPlay=allow',       // start muted rather than not starting at all
-      'controlsVisibleOnLoad=false',
-      'playbar=false',
-      'playButton=false',
-      'smallPlayButton=false',
-      'volumeControl=false',
-      'fullscreenButton=false',
-      'settingsControl=false',
-      'qualityControl=false',
-      'playbackRateControl=false',
-      'playPauseNotifier=false',
-      'copyLinkAndThumbnailEnabled=false',
-      'resumable=false',            // a live session never offers to resume
-      'endVideoBehavior=default',
-      'videoFoam=false',
-      'fitStrategy=contain'
-    ].join(' ');
+    const MEDIA = V.wistiaId;
+    // Wistia wants a per-media module alongside player.js. Injected from the
+    // resolved ID rather than hardcoded, so uk-workshop/video.js stays the one
+    // place any media ID is written.
+    const mod = document.createElement('script');
+    mod.src = 'https://fast.wistia.com/embed/' + MEDIA + '.js';
+    mod.async = true; mod.type = 'module';
+    document.head.appendChild(mod);
+
+    // Every control switched off by name. These are HTML attributes, present
+    // before the player initialises, so unlike an options object pushed to _wq
+    // they cannot arrive too late and be discarded - which is what left this
+    // room relying on the Wistia dashboard's own defaults. It shares a media ID
+    // with the on-demand page, so giving that page a scrub bar in the dashboard
+    // would otherwise put one over a session claiming to be live.
+    //
+    // Muted autoplay is the one form every browser permits without a gesture,
+    // so the session starts silent and running behind the tap-for-sound bar.
+    // The click that got them here happened on the previous page and does not
+    // carry.
+    video = document.createElement('wistia-player');
+    video.setAttribute('media-id', MEDIA);
+    video.setAttribute('aspect', '1.7777777777777777');
+    [['autoplay', 'true'], ['muted', 'true'], ['silent-autoplay', 'allow'],
+     ['controls-visible-on-load', 'false'], ['playbar', 'false'],
+     ['play-button', 'false'], ['small-play-button', 'false'],
+     ['volume-control', 'false'], ['fullscreen-button', 'false'],
+     ['settings-control', 'false'], ['quality-control', 'false'],
+     ['playback-rate-control', 'false'], ['play-pause-notifier', 'false'],
+     ['copy-link-and-thumbnail-enabled', 'false'], ['resumable', 'false'],
+     ['end-video-behavior', 'default']
+    ].forEach(function (a) { video.setAttribute(a[0], a[1]); });
 
     const fill = document.createElement('div');
     fill.className = 'player-fill';
-    const mount = document.createElement('div');
-    mount.className = 'wistia_embed wistia_async_' + V.wistiaId + ' ' + OPTS;
-    fill.appendChild(mount);
+    fill.appendChild(video);
     holder.insertBefore(fill, bar);
 
     // Blocks clicks from reaching the video surface, which Wistia would
@@ -726,22 +730,26 @@ try { sessionStorage.setItem('gkOriginPage', '/uk-workshop/'); } catch (e) {}
     shield.className = 'player-shield';
     holder.insertBefore(shield, bar);
 
-    window._wq = window._wq || [];
-    window._wq.push({
-      id: V.wistiaId,
-      onReady: function (v) {
-        video = v;
+    // Duration and the late-join seek both need the player loaded. Poll for it
+    // rather than depend on an event name, and give up rather than spin.
+    let tries = 0;
+    const ready = setInterval(function () {
+      const d = video.duration;
+      if (d && isFinite(d) && d > 0) {
+        clearInterval(ready);
         // Wistia's own runtime beats the constant, so the tag marks stay right
         // through a re-edit without anyone remembering to update video.js.
-        const d = v.duration();
-        if (d && isFinite(d) && d > 0) WORKSHOP_SECONDS = d;
+        WORKSHOP_SECONDS = d;
         // Drop a late arrival into the session already in progress, the way
         // they would land on a real live call.
-        if (seekTo > 0) { try { v.time(Math.min(seekTo, (d || seekTo + 1) - 1)); } catch (e) {} }
-        try { v.play(); } catch (e) {}
+        if (seekTo > 0) { try { video.currentTime = Math.min(seekTo, d - 1); } catch (e) {} }
+        try { video.play(); } catch (e) {}
+      } else if (++tries > 60) {
+        clearInterval(ready);
       }
-    });
+    }, 500);
   }
+
 
   function reveal(offsetSec) {
     offsetSec = Math.max(0, offsetSec || 0);
@@ -765,7 +773,7 @@ try { sessionStorage.setItem('gkOriginPage', '/uk-workshop/'); } catch (e) {}
       bar.hidden = false;
       bar.addEventListener('click', function () {
         if (video) {
-          try { video.unmute(); video.play(); } catch (e) {}   // also the gesture, if autoplay was refused
+          try { video.muted = false; video.play(); } catch (e) {}   // also the gesture, if autoplay was refused
         }
         bar.remove();
       });
@@ -779,6 +787,7 @@ try { sessionStorage.setItem('gkOriginPage', '/uk-workshop/'); } catch (e) {}
         // exactly what the fallback below is - so the fallback is for desktop
         // browsers where the player handle is not ready yet, not for phones.
         try { if (video && video.requestFullscreen) { video.requestFullscreen(); return; } } catch (e) {}
+        try { if (video && video.requestFullScreen) { video.requestFullScreen(); return; } } catch (e) {}
         const stage = document.getElementById('playerStage');
         if (stage && stage.requestFullscreen) {
           const r = stage.requestFullscreen();

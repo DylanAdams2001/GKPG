@@ -72,7 +72,7 @@ fbq('trackCustom', 'RecordingView', { content_name: 'UK Workshop' });
   .player { position: relative; width: 100%; max-width: 100%; background: #0a0a0a; border-radius: 14px; overflow: hidden; box-shadow: 0 18px 48px rgba(0,0,0,0.18); }
   .player::before { content: ""; display: block; padding-top: 56.25%; }
   .player iframe, .player video { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
-  .player .wistia_embed { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .player wistia-player { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
   .player-note { text-align: center; font-size: 13px; color: var(--mid-grey); margin: 12px 0 0; }
   .player-note .dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--mid-grey); margin-right: 6px; vertical-align: 1px; }
 
@@ -134,7 +134,7 @@ fbq('trackCustom', 'RecordingView', { content_name: 'UK Workshop' });
 
 </div>
 
-<script src="https://fast.wistia.com/assets/external/E-v1.js" async></script>
+<script src="https://fast.wistia.com/player.js" async></script>
 <script src="/uk-workshop/video.js"></script>
 <script>
 (function () {
@@ -159,45 +159,45 @@ fbq('trackCustom', 'RecordingView', { content_name: 'UK Workshop' });
 
   const stage = document.getElementById('playerStage');
   if (stage && V.wistiaId) {
-    // Options ride on the class name, not in _wq. Wistia reads the class at
-    // the moment it initialises the embed, whereas an options object pushed to
-    // _wq after the div is already in the DOM arrives too late and is ignored -
-    // the player then silently falls back to whatever the media is set to in
-    // the Wistia dashboard. That is why this page had no scrub bar and was
-    // autoplaying muted despite autoPlay:false being right there in the code.
-    //
-    // Every control is named rather than left to the default, because the
-    // dashboard can turn them off account-wide and "we did not switch it off"
-    // is not the same as "it is on". Skipping ahead is the point of this page:
-    // someone who missed the session, or who has already sat through it, should
-    // be able to jump straight to the numbers.
-    const OPTS = [
-      'autoPlay=false',
-      'resumable=true',             // picks up where they stopped last time
-      'videoFoam=false',            // see the note in live.html - it freezes the canvas
-      'fitStrategy=contain',
-      'controlsVisibleOnLoad=true',
-      'playbar=true',               // the scrub bar
-      'playButton=true',
-      'smallPlayButton=true',
-      'volumeControl=true',
-      'fullscreenButton=true',
-      'settingsControl=true',
-      'playbackRateControl=true'
-    ].join(' ');
+    // Its own upload when there is one, the shared workshop media otherwise.
+    const MEDIA = V.watchWistiaId || V.wistiaId;
+    // Wistia wants a per-media module alongside player.js. Injected from the
+    // resolved ID rather than hardcoded, so uk-workshop/video.js stays the one
+    // place any media ID is written.
+    const mod = document.createElement('script');
+    mod.src = 'https://fast.wistia.com/embed/' + MEDIA + '.js';
+    mod.async = true; mod.type = 'module';
+    document.head.appendChild(mod);
 
-    const mount = document.createElement('div');
-    mount.className = 'wistia_embed wistia_async_' + V.wistiaId + ' ' + OPTS;
-    stage.appendChild(mount);
-    window._wq = window._wq || [];
-    window._wq.push({
-      id: V.wistiaId,
-      onReady: function (v) {
-        video = v;
-        const d = v.duration();
-        if (d && isFinite(d) && d > 0) WORKSHOP_SECONDS = d;
-      }
-    });
+    // An ordinary player: play button, scrub bar along the bottom, volume,
+    // fullscreen, speed - what anyone expects of a video they were sent a link
+    // to. Nothing is hidden and nothing autoplays, because this page says
+    // plainly that it is a recording. Skipping ahead is the point of it:
+    // someone who missed the session, or who has already sat through it, comes
+    // here to jump to the part they want.
+    //
+    // Every control is named rather than left to the default. The dashboard can
+    // turn controls off for the whole media, and this media is also what the
+    // live room plays - so leaving it implicit would let a settings change here
+    // put a progress bar over a session claiming to be live.
+    video = document.createElement('wistia-player');
+    video.setAttribute('media-id', MEDIA);
+    video.setAttribute('aspect', '1.7777777777777777');
+    [['autoplay', 'false'], ['muted', 'false'], ['resumable', 'true'],
+     ['controls-visible-on-load', 'true'], ['playbar', 'true'],
+     ['play-button', 'true'], ['small-play-button', 'true'],
+     ['volume-control', 'true'], ['fullscreen-button', 'true'],
+     ['settings-control', 'true'], ['playback-rate-control', 'true']
+    ].forEach(function (a) { video.setAttribute(a[0], a[1]); });
+    stage.appendChild(video);
+
+    // The component reports duration the way a media element does, but not
+    // until it has loaded. Poll briefly rather than guess at an event name.
+    const durTimer = setInterval(function () {
+      const d = video.duration;
+      if (d && isFinite(d) && d > 0) { WORKSHOP_SECONDS = d; clearInterval(durTimer); }
+    }, 500);
+    setTimeout(function () { clearInterval(durTimer); }, 30000);
   }
   const MARKS = [
     { at: 0.25, ev: 'Recording25',       tag: 'watched-25',       pct: 25 },
@@ -207,6 +207,7 @@ fbq('trackCustom', 'RecordingView', { content_name: 'UK Workshop' });
   ];
   let watchedSeconds = 0;
   let lastTick = null;
+  let lastPos = null;
   const firedMarks = {};
 
   // Ignore an unresolved merge field arriving literally as {{contact.id}}.
@@ -238,14 +239,17 @@ fbq('trackCustom', 'RecordingView', { content_name: 'UK Workshop' });
   function engagementTick() {
     const now = Date.now();
     if (document.visibilityState === 'visible') {
-      // Time actually played, accumulated - not the playhead position. This
-      // page has a scrubber, and reading the playhead directly would hand a
-      // watched-complete tag to anyone who dragged it to the end. That tag
-      // gates the guide and the calculator, so it has to mean something.
-      let playing = false;
-      if (video) { try { playing = video.state() === 'playing'; } catch (e) {} }
-      if (playing && lastTick !== null) {
-        watchedSeconds += Math.min((now - lastTick) / 1000, 2);
+      // Forward progress only, in small steps. This page has a scrubber, and
+      // reading the playhead directly would hand a watched-complete tag to
+      // anyone who dragged it to the end - that tag gates the guide and the
+      // calculator, so it has to mean something. A drag jumps further than a
+      // tick ever could, so it is simply not counted.
+      const pos = video ? video.currentTime : null;
+      if (pos !== null && isFinite(pos)) {
+        if (lastPos !== null && pos > lastPos && pos - lastPos < 2) {
+          watchedSeconds += pos - lastPos;
+        }
+        lastPos = pos;
       }
       lastTick = now;
     } else {

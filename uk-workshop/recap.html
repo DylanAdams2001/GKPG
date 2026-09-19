@@ -67,6 +67,7 @@ fbq('trackCustom', 'RecapView', { content_name: 'UK Workshop' });
 
   .player { position: relative; width: 100%; max-width: 100%; aspect-ratio: 16 / 9; background: #0a0a0a; border-radius: 14px; overflow: hidden; box-shadow: 0 18px 48px rgba(0,0,0,0.18); }
   .player iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  .player wistia-player { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
   .player-note { text-align: center; font-size: 13px; color: var(--mid-grey); margin: 12px 0 0; }
 
   .takeaways { margin-top: 44px; }
@@ -105,12 +106,11 @@ fbq('trackCustom', 'RecapView', { content_name: 'UK Workshop' });
     <p>You were in the workshop and dropped off. This is the recap: the part the second half was building to, where the rent actually comes from and why the numbers hold when the market doesn't.</p>
   </section>
 
-  <!-- TEMPORARY: the stand-in recording from the live room, until the
-       5 minute cut exists. Swap the src and delete this comment. -->
-  <div class="player">
-    <iframe src="https://www.tella.tv/video/vid_cmu1b8mm300cm0agmdoqnhkfg/embed?b=0&amp;title=0&amp;loop=0&amp;wt=0&amp;o=0&amp;a=0" title="The short version of the Golden Key Property workshop" allow="autoplay; fullscreen" allowfullscreen></iframe>
-  </div>
-  <p class="player-note">About five minutes. Tap to play, sound is on.</p>
+  <!-- The five minute cut, a separate Wistia media from the full session.
+       Ordinary controls: this page is openly a recap, and someone who dropped
+       out of the workshop should be able to move around inside it. -->
+  <div class="player" id="playerStage"></div>
+  <p class="player-note">About five minutes. Press play, sound is on.</p>
 
   <section class="takeaways">
     <h2>If you only take three things</h2>
@@ -149,6 +149,39 @@ fbq('trackCustom', 'RecapView', { content_name: 'UK Workshop' });
 
 </div>
 
+<script src="https://fast.wistia.com/player.js" async></script>
+<script src="/uk-workshop/video.js"></script>
+<script>
+(function () {
+  // The recap player. Media ID from uk-workshop/video.js, so the recap and the
+  // full session are swapped in the same one place. Controls are named rather
+  // than left to the default, for the same reason as the other two pages: the
+  // Wistia dashboard can turn them off for a whole media.
+  var V = window.GK_WORKSHOP || {};
+  var stage = document.getElementById('playerStage');
+  if (stage && V.recapWistiaId) {
+    var MEDIA = V.recapWistiaId;
+    // Wistia wants a per-media module alongside player.js. Injected from the
+    // resolved ID rather than hardcoded, so uk-workshop/video.js stays the one
+    // place any media ID is written.
+    const mod = document.createElement('script');
+    mod.src = 'https://fast.wistia.com/embed/' + MEDIA + '.js';
+    mod.async = true; mod.type = 'module';
+    document.head.appendChild(mod);
+
+    var p = document.createElement('wistia-player');
+    p.setAttribute('media-id', MEDIA);
+    p.setAttribute('aspect', '1.7777777777777777');
+    [['autoplay', 'false'], ['muted', 'false'], ['resumable', 'true'],
+     ['controls-visible-on-load', 'true'], ['playbar', 'true'],
+     ['play-button', 'true'], ['small-play-button', 'true'],
+     ['volume-control', 'true'], ['fullscreen-button', 'true'],
+     ['settings-control', 'true'], ['playback-rate-control', 'true']
+    ].forEach(function (a) { p.setAttribute(a[0], a[1]); });
+    stage.appendChild(p);
+  }
+})();
+</script>
 <script>
 (function () {
   // The email link carries ?c={{contact.id}}. Tell GHL this contact opened the

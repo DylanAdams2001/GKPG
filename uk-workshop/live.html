@@ -252,6 +252,25 @@ fbq('track', 'ViewContent', { content_name: 'UK Workshop' });
   .msg-text { font-size: 13px; color: rgba(255,255,255,0.78); line-height: 1.55; }
   .msg-note { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 3px; font-style: italic; }
 
+  /* Oliver's own lines. Set apart from the viewer's own messages so the feed
+     always reads as one host addressing the room, and so a prompt he gives
+     out loud is unmistakable in the chat when it lands. */
+  .msg.host { border-left: 2px solid var(--gold); padding-left: 11px; }
+  .msg.host .msg-from { display: flex; align-items: center; gap: 6px; }
+  .msg.host .msg-text { color: rgba(255,255,255,0.95); font-weight: 600; }
+  .msg-badge {
+    display: inline-block; padding: 2px 6px; border-radius: 4px;
+    background: var(--brand-gradient); color: var(--black);
+    font-size: 9.5px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase;
+  }
+  /* The one button the feed carries, and only on Oliver's own line. */
+  .msg-cta {
+    display: inline-block; margin-top: 9px; padding: 9px 15px; border-radius: 8px;
+    background: var(--brand-gradient); color: var(--black);
+    font-size: 12.5px; font-weight: 800; text-decoration: none;
+  }
+  .msg-cta:hover { background: #fff; }
+
   /* The composer. Oliver asks people to put answers in the chat four times
      during the recording, so there has to be somewhere to put them. */
   .chat-form { display: flex; gap: 8px; padding: 12px 14px; border-top: 1px solid rgba(255,255,255,0.1); flex-shrink: 0; }
@@ -450,17 +469,37 @@ try { sessionStorage.setItem('gkOriginPage', '/uk-workshop/'); } catch (e) {}
 
   // Edit freely. `at` is seconds of *watched* time, so the chat stays in step
   // with the viewer even if they switch tabs and come back.
-  // The chat feed. Empty on purpose - the copy is written by Oliver and
-  // dropped in here.
+  // The chat feed. Oliver's own prompts only - the four activities, the
+  // section handoffs and the close. Wording and timings below are a first
+  // pass scaled from the 42:02 session script onto the 31:26 cut, so they
+  // want one run against the recording before this goes live.
   //
   // `at` is seconds of watched video, not wall clock, so a line lands against
   // the right part of the talk even for someone who paused or joined late.
-  // Text only: no links and no buttons, so nothing in the feed can be styled
-  // into a call to action that a real message would never look like.
+  // A line may carry one `link`, which renders as a button under it. Only
+  // Oliver's own messages can: addMessage ignores `link` unless `host` is set,
+  // so nothing a viewer types into the composer can ever become a button.
   //
   //   { at: 240, from: 'Oliver Cullen', text: '...' },
+  //   { at: 240, from: 'Oliver Cullen', text: '...',
+  //     link: { href: '/uk-workshop/booking.html', label: 'Book your call' } },
   //
   const HOST_MESSAGES = [
+    { at: 45,   from: 'Oliver Cullen', text: "Welcome in. Grab the workbook - it's the second link down in your reminder email. Pen and paper is fine too." },
+    { at: 263,  from: 'Oliver Cullen', text: "First one for you. Two lines in the chat: what you want this to do for you, and your single biggest gripe with property right now." },
+    { at: 437,  from: 'Oliver Cullen', text: "Next. One line only - what is actually holding you back? Not the polite answer. The real one." },
+    { at: 523,  from: 'Oliver Cullen', text: "Worth writing this one down: the building is not the asset. The income agreement is the asset." },
+    { at: 757,  from: 'Oliver Cullen', text: "So - Specialist Supported Housing. The housing association pays you, not the tenant. That's the whole shape of it." },
+    { at: 908,  from: 'Oliver Cullen', text: "Third one. Which strategies have let you down? BRRR, flips, HMOs, serviced accom - and if you're brand new, just say so." },
+    { at: 1030, from: 'Oliver Cullen', text: "If the finance column looks wrong to you, it isn't. Cash-on-cash and yield-on-cost have different denominators - it's return on your capital, not on the asset." },
+    { at: 1198, from: 'Oliver Cullen', text: "Risks. Funding, benefit rules, and what happens if the provider fails. I'm going to take all three properly rather than skip them." },
+    { at: 1345, from: 'Oliver Cullen', text: "CPI-linked uplifts, compounding across the term. Ask me about the collar and the cap - they matter and they're in the lease." },
+    { at: 1489, from: 'Oliver Cullen', text: "Exit. Three-year buyback floor is an option you hold, not a lock-in. You can still sell on the open market at any point." },
+    { at: 1610, from: 'Oliver Cullen', text: "FAQs now. Pricing versus market, what happens if the place gets damaged, and whether you own the title outright." },
+    { at: 1738, from: 'Oliver Cullen', text: "Last one. Your burning question - the one you'd want answered before you'd move on any of this. Put it in the chat." },
+    { at: 1786, from: 'Oliver Cullen', text: "Here's the booking link. One-to-one, no pitch on it - we go through your numbers and whether this fits or doesn't.",
+      link: { href: '/uk-workshop/booking.html', label: 'Book your call \u2192' } },
+    { at: 1850, from: 'Oliver Cullen', text: "If this has been useful, put a W in the chat. Thanks for giving me the time." }
   ];
 
   const chatBody = document.getElementById('chatBody');
@@ -487,10 +526,18 @@ try { sessionStorage.setItem('gkOriginPage', '/uk-workshop/'); } catch (e) {}
   function addMessage(from, text, opts) {
     opts = opts || {};
     const wrap = document.createElement('div');
-    wrap.className = 'msg' + (opts.mine ? ' mine' : '');
+    wrap.className = 'msg' + (opts.mine ? ' mine' : '') + (opts.host ? ' host' : '');
     const who = document.createElement('div');
     who.className = 'msg-from';
-    who.textContent = from;
+    if (opts.host) {
+      const badge = document.createElement('span');
+      badge.className = 'msg-badge';
+      badge.textContent = 'Host';
+      who.appendChild(badge);
+      who.appendChild(document.createTextNode(from));
+    } else {
+      who.textContent = from;
+    }
     const body = document.createElement('div');
     body.className = 'msg-text';
     body.textContent = text;              // textContent, so a typed question can never inject markup
@@ -501,6 +548,15 @@ try { sessionStorage.setItem('gkOriginPage', '/uk-workshop/'); } catch (e) {}
       n.className = 'msg-note';
       n.textContent = opts.note;
       wrap.appendChild(n);
+    }
+    // Host lines only. A viewer's own message goes through the same function,
+    // so gating on opts.host is what stops typed text ever rendering a button.
+    if (opts.host && opts.link && opts.link.href) {
+      const a = document.createElement('a');
+      a.className = 'msg-cta';
+      a.href = opts.link.href;
+      a.textContent = opts.link.label || 'Open';
+      wrap.appendChild(a);
     }
     chatBody.appendChild(wrap);
     chatBody.scrollTop = chatBody.scrollHeight;
@@ -515,7 +571,7 @@ try { sessionStorage.setItem('gkOriginPage', '/uk-workshop/'); } catch (e) {}
       const m = HOST_MESSAGES[i];
       if (!firedMessages[i] && seconds >= m.at) {
         firedMessages[i] = true;
-        addMessage(m.from, m.text);
+        addMessage(m.from, m.text, { host: true, link: m.link });
       }
     }
   }

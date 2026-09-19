@@ -115,7 +115,7 @@ fbq('track', 'ViewContent', { content_name: 'UK Workshop' });
     background: rgba(0,0,0,0.55); color: rgba(255,255,255,0.92);
     border: 1px solid rgba(255,255,255,0.22); border-radius: 100px;
     padding: 9px 14px; font-family: var(--face); font-size: 12px; font-weight: 700;
-    letter-spacing: 0.3px; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+    letter-spacing: 0.3px;
   }
   .fsbtn:hover { background: rgba(0,0,0,0.78); border-color: var(--gold); color: var(--gold); }
   .fsbtn svg { width: 14px; height: 14px; flex-shrink: 0; }
@@ -696,9 +696,13 @@ try { sessionStorage.setItem('gkOriginPage', '/uk-workshop/'); } catch (e) {}
         copyLinkAndThumbnailEnabled: false,
         resumable: false,          // a live session never offers to resume
         endVideoBehavior: 'default',
-        videoFoam: true,     // responsive resize - without it the player keeps
-                             // its natural width and shoves the page sideways
-                             // on a phone, which no amount of CSS overrides
+        // Off deliberately. videoFoam is Wistia sizing the player itself, and
+        // .player already sets the box with aspect-ratio: 16/9 - the two
+        // compute against each other and the canvas stops repainting, leaving
+        // audio running over a frozen first frame. The page is kept narrow
+        // instead by min-width:0 on the grid children and max-width on the
+        // embed, which is where the mobile overflow actually came from.
+        videoFoam: false,
         fitStrategy: 'contain'
       },
       onReady: function (v) {

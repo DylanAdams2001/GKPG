@@ -166,13 +166,10 @@ fbq('trackCustom', 'RecordingView', { content_name: 'UK Workshop' });
       // off" is not the same as "it is on" - and the scrub bar is the whole
       // point of this page. Someone who missed the session, or who already sat
       // through it once, should be able to jump straight to the numbers.
-      //
-      // videoFoam is the responsive resize. With it off the player keeps its
-      // natural width and pushes the page sideways on a phone.
       options: {
         autoPlay: false,
         resumable: true,          // picks up where they stopped last time
-        videoFoam: true,
+        videoFoam: false,         // see the note in live.html - it freezes the canvas
         fitStrategy: 'contain',
         controlsVisibleOnLoad: true,
         playbar: true,            // the scrub bar

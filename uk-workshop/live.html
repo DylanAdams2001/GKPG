@@ -95,7 +95,21 @@ fbq('track', 'ViewContent', { content_name: 'UK Workshop' });
     display: flex; align-items: center; justify-content: center;
   }
   .player iframe, .player video { width: 100%; height: 100%; border: 0; display: block; }
+  /* Out of flow, sized by its insets - the same shape watch.html uses. It was
+     a flex item at width/height:100%, and a percentage height inside a flex
+     container whose own height comes only from aspect-ratio resolves to zero
+     on iOS Safari. With align-items:center it never stretched either, so once
+     playerIdle was removed at reveal there was nothing left giving .player any
+     content height and the player vanished on a phone.
+     The wrapper is ours because Wistia writes inline styles onto .wistia_embed
+     itself, and an inline style beats a stylesheet rule. */
+  .player-fill { position: absolute; inset: 0; z-index: 1; }
   .player .wistia_embed { width: 100%; height: 100%; }
+  /* Belt and braces for older iOS, where aspect-ratio does nothing and the
+     player would otherwise have no height at all. */
+  @supports not (aspect-ratio: 16 / 9) {
+    .player { height: 0; padding-bottom: 56.25%; }
+  }
   /* Wistia still toggles play/pause when the video surface is clicked, even
      with every control switched off. A live session cannot be paused by a
      stray click, so nothing reaches it: the shield sits over the player and
@@ -107,10 +121,12 @@ fbq('track', 'ViewContent', { content_name: 'UK Workshop' });
      the whole row and shoves the page sideways. */
   .live-grid > * { min-width: 0; }
   .player .wistia_embed, .player iframe { max-width: 100%; }
-  /* Top right, deliberately: the tap-for-sound button is centred along the
-     bottom and the two would collide on a narrow screen. */
+  /* Bottom right. Not top right, which is where Oliver's camera inset sits
+     for the whole recording, and not centred, which is the sound button's
+     spot. On a narrow screen it drops to the icon alone so the two cannot
+     collide along the bottom edge. */
   .fsbtn {
-    position: absolute; top: 12px; right: 12px; z-index: 4;
+    position: absolute; bottom: 12px; right: 12px; z-index: 4;
     display: inline-flex; align-items: center; gap: 7px; cursor: pointer;
     background: rgba(0,0,0,0.55); color: rgba(255,255,255,0.92);
     border: 1px solid rgba(255,255,255,0.22); border-radius: 100px;
@@ -120,9 +136,8 @@ fbq('track', 'ViewContent', { content_name: 'UK Workshop' });
   .fsbtn:hover { background: rgba(0,0,0,0.78); border-color: var(--gold); color: var(--gold); }
   .fsbtn svg { width: 14px; height: 14px; flex-shrink: 0; }
   @media (max-width: 560px) {
-    /* Worth the room it takes on a phone - this is the control that makes the
-       session watchable at that size. */
-    .fsbtn { padding: 10px 15px; font-size: 12.5px; }
+    .fsbtn { padding: 10px; }
+    .fsbtn .fsbtn-label { display: none; }
   }
   .soundbar {
     position: absolute; left: 50%; bottom: 20px; transform: translateX(-50%); z-index: 3;
@@ -317,7 +332,7 @@ fbq('track', 'ViewContent', { content_name: 'UK Workshop' });
         </div>
         <button type="button" class="fsbtn" id="fsBtn" hidden>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
-          Full screen
+          <span class="fsbtn-label">Full screen</span>
         </button>
         <button type="button" class="soundbar" id="soundBar" hidden>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>
@@ -666,9 +681,12 @@ try { sessionStorage.setItem('gkOriginPage', '/uk-workshop/'); } catch (e) {}
 
     if (V.poster) holder.style.backgroundImage = 'url("' + V.poster + '")';
 
+    const fill = document.createElement('div');
+    fill.className = 'player-fill';
     const mount = document.createElement('div');
     mount.className = 'wistia_embed wistia_async_' + V.wistiaId;
-    holder.insertBefore(mount, bar);
+    fill.appendChild(mount);
+    holder.insertBefore(fill, bar);
 
     // Blocks clicks from reaching the video surface, which Wistia would
     // otherwise read as pause. Sits under the sound button, not over it.

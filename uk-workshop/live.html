@@ -256,13 +256,7 @@ fbq('track', 'ViewContent', { content_name: 'UK Workshop' });
      always reads as one host addressing the room, and so a prompt he gives
      out loud is unmistakable in the chat when it lands. */
   .msg.host { border-left: 2px solid var(--gold); padding-left: 11px; }
-  .msg.host .msg-from { display: flex; align-items: center; gap: 6px; }
   .msg.host .msg-text { color: rgba(255,255,255,0.95); font-weight: 600; }
-  .msg-badge {
-    display: inline-block; padding: 2px 6px; border-radius: 4px;
-    background: var(--brand-gradient); color: var(--black);
-    font-size: 9.5px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase;
-  }
   /* The one button the feed carries, and only on Oliver's own line. */
   .msg-cta {
     display: inline-block; margin-top: 9px; padding: 9px 15px; border-radius: 8px;
@@ -485,7 +479,7 @@ try { sessionStorage.setItem('gkOriginPage', '/uk-workshop/'); } catch (e) {}
   //     link: { href: '/uk-workshop/booking.html', label: 'Book your call' } },
   //
   const HOST_MESSAGES = [
-    { at: 45,   from: 'Oliver Cullen', text: "Welcome in. Grab the workbook - it's the second link down in your reminder email. Pen and paper is fine too." },
+    { at: 0,    from: 'Oliver Cullen', text: "Welcome in. Grab the workbook - it's the second link down in your reminder email. Pen and paper is fine too." },
     { at: 263,  from: 'Oliver Cullen', text: "First one for you. Two lines in the chat: what you want this to do for you, and your single biggest gripe with property right now." },
     { at: 437,  from: 'Oliver Cullen', text: "Next. One line only - what is actually holding you back? Not the polite answer. The real one." },
     { at: 523,  from: 'Oliver Cullen', text: "Worth writing this one down: the building is not the asset. The income agreement is the asset." },
@@ -501,6 +495,209 @@ try { sessionStorage.setItem('gkOriginPage', '/uk-workshop/'); } catch (e) {}
       link: { href: '/uk-workshop/booking.html', label: 'Book your call \u2192' } },
     { at: 1850, from: 'Oliver Cullen', text: "If this has been useful, put a W in the chat. Thanks for giving me the time." }
   ];
+
+  // ---- TEMPORARY TEST HARNESS — REMOVE BEFORE THIS PAGE IS USED AGAIN -----
+  // Simulated attendee chat, for checking how a populated feed renders and
+  // scrolls. OFF unless ?sim=1 is in the URL, so nothing here is reachable by
+  // a real attendee arriving from the confirmation email.
+  //
+  // This is scaffolding, not a change of position. The note above HOST_MESSAGES
+  // still stands: inventing attendees who endorse an investment is not
+  // something this page ships. These names are fictional and the page shows a
+  // banner saying so whenever the flag is on.
+  //
+  // Timings are the 42:02 session script scaled by 1886/2522 onto the 31:26
+  // cut, so they are approximate and drift against what Oliver actually says.
+  // Source of truth: working-files/webinar-chat-sim/all-messages-v1.csv
+  //
+  // TO REMOVE: delete from this comment down to END TEST HARNESS, plus the
+  // sim branch inside releaseDueMessages.
+  const SIM_ON = new URLSearchParams(window.location.search).get('sim') === '1';
+  const SIM_MESSAGES = SIM_ON ? [
+    { at: 3, from: "Marcus Reid", text: "evening" },
+    { at: 5, from: "Priya Shah", text: "Hello everyone! Looking forward to this" },
+    { at: 8, from: "Tom Whitfield", text: "audio all good this end" },
+    { at: 11, from: "Aisha Bello", text: "Hi from Manchester \ud83d\udc4b" },
+    { at: 14, from: "Derek Hanson", text: "Hull here" },
+    { at: 19, from: "Nina Kaur", text: "hiya" },
+    { at: 23, from: "Callum Fraser", text: "glasgow \u270b" },
+    { at: 28, from: "Fiona Duncan", text: "Good evening. Edinburgh." },
+    { at: 33, from: "Rob Ellington", text: "Evening all" },
+    { at: 39, from: "Gareth Lloyd", text: "alright" },
+    { at: 46, from: "Priya Shah", text: "Sorry \u2014 where do I find the workbook?" },
+    { at: 52, from: "Yusuf Rahman", text: "same, is it in the email?" },
+    { at: 57, from: "Bex Tran", text: "It was in the reminder email, second link down" },
+    { at: 61, from: "Priya Shah", text: "Got it, thank you!" },
+    { at: 66, from: "Nathan Okonjo", text: "got a drink and a pen, ready" },
+    { at: 103, from: "Marcus Reid", text: "16% net. ok im listening" },
+    { at: 108, from: "Callum Fraser", text: "16 NET? or gross" },
+    { at: 113, from: "Tom Whitfield", text: "^ net apparently. we'll see" },
+    { at: 120, from: "Derek Hanson", text: "Sounds too good to be honest" },
+    { at: 166, from: "Nina Kaur", text: "knew it! the accent \ud83d\ude04" },
+    { at: 170, from: "Aisha Bello", text: "\ud83c\udde6\ud83c\uddfa" },
+    { at: 206, from: "Fiona Duncan", text: "That's refreshing to hear." },
+    { at: 216, from: "Chloe Ashworth", text: "we'll see \ud83d\udc40" },
+    { at: 263, from: "Tom Whitfield", text: "Cashflow. Gripe = every deal is priced for the seller not the buyer" },
+    { at: 268, from: "Aisha Bello", text: "Income without the headache. Gripe: Article 4 killed my expansion plan" },
+    { at: 272, from: "Marcus Reid", text: "cashflow. gripe is section 24" },
+    { at: 276, from: "Nina Kaur", text: "want out of SA, want something boring honestly" },
+    { at: 280, from: "Priya Shah", text: "Goal is steady income. Gripe is not knowing who to trust" },
+    { at: 285, from: "Derek Hanson", text: "GRIPE = TENANTS. goal = not dealing with them" },
+    { at: 291, from: "Sandra Mbeki", text: "cashflow. mortgage went up \u00a3340 a month, rent didn't" },
+    { at: 294, from: "Callum Fraser", text: "equity + cashflow. gripe = lenders" },
+    { at: 304, from: "Fiona Duncan", text: "Goal: replace part of my pension income. Gripe: the amount of noise and hype online." },
+    { at: 307, from: "Helen Pritchard", text: "I have equity but almost no income and I am 68. That is my problem in one line." },
+    { at: 310, from: "Gareth Lloyd", text: "goal: stop relying on builders. gripe: builders" },
+    { at: 313, from: "Bex Tran", text: "Zero admin. I don't have the hours." },
+    { at: 316, from: "Yusuf Rahman", text: "goal is just to get started tbh" },
+    { at: 343, from: "Gareth Lloyd", text: "called it" },
+    { at: 345, from: "Nina Kaur", text: "\ud83d\ude02" },
+    { at: 366, from: "Derek Hanson", text: "been waiting 5 months on a section 21. FIVE" },
+    { at: 377, from: "Aisha Bello", text: "Derek that's rough" },
+    { at: 386, from: "Helen Pritchard", text: "This is exactly me" },
+    { at: 392, from: "Fiona Duncan", text: "Same position here." },
+    { at: 413, from: "Callum Fraser", text: "every guru on IG has a different answer" },
+    { at: 417, from: "Marcus Reid", text: "^this" },
+    { at: 437, from: "Tom Whitfield", text: "Yield not covering loan" },  // LOCKED
+    { at: 440, from: "Callum Fraser", text: "time" },
+    { at: 443, from: "Nathan Okonjo", text: "Location will crash" },  // LOCKED
+    { at: 447, from: "Aisha Bello", text: "not enough deposit left" },
+    { at: 450, from: "Derek Hanson", text: "Tenants not paying" },  // LOCKED
+    { at: 453, from: "Priya Shah", text: "Honestly? Fear" },  // LOCKED
+    { at: 457, from: "Sandra Mbeki", text: "interest rates" },
+    { at: 459, from: "Marcus Reid", text: "finding anything that actually stacks" },
+    { at: 495, from: "Fiona Duncan", text: "That's a good point about wanting to live there ourselves." },
+    { at: 523, from: "Bex Tran", text: "\"the building is not the asset\" \u2014 ok that's the reframe" },
+    { at: 574, from: "Gareth Lloyd", text: "boring sounds great right now" },
+    { at: 579, from: "Nina Kaur", text: "after 4 years of SA I want boring" },
+    { at: 606, from: "Marcus Reid", text: "bored = fine. i just want it to pay" },
+    { at: 633, from: "Bex Tran", text: "Boring is the product. Understood." },
+    { at: 675, from: "Priya Shah", text: "Is there a minimum you need to start with?" },
+    { at: 757, from: "Rob Ellington", text: "Ah, SSH. Was wondering where this was going." },
+    { at: 761, from: "Marcus Reid", text: "heard of it" },
+    { at: 766, from: "Charlotte Weaver", text: "I've seen these come up at auction" },
+    { at: 779, from: "Nathan Okonjo", text: "Isn't this the thing that had the regulator all over it a few years back? Some of those providers went pop" },  // SEEDED
+    { at: 799, from: "Callum Fraser", text: "^ yeah I remember that" },
+    { at: 809, from: "Fiona Duncan", text: "Would like to hear the answer to Nathan's question too." },
+    { at: 838, from: "Aisha Bello", text: "so the HA pays you not the tenant? have I got that right" },
+    { at: 853, from: "Tom Whitfield", text: "Aisha yes that's the whole point of it" },
+    { at: 872, from: "Dev Patel", text: "Is the SSH column net of everything?" },
+    { at: 891, from: "Rob Ellington", text: "FRI lease presumably. That's the key line on that table." },
+    { at: 908, from: "Callum Fraser", text: "BRRR" },  // LOCKED
+    { at: 911, from: "Aisha Bello", text: "BRRR" },  // LOCKED
+    { at: 914, from: "Gareth Lloyd", text: "Flipping, but takes so long" },  // LOCKED
+    { at: 918, from: "Yusuf Rahman", text: "first time investor here" },
+    { at: 921, from: "Derek Hanson", text: "Tenant in the power not the other way around" },  // LOCKED
+    { at: 924, from: "Nina Kaur", text: "serviced accom. margins gone" },
+    { at: 927, from: "Priya Shah", text: "None yet \u2014 first timer too" },
+    { at: 930, from: "Marcus Reid", text: "HMO. article 4 ruined it" },
+    { at: 945, from: "Aisha Bello", text: "\ud83d\ude05 3 years of my life" },
+    { at: 956, from: "Derek Hanson", text: "still ongoing mate" },
+    { at: 981, from: "Tom Whitfield", text: "\u00a3325k for a 3 bed semi. where?" },
+    { at: 990, from: "Marcus Reid", text: "thats above market for a 3 bed semi up north" },
+    { at: 1002, from: "Charlotte Weaver", text: "^ depends entirely on where" },
+    { at: 1023, from: "Callum Fraser", text: "wait how is the finance one a higher % on less income" },  // SEEDED
+    { at: 1026, from: "Priya Shah", text: "I'm confused by that too" },
+    { at: 1029, from: "Tom Whitfield", text: "cash on cash vs yield on cost. different denominators" },
+    { at: 1033, from: "Rob Ellington", text: "Tom's right \u2014 it's return on YOUR capital, not on the asset" },
+    { at: 1107, from: "Nina Kaur", text: "haha we've all done it" },
+    { at: 1110, from: "Aisha Bello", text: "\ud83d\ude04" },
+    { at: 1115, from: "Tom Whitfield", text: "15.6 is right" },
+    { at: 1131, from: "Bex Tran", text: "Ok the two-houses drawing actually made that click" },
+    { at: 1135, from: "Yusuf Rahman", text: "that's clever" },
+    { at: 1140, from: "Dev Patel", text: "I'd still do cash." },
+    { at: 1144, from: "Fiona Duncan", text: "Agreed, no mortgage at my stage." },
+    { at: 1165, from: "Rob Ellington", text: "24% stress rate is a bold claim but the direction is right" },
+    { at: 1171, from: "Marcus Reid", text: "24% and we've all got bigger problems than this" },
+    { at: 1176, from: "Callum Fraser", text: "\ud83d\ude02 true" },
+    { at: 1182, from: "Tom Whitfield", text: "what product is that on? 5 yr fix?" },
+    { at: 1198, from: "Nathan Okonjo", text: "What happens if the government funding dries up?" },  // SEEDED
+    { at: 1204, from: "Laura Bennett", text: "Or if the benefit rules change mid-term?" },
+    { at: 1253, from: "Marcus Reid", text: "and if nurture goes bust?" },  // SEEDED
+    { at: 1258, from: "Nathan Okonjo", text: "^ that's the real question" },
+    { at: 1286, from: "Fiona Duncan", text: "Who are the other named providers?" },
+    { at: 1306, from: "Priya Shah", text: "\"you still own the house\" \u2014 that's the bit that reassures me" },
+    { at: 1316, from: "Laura Bennett", text: "Is the step-in written into the lease or is it a side agreement?" },
+    { at: 1345, from: "Tom Whitfield", text: "CPI+1 for 25 years compounding is the actual headline here" },
+    { at: 1354, from: "Fiona Duncan", text: "Is there a cap on the CPI uplift?" },
+    { at: 1358, from: "Rob Ellington", text: "Usually collared and capped. Worth asking." },
+    { at: 1385, from: "Charlotte Weaver", text: "Who's the developer again? Didn't catch the name" },
+    { at: 1391, from: "Bex Tran", text: "Samsop I think" },
+    { at: 1401, from: "Charlotte Weaver", text: "Funded off balance sheet rather than debt \u2014 that's unusual, in a good way" },
+    { at: 1427, from: "Sandra Mbeki", text: "As an NHS nurse I see how badly this housing is needed" },
+    { at: 1437, from: "Aisha Bello", text: "^^" },
+    { at: 1445, from: "Helen Pritchard", text: "It is nice that the money does something useful as well." },
+    { at: 1488, from: "Marcus Reid", text: "so im locked in for 3 years" },
+    { at: 1493, from: "Tom Whitfield", text: "not locked in \u2014 that's the buyback floor, you can still sell" },
+    { at: 1497, from: "Laura Bennett", text: "It's an option, not a restriction, if I'm reading it right" },
+    { at: 1506, from: "Nathan Okonjo", text: "30% guaranteed floor at year 3 or nothing?" },
+    { at: 1518, from: "Bex Tran", text: "Would want that in writing before anything else" },
+    { at: 1546, from: "Yusuf Rahman", text: "\u00a35k reservation \u2014 is that refundable?" },
+    { at: 1555, from: "Dev Patel", text: "45 days is quick." },
+    { at: 1572, from: "Tom Whitfield", text: "Daniel's my exact situation lol" },
+    { at: 1581, from: "Priya Shah", text: "Claire's example is more like me" },
+    { at: 1609, from: "Marcus Reid", text: "is it more expensive than market price?" },  // SEEDED
+    { at: 1614, from: "Priya Shah", text: "What if the tenant trashes the place?" },  // SEEDED
+    { at: 1618, from: "Callum Fraser", text: "or stops paying" },
+    { at: 1624, from: "Rob Ellington", text: "Which lenders are actually doing these?" },
+    { at: 1629, from: "Aisha Bello", text: "can you do it in a limited company?" },
+    { at: 1635, from: "Yusuf Rahman", text: "whats the smallest one you do?" },
+    { at: 1675, from: "Nathan Okonjo", text: "Do I actually own it? Or is it a fund/share?" },  // SEEDED
+    { at: 1680, from: "Fiona Duncan", text: "Is the title in my own name?" },
+    { at: 1690, from: "Ahmed Siddiqui", text: "Can a non-UK resident buy these? Dubai based" },
+    { at: 1699, from: "Paul Doherty", text: "Any stock in Northern Ireland?" },
+    { at: 1710, from: "Vikram Nair", text: "SPV or personal name \u2014 which is better here?" },
+    { at: 1738, from: "Laura Bennett", text: "Mine's still the step-in mechanism in the lease" },
+    { at: 1744, from: "Bex Tran", text: "How fast can I actually start" },
+    { at: 1751, from: "Tom Whitfield", text: "got about 6 written down" },
+    { at: 1786, from: "Nina Kaur", text: "\ud83d\udc40" },
+    { at: 1792, from: "Priya Shah", text: "Ready" },
+    { at: 1805, from: "Bex Tran", text: "Booked \u2705" },
+    { at: 1810, from: "Tom Whitfield", text: "booked for thursday" },
+    { at: 1814, from: "Derek Hanson", text: "Cant see the link?" },
+    { at: 1818, from: "Aisha Bello", text: "Derek it's just above yours" },
+    { at: 1822, from: "Derek Hanson", text: "got it now cheers" },
+    { at: 1828, from: "Margaret Sill", text: "Booked. Thank you." },
+    { at: 1834, from: "Fiona Duncan", text: "Booked a slot for Monday." },
+    { at: 1850, from: "Tom Whitfield", text: "W" },
+    { at: 1851, from: "Nina Kaur", text: "W" },
+    { at: 1851, from: "Aisha Bello", text: "W" },
+    { at: 1852, from: "Priya Shah", text: "W" },
+    { at: 1852, from: "Callum Fraser", text: "W" },
+    { at: 1852, from: "Bex Tran", text: "W" },
+    { at: 1853, from: "Yusuf Rahman", text: "W" },
+    { at: 1853, from: "Gareth Lloyd", text: "W" },
+    { at: 1854, from: "Derek Hanson", text: "W" },
+    { at: 1855, from: "Fiona Duncan", text: "W" },
+    { at: 1855, from: "Sandra Mbeki", text: "W" },
+    { at: 1855, from: "Rob Ellington", text: "W" },
+    { at: 1856, from: "Dev Patel", text: "W" },
+    { at: 1856, from: "Jack Hemmings", text: "W" },
+    { at: 1857, from: "Kirsty Doyle", text: "W" },
+    { at: 1858, from: "Owen Griffiths", text: "W" },
+    { at: 1858, from: "Steph Collier", text: "W" },
+    { at: 1858, from: "Laura Bennett", text: "W" },
+    { at: 1859, from: "Charlotte Weaver", text: "W" },
+    { at: 1860, from: "Ruth Kaminski", text: "W" },
+    { at: 1861, from: "Joan Whitlock", text: "W" },
+    { at: 1862, from: "Ahmed Siddiqui", text: "W" },
+    { at: 1864, from: "Marcus Reid", text: "W" },
+    { at: 1868, from: "Nathan Okonjo", text: "W \u2014 thanks for actually answering the risk stuff" },
+    { at: 1874, from: "Helen Pritchard", text: "Thank you Oliver, very clear." },
+    { at: 1880, from: "Priya Shah", text: "Thank you! \ud83d\ude4f" },
+    { at: 1881, from: "Vikram Nair", text: "W" },
+  ] : [];
+
+  if (SIM_ON) {
+    const b = document.createElement('div');
+    b.setAttribute('role', 'status');
+    b.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;background:#b3261e;'
+      + 'color:#fff;font:700 12px/1.45 system-ui,sans-serif;letter-spacing:.06em;'
+      + 'text-transform:uppercase;text-align:center;padding:7px 12px;';
+    b.textContent = 'Test build \u2014 simulated chat, fictional names, not real attendees';
+    document.body.appendChild(b);
+  }
+  // ---- END TEST HARNESS ---------------------------------------------------
 
   const chatBody = document.getElementById('chatBody');
 
@@ -529,15 +726,7 @@ try { sessionStorage.setItem('gkOriginPage', '/uk-workshop/'); } catch (e) {}
     wrap.className = 'msg' + (opts.mine ? ' mine' : '') + (opts.host ? ' host' : '');
     const who = document.createElement('div');
     who.className = 'msg-from';
-    if (opts.host) {
-      const badge = document.createElement('span');
-      badge.className = 'msg-badge';
-      badge.textContent = 'Host';
-      who.appendChild(badge);
-      who.appendChild(document.createTextNode(from));
-    } else {
-      who.textContent = from;
-    }
+    who.textContent = from;
     const body = document.createElement('div');
     body.className = 'msg-text';
     body.textContent = text;              // textContent, so a typed question can never inject markup
@@ -565,6 +754,7 @@ try { sessionStorage.setItem('gkOriginPage', '/uk-workshop/'); } catch (e) {}
 
   // Called from the engagement tick, so chat advances on watched time.
   const firedMessages = {};
+  const firedSim = {};
   function releaseDueMessages(seconds) {
     if (!chatBody) return;
     for (let i = 0; i < HOST_MESSAGES.length; i++) {
@@ -572,6 +762,16 @@ try { sessionStorage.setItem('gkOriginPage', '/uk-workshop/'); } catch (e) {}
       if (!firedMessages[i] && seconds >= m.at) {
         firedMessages[i] = true;
         addMessage(m.from, m.text, { host: true, link: m.link });
+      }
+    }
+    // TEST HARNESS: simulated attendees. Never runs without ?sim=1, and they
+    // go through addMessage with no host flag, so none can render a link
+    // button. Delete this loop when the harness comes out.
+    for (let j = 0; j < SIM_MESSAGES.length; j++) {
+      const s = SIM_MESSAGES[j];
+      if (!firedSim[j] && seconds >= s.at) {
+        firedSim[j] = true;
+        addMessage(s.from, s.text, {});
       }
     }
   }

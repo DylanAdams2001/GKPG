@@ -159,31 +159,39 @@ fbq('trackCustom', 'RecordingView', { content_name: 'UK Workshop' });
 
   const stage = document.getElementById('playerStage');
   if (stage && V.wistiaId) {
+    // Options ride on the class name, not in _wq. Wistia reads the class at
+    // the moment it initialises the embed, whereas an options object pushed to
+    // _wq after the div is already in the DOM arrives too late and is ignored -
+    // the player then silently falls back to whatever the media is set to in
+    // the Wistia dashboard. That is why this page had no scrub bar and was
+    // autoplaying muted despite autoPlay:false being right there in the code.
+    //
+    // Every control is named rather than left to the default, because the
+    // dashboard can turn them off account-wide and "we did not switch it off"
+    // is not the same as "it is on". Skipping ahead is the point of this page:
+    // someone who missed the session, or who has already sat through it, should
+    // be able to jump straight to the numbers.
+    const OPTS = [
+      'autoPlay=false',
+      'resumable=true',             // picks up where they stopped last time
+      'videoFoam=false',            // see the note in live.html - it freezes the canvas
+      'fitStrategy=contain',
+      'controlsVisibleOnLoad=true',
+      'playbar=true',               // the scrub bar
+      'playButton=true',
+      'smallPlayButton=true',
+      'volumeControl=true',
+      'fullscreenButton=true',
+      'settingsControl=true',
+      'playbackRateControl=true'
+    ].join(' ');
+
     const mount = document.createElement('div');
-    mount.className = 'wistia_embed wistia_async_' + V.wistiaId;
+    mount.className = 'wistia_embed wistia_async_' + V.wistiaId + ' ' + OPTS;
     stage.appendChild(mount);
     window._wq = window._wq || [];
     window._wq.push({
       id: V.wistiaId,
-      // Every control named explicitly rather than left to the default. Wistia
-      // lets an account set its own player defaults, so "we didn't switch it
-      // off" is not the same as "it is on" - and the scrub bar is the whole
-      // point of this page. Someone who missed the session, or who already sat
-      // through it once, should be able to jump straight to the numbers.
-      options: {
-        autoPlay: false,
-        resumable: true,          // picks up where they stopped last time
-        videoFoam: false,         // see the note in live.html - it freezes the canvas
-        fitStrategy: 'contain',
-        controlsVisibleOnLoad: true,
-        playbar: true,            // the scrub bar
-        playButton: true,
-        smallPlayButton: true,
-        volumeControl: true,
-        fullscreenButton: true,
-        settingsControl: true,
-        playbackRateControl: true
-      },
       onReady: function (v) {
         video = v;
         const d = v.duration();

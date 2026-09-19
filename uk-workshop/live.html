@@ -686,10 +686,37 @@ try { sessionStorage.setItem('gkOriginPage', '/uk-workshop/'); } catch (e) {}
 
     if (V.poster) holder.style.backgroundImage = 'url("' + V.poster + '")';
 
+    // Options ride on the class name, not in _wq. Wistia reads the class when
+    // it initialises the embed; an options object pushed to _wq after the div
+    // is already in the DOM arrives too late and is ignored, leaving the player
+    // on whatever the media is set to in the Wistia dashboard. This room looked
+    // right only because those defaults happened to suit it - one change in the
+    // dashboard and a progress bar appears over a session claiming to be live.
+    const OPTS = [
+      'autoPlay=true',
+      'muted=true',
+      'silentAutoPlay=allow',       // start muted rather than not starting at all
+      'controlsVisibleOnLoad=false',
+      'playbar=false',
+      'playButton=false',
+      'smallPlayButton=false',
+      'volumeControl=false',
+      'fullscreenButton=false',
+      'settingsControl=false',
+      'qualityControl=false',
+      'playbackRateControl=false',
+      'playPauseNotifier=false',
+      'copyLinkAndThumbnailEnabled=false',
+      'resumable=false',            // a live session never offers to resume
+      'endVideoBehavior=default',
+      'videoFoam=false',
+      'fitStrategy=contain'
+    ].join(' ');
+
     const fill = document.createElement('div');
     fill.className = 'player-fill';
     const mount = document.createElement('div');
-    mount.className = 'wistia_embed wistia_async_' + V.wistiaId;
+    mount.className = 'wistia_embed wistia_async_' + V.wistiaId + ' ' + OPTS;
     fill.appendChild(mount);
     holder.insertBefore(fill, bar);
 
@@ -702,32 +729,6 @@ try { sessionStorage.setItem('gkOriginPage', '/uk-workshop/'); } catch (e) {}
     window._wq = window._wq || [];
     window._wq.push({
       id: V.wistiaId,
-      options: {
-        autoPlay: true,
-        muted: true,
-        silentAutoPlay: 'allow',   // start muted rather than not starting at all
-        controlsVisibleOnLoad: false,
-        playbar: false,
-        playButton: false,
-        smallPlayButton: false,
-        volumeControl: false,
-        fullscreenButton: false,
-        settingsControl: false,
-        qualityControl: false,
-        playbackRateControl: false,
-        playPauseNotifier: false,
-        copyLinkAndThumbnailEnabled: false,
-        resumable: false,          // a live session never offers to resume
-        endVideoBehavior: 'default',
-        // Off deliberately. videoFoam is Wistia sizing the player itself, and
-        // .player already fixes the box at 16:9 - the two
-        // compute against each other and the canvas stops repainting, leaving
-        // audio running over a frozen first frame. The page is kept narrow
-        // instead by min-width:0 on the grid children and max-width on the
-        // embed, which is where the mobile overflow actually came from.
-        videoFoam: false,
-        fitStrategy: 'contain'
-      },
       onReady: function (v) {
         video = v;
         // Wistia's own runtime beats the constant, so the tag marks stay right

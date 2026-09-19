@@ -88,12 +88,19 @@ fbq('track', 'ViewContent', { content_name: 'UK Workshop' });
   /* The room is deliberately smaller while it waits, so that the panels
      visibly grow at the moment the session opens. */
   .player-wrap { max-width: 1040px; margin: 0 auto; transition: max-width 0.6s ease; }
+  /* The 16:9 box comes from a padding ratio on a pseudo-element, not from
+     aspect-ratio. Every real child in here is absolutely positioned - the
+     video, the click shield, both buttons - so the moment reveal() removes the
+     idle placeholder there is nothing in flow left to measure. Chrome resolves
+     aspect-ratio anyway; Safari collapses the whole player to a sliver, which
+     is what iOS was showing. A pseudo-element is always in flow, so the box
+     keeps its height in every browser whatever is or is not inside it. */
   .player {
-    position: relative; aspect-ratio: 16 / 9; border-radius: 16px; overflow: hidden;
+    position: relative; width: 100%; border-radius: 16px; overflow: hidden;
     background: #121213; border: 1px solid rgba(255,255,255,0.14);
     box-shadow: 0 30px 80px rgba(0,0,0,0.55);
-    display: flex; align-items: center; justify-content: center;
   }
+  .player::before { content: ""; display: block; padding-top: 56.25%; }
   .player iframe, .player video { width: 100%; height: 100%; border: 0; display: block; }
   /* Out of flow, sized by its insets - the same shape watch.html uses. It was
      a flex item at width/height:100%, and a percentage height inside a flex
@@ -105,11 +112,6 @@ fbq('track', 'ViewContent', { content_name: 'UK Workshop' });
      itself, and an inline style beats a stylesheet rule. */
   .player-fill { position: absolute; inset: 0; z-index: 1; }
   .player .wistia_embed { width: 100%; height: 100%; }
-  /* Belt and braces for older iOS, where aspect-ratio does nothing and the
-     player would otherwise have no height at all. */
-  @supports not (aspect-ratio: 16 / 9) {
-    .player { height: 0; padding-bottom: 56.25%; }
-  }
   /* Wistia still toggles play/pause when the video surface is clicked, even
      with every control switched off. A live session cannot be paused by a
      stray click, so nothing reaches it: the shield sits over the player and
@@ -151,7 +153,10 @@ fbq('track', 'ViewContent', { content_name: 'UK Workshop' });
   .soundbar svg { width: 17px; height: 17px; }
   @keyframes soundPulse { 0%,100%{transform:translateX(-50%) scale(1)} 50%{transform:translateX(-50%) scale(1.045)} }
   @media (prefers-reduced-motion: reduce) { .soundbar { animation: none; } }
-  .player-placeholder { padding: 32px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; }
+  .player-placeholder {
+    position: absolute; inset: 0; padding: 32px; gap: 16px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
   .player-placeholder .icon {
     width: 72px; height: 72px; border-radius: 50%; background: var(--brand-gradient);
     display: flex; align-items: center; justify-content: center; color: var(--black); font-size: 24px; padding-left: 5px;
@@ -715,7 +720,7 @@ try { sessionStorage.setItem('gkOriginPage', '/uk-workshop/'); } catch (e) {}
         resumable: false,          // a live session never offers to resume
         endVideoBehavior: 'default',
         // Off deliberately. videoFoam is Wistia sizing the player itself, and
-        // .player already sets the box with aspect-ratio: 16/9 - the two
+        // .player already fixes the box at 16:9 - the two
         // compute against each other and the canvas stops repainting, leaving
         // audio running over a frozen first frame. The page is kept narrow
         // instead by min-width:0 on the grid children and max-width on the

@@ -66,7 +66,11 @@ fbq('trackCustom', 'RecordingView', { content_name: 'UK Workshop' });
   .hero h1 { font-size: clamp(28px, 5vw, 42px); line-height: 1.08; margin-bottom: 14px; text-wrap: balance; }
   .hero p { color: var(--mid-grey); max-width: 58ch; margin: 0 auto; font-size: 16px; }
 
-  .player { position: relative; width: 100%; max-width: 100%; aspect-ratio: 16 / 9; background: #0a0a0a; border-radius: 14px; overflow: hidden; box-shadow: 0 18px 48px rgba(0,0,0,0.18); }
+  /* Padding ratio on a pseudo-element rather than aspect-ratio - every child
+     here is absolutely positioned, and Safari collapses a box with nothing in
+     flow to measure. See the longer note in live.html. */
+  .player { position: relative; width: 100%; max-width: 100%; background: #0a0a0a; border-radius: 14px; overflow: hidden; box-shadow: 0 18px 48px rgba(0,0,0,0.18); }
+  .player::before { content: ""; display: block; padding-top: 56.25%; }
   .player iframe, .player video { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
   .player .wistia_embed { position: absolute; inset: 0; width: 100%; height: 100%; }
   .player-note { text-align: center; font-size: 13px; color: var(--mid-grey); margin: 12px 0 0; }

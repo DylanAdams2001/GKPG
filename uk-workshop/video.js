@@ -39,12 +39,11 @@ window.GK_WORKSHOP = {
   // page. Two copies rather than one because a Wistia media carries its own
   // player settings and those beat the attributes set on an embed: the live
   // room needs no controls and instant muted autoplay, the recording page
-  // needs a play button and a scrub bar, and one media cannot be both. Set
-  // this media's player to the ordinary defaults in Wistia and leave
-  // wistiaId's alone.
-  // Until the second upload exists this falls back to the shared ID, which
-  // means the recording page keeps the live room's chromeless player.
-  watchWistiaId: null,
+  // needs a play button and a scrub bar, and one media cannot be both.
+  // Leave this one on Wistia's ordinary player defaults and leave wistiaId
+  // on the live room's. Changing either in the dashboard only affects its
+  // own page now, which is the point of the split.
+  watchWistiaId: '6q284zrl27',
 
   // The five minute recap, a separate cut, used only by /uk-workshop/recap.
   recapWistiaId: '43po0oinls',

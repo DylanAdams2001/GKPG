@@ -267,16 +267,6 @@ fbq('track', 'ViewContent', { content_name: 'UK Workshop' });
   .next-card h4 { font-size: 15px; font-weight: 700; color: var(--black); margin-bottom: 6px; }
   .next-card p { font-size: 13px; color: var(--mid-grey); line-height: 1.6; }
 
-  /* FOOTER */
-  .footer { background: var(--black); padding: 44px 24px; text-align: center; border-top: 1px solid rgba(255,255,255,0.06); }
-  .footer .wordmark { display: inline-flex; align-items: center; gap: 8px; font-family: var(--face-display); font-weight: 800; font-size: 1.05rem; letter-spacing: 0.01em; color: #fff; margin-bottom: 20px; }
-  .footer .wordmark span { color: var(--gold); }
-  .footer .wordmark-icon { color: var(--gold); }
-  .footer-links { display: flex; align-items: center; justify-content: center; gap: 26px; flex-wrap: wrap; margin-bottom: 18px; }
-  .footer-links a { font-size: 13px; color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.2s; }
-  .footer-links a:hover { color: var(--gold); }
-  .footer-copy { font-size: 11.5px; color: rgba(255,255,255,0.24); line-height: 1.8; max-width: 640px; margin: 0 auto; }
-
   @media (max-width: 780px) {
     .next-grid { grid-template-columns: 1fr; }
     .watch { padding: 38px 16px 48px; }
@@ -355,21 +345,6 @@ fbq('track', 'ViewContent', { content_name: 'UK Workshop' });
   </div>
 </section>
 
-<!-- FOOTER -->
-<footer class="footer">
-  <div class="wordmark"><svg class="wordmark-icon" width="15" height="32" viewBox="75 42 51 110" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="100" cy="66" r="19" stroke="currentColor" stroke-width="7"/><rect x="95.5" y="85" width="9" height="62" fill="currentColor"/><rect x="104.5" y="126" width="15" height="7" fill="currentColor"/><rect x="104.5" y="138" width="11" height="7" fill="currentColor"/></svg>Golden Key<span> · </span>Property</div>
-  <div class="footer-links">
-    <a href="#">Privacy Policy</a>
-    <a href="#">Terms &amp; Conditions</a>
-  </div>
-  <p class="footer-copy">
-    &copy; 2026 Golden Key Property. All rights reserved.<br />
-    Golden Key Property is a trading name of Asbach Enterprises Ltd, registered in England &amp; Wales. Registration number: 16016190.<br />
-    167-169 Great Portland Street, 5th Floor, London, England, W1W 5PF &nbsp;·&nbsp; info@gkpg.co.uk<br /><br />
-    <strong>Risk warning:</strong> This page is not a financial promotion and the workshop is general information only, not a personal recommendation. Property investment places your capital at risk; you may get back less than you invest. Property values can fall as well as rise, rental income is not guaranteed, and property is generally illiquid, so it may be difficult to sell or exit quickly. Past or targeted performance is not a reliable indicator of future results. Golden Key Property is not authorised or regulated by the Financial Conduct Authority to give investment advice. Seek independent financial and legal advice before making any investment decision.
-  </p>
-</footer>
-
 <script src="https://fast.wistia.com/assets/external/E-v1.js" async></script>
 <script src="/uk-workshop/video.js"></script>
 <script>
@@ -416,7 +391,6 @@ try { sessionStorage.setItem('gkOriginPage', '/uk-workshop/'); } catch (e) {}
   const watchTitle = document.getElementById('watchTitle');
   const watchSub = document.getElementById('watchSub');
   if (!cdStage || !liveGrid) return;
-
 
   function fmt(ms) {
     const total = Math.max(0, Math.round(ms / 1000));

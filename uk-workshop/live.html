@@ -773,10 +773,24 @@ try { sessionStorage.setItem('gkOriginPage', '/uk-workshop/'); } catch (e) {}
   // at all means the browser lost the booking rather than that no booking was
   // made, so the session opens now instead of restarting a wait they have
   // already sat through.
+  //
+  // ?in=<seconds> is a preview hook: it starts a countdown of that length from
+  // load, so the handover into the room can be shown or tested without waiting
+  // for a real slot. It wins over anything stored and resets on every reload,
+  // which is what makes it usable for a repeat demo, and it is deliberately
+  // not persisted - a preview must not leave a fake booking behind in the
+  // browser of someone who later arrives for a real session. It can only ever
+  // delay the room opening: there is nothing here that reveals a session early
+  // or skips any part of one.
   const now = Date.now();
+  const previewIn = parseInt(new URLSearchParams(window.location.search).get('in') || '', 10);
   let target = readStart();
-  if (target - now > SLOT_MS + MIN_LEAD_MS) target = 0;
-  if (!target || now - target > LATE_JOIN_MAX_MS) { target = now; rememberStart(target); }
+  if (isFinite(previewIn) && previewIn >= 0 && previewIn <= 3600) {
+    target = now + previewIn * 1000;
+  } else {
+    if (target - now > SLOT_MS + MIN_LEAD_MS) target = 0;
+    if (!target || now - target > LATE_JOIN_MAX_MS) { target = now; rememberStart(target); }
+  }
   if (target <= now) { reveal((now - target) / 1000); return; }
 
   const span = Math.max(1, target - now);
